@@ -1,4 +1,4 @@
-import { Field, ObjectType } from "type-graphql";
+import { Field, ObjectType, InputType } from "type-graphql";
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @ObjectType()
@@ -14,6 +14,15 @@ class Category {
 
 	@Field()
 	@Column({ length: 2083, type: "varchar" })
+	picto: string;
+}
+
+@InputType()
+export class CategoryInput {
+	@Field()
+	name: string;
+
+	@Field()
 	picto: string;
 }
 
