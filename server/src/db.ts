@@ -1,4 +1,5 @@
 import { DataSource } from "typeorm";
+import City from "./entity/City";
 
 export default new DataSource({
   type: "postgres",
@@ -8,6 +9,6 @@ export default new DataSource({
   password: "postgres",
   database: "postgres",
   synchronize: true,
-  entities: [],
+  entities: [City],
   logging: ["query", "error"],
 });
