@@ -1,5 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-import { Field, ObjectType } from "type-graphql";
+import { Field, InputType, ObjectType } from "type-graphql";
+import { MaxLength } from "class-validator";
 
 @Entity()
 @ObjectType()
@@ -29,4 +30,25 @@ class City {
   longitude: string;
 }
 
+@InputType()
+export class CityInput {
+  @Field()
+  @MaxLength(50)
+  name: string;
+
+  @Field()
+  @MaxLength(2083)
+  picture: string;
+
+  @Field()
+  description: string;
+
+  @Field()
+  @MaxLength(12)
+  latitude: string;
+
+  @Field()
+  @MaxLength(13)
+  longitude: string;
+}
 export default City;

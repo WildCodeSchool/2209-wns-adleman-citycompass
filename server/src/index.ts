@@ -1,18 +1,19 @@
 import "reflect-metadata";
 import { ApolloServer } from "apollo-server";
 import { ApolloServerPluginLandingPageLocalDefault } from "apollo-server-core";
-// import { buildSchema } from "type-graphql";
+import { buildSchema } from "type-graphql";
 import datasource from "./db";
+import { CityResolver } from "./resolver/CityResolver";
 
 const start = async (): Promise<void> => {
   await datasource.initialize();
 
-  // const schema = await buildSchema({
-  //   resolvers: [],
-  // });
+  const schema = await buildSchema({
+    resolvers: [CityResolver],
+  });
 
   const server = new ApolloServer({
-    // schema,
+    schema,
     csrfPrevention: true,
     cache: "bounded",
     plugins: [ApolloServerPluginLandingPageLocalDefault({ embed: true })],
