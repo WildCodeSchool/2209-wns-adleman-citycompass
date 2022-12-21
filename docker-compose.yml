@@ -17,12 +17,13 @@ services:
       - 5001:5001
       - 4000:4000
     volumes:
-      - ./server/src:/app/src
+      - ./server/src/:/app/src/
   client:
     build: './client'
     ports:
+      - 8080:3000
       - 3000:3000
     volumes:
-      - ./client/src:/app/src
-
+      - ./client/src/:/app/src/
+    
 
