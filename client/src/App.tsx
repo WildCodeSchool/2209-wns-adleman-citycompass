@@ -7,7 +7,6 @@ function App() {
     <>
       <Toaster position="bottom-center" />
       <main>
-        <p>Coucou !!</p>
         <Routes></Routes>
       </main>
     </>
