@@ -1,4 +1,5 @@
-import { Resolver, Mutation, Query, Arg } from "type-graphql";
+import { ApolloError } from "apollo-server-core";
+import { Resolver, Mutation, Query, Arg, Int } from "type-graphql";
 import datasource from "../db";
 import Category, { CategoryInput } from "../entity/Category";
 
@@ -12,5 +13,25 @@ export class CategoryResolver {
 	@Mutation(() => Category)
 	async createCategory(@Arg("data") data: CategoryInput): Promise<Category> {
 		return await datasource.getRepository(Category).save(data);
+	}
+
+	@Mutation(() => Category)
+	async updateCategory(
+		@Arg("id", () => Int) id: number,
+		@Arg("data") data: CategoryInput
+	): Promise<Category> {
+		const { name, picto } = data;
+		const categoryToUpdate = await datasource
+			.getRepository(Category)
+			.findOne({ where: { id } });
+		if (categoryToUpdate === null)
+			throw new ApolloError("Category not found", "NOT_FOUND");
+
+		categoryToUpdate.name = name;
+		categoryToUpdate.picto = picto;
+
+		await datasource.getRepository(Category).save(categoryToUpdate);
+
+		return categoryToUpdate;
 	}
 }
