@@ -12,6 +12,12 @@ export class CategoryResolver {
 
 	@Mutation(() => Category)
 	async createCategory(@Arg("data") data: CategoryInput): Promise<Category> {
+		const categoryToCreate = await datasource
+			.getRepository(Category)
+			.findOne({ where: { name: data.name } });
+		if (categoryToCreate !== null)
+			throw new ApolloError("Category already exit", "NOT_FOUND");
+
 		return await datasource.getRepository(Category).save(data);
 	}
 
