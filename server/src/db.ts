@@ -4,7 +4,7 @@ import Category from "./entity/Category";
 
 export default new DataSource({
   type: "postgres",
-  host: "db",
+  host: process.env.DB_HOST,
   port: 5432,
   username: "postgres",
   password: "postgres",
