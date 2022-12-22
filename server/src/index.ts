@@ -4,12 +4,13 @@ import { ApolloServerPluginLandingPageLocalDefault } from "apollo-server-core";
 import { buildSchema } from "type-graphql";
 import datasource from "./db";
 import { CityResolver } from "./resolver/CityResolver";
+import { CategoryResolver } from "./resolver/CategoryResolver";
 
 const start = async (): Promise<void> => {
-  await datasource.initialize();
+	await datasource.initialize();
 
   const schema = await buildSchema({
-    resolvers: [CityResolver],
+    resolvers: [CategoryResolver, CityResolver],
   });
 
   const server = new ApolloServer({
@@ -19,9 +20,9 @@ const start = async (): Promise<void> => {
     plugins: [ApolloServerPluginLandingPageLocalDefault({ embed: true })],
   });
 
-  await server.listen().then(({ url }) => {
-    console.log(`🚀  Server ready at ${url}`);
-  });
+	await server.listen().then(({ url }) => {
+		console.log(`🚀  Server ready at ${url}`);
+	});
 };
 
 void start();
