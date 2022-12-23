@@ -10,11 +10,12 @@ import db from "../../server/src/db";
 const createCityMutation = gql`
   mutation CreateCity($data: CityInput!) {
     createCity(data: $data) {
+      id
       name
       description
       picture
       longitude
-      latitute
+      latitude
     }
   }
 `;
@@ -52,14 +53,15 @@ describe("City resolver", () => {
         },
       });
 
+      // console.log(JSON.stringify(err, null, 2));
       expect(res.data?.createCity).toHaveProperty("id");
-      // expect(res.data?.createCity).toHaveProperty("name", "Lyon");
-      // expect(res.data?.createCity).toHaveProperty(
-      //   "description",
-      //   "La description de Lyon"
-      // );
-      // expect(res.data?.createCity).toHaveProperty("latitude", "45.764043");
-      // expect(res.data?.createCity).toHaveProperty("longitude", "4.835659");
+      expect(res.data?.createCity).toHaveProperty("name", "Lyon");
+      expect(res.data?.createCity).toHaveProperty(
+        "description",
+        "La description de Lyon"
+      );
+      expect(res.data?.createCity).toHaveProperty("latitude", "45.764043");
+      expect(res.data?.createCity).toHaveProperty("longitude", "4.835659");
     });
   });
 
@@ -88,6 +90,8 @@ describe("City resolver", () => {
       });
 
       expect(res.data.getCities.length).toBe(2);
+      expect(res.data.getCities[0]).toHaveProperty("id");
+      expect(res.data.getCities[0]).toHaveProperty("name");
     });
   });
 });
