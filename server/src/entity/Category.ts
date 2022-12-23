@@ -1,5 +1,6 @@
+import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from "typeorm";
 import { Field, ObjectType, InputType } from "type-graphql";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import Place from "./Place";
 
 @ObjectType()
 @Entity()
@@ -15,6 +16,9 @@ class Category {
 	@Field()
 	@Column({ length: 2083, type: "varchar" })
 	picto: string;
+
+	@OneToMany(() => Place, (place) => place.category)
+	places?: Place[];
 }
 
 @InputType()
