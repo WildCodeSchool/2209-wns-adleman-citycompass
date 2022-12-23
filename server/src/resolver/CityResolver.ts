@@ -1,4 +1,4 @@
-  import { Arg, Mutation, Resolver, Query } from "type-graphql";
+import { Arg, Mutation, Resolver, Query } from "type-graphql";
 import { ApolloError } from "apollo-server-errors";
 import City, { CityInput } from "../entity/City";
 import datasource from "../db";
@@ -15,8 +15,7 @@ export class CityResolver {
     await existingCity(data);
     await existingCoordinates(data);
 
-    const { raw: id } = await datasource.getRepository(City).insert(data);
-    return { id, ...data };
+    return await datasource.getRepository(City).save(data);
   }
 
   @Query(() => [City])

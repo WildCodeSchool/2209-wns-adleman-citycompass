@@ -8,6 +8,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    ports: 
+      - 5432:5432
   server:
     depends_on:
       db:
@@ -18,6 +20,8 @@ services:
       - 4000:4000
     volumes:
       - ./server/src/:/app/src/
+    environment: 
+      DB_HOST: "db"
   client:
     build: './client'
     ports:
