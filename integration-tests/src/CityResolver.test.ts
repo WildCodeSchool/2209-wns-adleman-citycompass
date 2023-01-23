@@ -53,7 +53,6 @@ describe("City resolver", () => {
         },
       });
 
-      // console.log(JSON.stringify(err, null, 2));
       expect(res.data?.createCity).toHaveProperty("id");
       expect(res.data?.createCity).toHaveProperty("name", "Lyon");
       expect(res.data?.createCity).toHaveProperty(
