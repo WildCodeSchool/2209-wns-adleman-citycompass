@@ -15,8 +15,7 @@ export class CityResolver {
     await existingCity(data);
     await existingCoordinates(data);
 
-    const { raw: id } = await datasource.getRepository(City).insert(data);
-    return { id, ...data };
+    return await datasource.getRepository(City).save(data);
   }
 
   @Query(() => [City])

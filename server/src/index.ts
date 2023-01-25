@@ -8,22 +8,22 @@ import { CategoryResolver } from "./resolver/CategoryResolver";
 import { PlaceResolver } from "./resolver/PlaceResolver";
 
 const start = async (): Promise<void> => {
-	await datasource.initialize();
+  await datasource.initialize();
 
-	const schema = await buildSchema({
-		resolvers: [CategoryResolver, CityResolver, PlaceResolver],
-	});
+  const schema = await buildSchema({
+    resolvers: [CategoryResolver, CityResolver, PlaceResolver],
+  });
 
-	const server = new ApolloServer({
-		schema,
-		csrfPrevention: true,
-		cache: "bounded",
-		plugins: [ApolloServerPluginLandingPageLocalDefault({ embed: true })],
-	});
+  const server = new ApolloServer({
+    schema,
+    csrfPrevention: true,
+    cache: "bounded",
+    plugins: [ApolloServerPluginLandingPageLocalDefault({ embed: true })],
+  });
 
-	await server.listen().then(({ url }) => {
-		console.log(`🚀  Server ready at ${url}`);
-	});
+  await server.listen().then(({ url }) => {
+    console.log(`🚀  Server ready at ${url}`);
+  });
 };
 
 void start();
