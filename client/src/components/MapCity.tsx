@@ -2,7 +2,7 @@ import L from "leaflet";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "./MapCity.css";
 import restaurant from "../assets/noun-restaurant-1032636.png";
-import building from "../assets/noun-building-1068937.png"
+import building from "../assets/noun-building-1068937.png";
 
 export default function MapCity() {
   const city = {
@@ -57,22 +57,28 @@ export default function MapCity() {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://wxs.ign.fr/pratique/wmts/?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=ORTHOIMAGERY.ORTHOPHOTOS&STYLE=normal&TILEMATRIXSET=PM&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&FORMAT=image%2Fjpeg"
         />
-        <Marker
-          position={[parseFloat(place1.latitude), parseFloat(place1.longitude)]}
-          icon={restaurantIcon}
-        >
-          <Popup>
-            {place1.name} <br /> {place1.adress}
-          </Popup>
-        </Marker>{" "}
-        <Marker
-          position={[parseFloat(place2.latitude), parseFloat(place2.longitude)]}
-          icon={buildingIcon}
-        >
-          <Popup>
-            {place2.name} <br /> {place2.adress}
-          </Popup>
-        </Marker>
+          <Marker
+            position={[
+              parseFloat(place1.latitude),
+              parseFloat(place1.longitude),
+            ]}
+            icon={restaurantIcon}
+          >
+            <Popup>
+              {place1.name} <br /> {place1.adress}
+            </Popup>
+          </Marker>{" "}
+          <Marker
+            position={[
+              parseFloat(place2.latitude),
+              parseFloat(place2.longitude),
+            ]}
+            icon={buildingIcon}
+          >
+            <Popup>
+              {place2.name} <br /> {place2.adress}
+            </Popup>
+          </Marker>
       </MapContainer>
     </div>
   );
