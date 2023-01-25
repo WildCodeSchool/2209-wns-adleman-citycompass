@@ -37,6 +37,7 @@ services:
         condition: service_healthy
     environment:
       DB_HOST: testDB
+      API_URL: http://backend:4000
     volumes:
       - ./server/src/entity:/server/src/entity
       - ./integration-tests/src:/app/src
