@@ -1,3 +1,10 @@
+import MapCity from "../components/MapCity";
+
 export default function City() {
-  return <div>City</div>;
+  return (
+    <div>
+      <p> City</p>
+      <MapCity />
+    </div>
+  );
 }
