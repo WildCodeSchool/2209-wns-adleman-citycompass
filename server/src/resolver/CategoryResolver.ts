@@ -6,7 +6,7 @@ import Category, { CategoryInput } from "../entity/Category";
 @Resolver(Category)
 export class CategoryResolver {
 	@Query(() => [Category])
-	async categories(): Promise<Category[]> {
+	async getCategories(): Promise<Category[]> {
 		return await datasource.getRepository(Category).find();
 	}
 
@@ -16,7 +16,7 @@ export class CategoryResolver {
 			.getRepository(Category)
 			.findOne({ where: { name: data.name } });
 		if (categoryToCreate !== null)
-			throw new ApolloError("Category already exit", "NOT_FOUND");
+			throw new ApolloError("Category already existe", "NOT_FOUND");
 
 		return await datasource.getRepository(Category).save(data);
 	}
