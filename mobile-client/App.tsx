@@ -1,23 +1,26 @@
+import { ApolloProvider } from "@apollo/client";
+import client from "./gql/client";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import ListingScreen from "./screens/ListingScreen";
+import PlaceDetails from "./screens/PlaceDetails";
 
-const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
 
 export default function App() {
 	return (
-		<>
+		<ApolloProvider client={client}>
 			<NavigationContainer>
-				<Tab.Navigator>
-					<Tab.Screen
-						name="Listing"
-						component={ListingScreen}
-						options={{ unmountOnBlur: true }}
+				<Stack.Navigator>
+					<Stack.Screen name="Listing" component={ListingScreen} />
+					<Stack.Screen
+						name="Place-details"
+						component={PlaceDetails}
+						options={{ title: "Details" }}
 					/>
-				</Tab.Navigator>
+				</Stack.Navigator>
 			</NavigationContainer>
-		</>
+		</ApolloProvider>
 	);
 }
