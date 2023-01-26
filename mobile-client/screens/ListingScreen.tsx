@@ -1,15 +1,23 @@
-import { Text, StyleSheet, FlatList, Image, View } from "react-native";
+import {
+	Text,
+	StyleSheet,
+	FlatList,
+	Image,
+	View,
+	TouchableOpacity,
+} from "react-native";
 import { useCallback } from "react";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
+import { useGetCitiesQuery } from "../gql/generated/schema";
 
 SplashScreen.preventAutoHideAsync();
 
-const DATA_City = [
-	{ id: 1, name: "Chartres", picture: "https://picsum.photos/500/400" },
-	{ id: 2, name: "Lyon", picture: "https://picsum.photos/500/400" },
-	{ id: 3, name: "Strasbourg", picture: "https://picsum.photos/500/400" },
-];
+// const data_City = [
+// 	{ id: 1, name: "Chartres", picture: "https://picsum.photos/500/400" },
+// 	{ id: 2, name: "Lyon", picture: "https://picsum.photos/500/400" },
+// 	{ id: 3, name: "Strasbourg", picture: "https://picsum.photos/500/400" },
+// ];
 
 const DATA_POI = [
 	{ id: 1, name: "Cathédrale Notre Dame", city_id: 1 },
@@ -21,6 +29,9 @@ const DATA_POI = [
 ];
 
 export default function ListingScreen() {
+	const { data, error } = useGetCitiesQuery();
+	const data_City = data?.getCities || [];
+
 	const [fontsLato] = useFonts({
 		"Lato-Black": require("../assets/fonts/Lato/Lato-Black.ttf"),
 	});
@@ -35,42 +46,39 @@ export default function ListingScreen() {
 		return null;
 	}
 
-	return DATA_City.length > 0 ? (
+	return data_City.length > 0 ? (
 		<FlatList
 			onLayout={onLayoutRootView}
 			style={styles.container}
-			data={DATA_City}
-			keyExtractor={(DATA_City) => DATA_City.id.toString()}
-			renderItem={(itemData) => {
+			data={data_City}
+			keyExtractor={(data_City) => data_City.id.toString()}
+			renderItem={(cityData) => {
 				return (
 					<>
-						<Text style={styles.title}>{itemData.item.name}</Text>
+						<Text style={styles.title}>{cityData.item.name}</Text>
 
 						<FlatList
 							data={DATA_POI}
-							keyExtractor={(itemData) => itemData.id.toString()}
+							keyExtractor={(cityData) => cityData.id.toString()}
 							renderItem={(poiData) => {
 								return (
 									<>
-										{poiData.item.city_id === itemData.item.id ? (
-											<View style={styles.cardPoi}>
-												<View style={styles.containerText}>
+										{poiData.item.city_id === cityData.item.id ? (
+											<TouchableOpacity
+												onPress={() => console.log(poiData.item.id)}
+											>
+												<View style={styles.cardPoi}>
 													<Text style={styles.poiText}>
 														{poiData.item.name}
 													</Text>
-													{poiData.item.adress ? (
-														<Text style={styles.poiText}>
-															{poiData.item.adress}
-														</Text>
-													) : null}
+													<Image
+														style={styles.poiPicture}
+														source={{
+															uri: cityData.item.picture,
+														}}
+													/>
 												</View>
-												<Image
-													style={styles.poiPicture}
-													source={{
-														uri: itemData.item.picture,
-													}}
-												/>
-											</View>
+											</TouchableOpacity>
 										) : null}
 									</>
 								);
@@ -104,7 +112,7 @@ const styles = StyleSheet.create({
 	},
 	cardPoi: {
 		flex: 1,
-		flexDirection: "row-reverse",
+		// flexDirection: "row",
 		borderTopRightRadius: 40,
 		borderBottomRightRadius: 40,
 		borderBottomLeftRadius: 40,
@@ -112,18 +120,16 @@ const styles = StyleSheet.create({
 		marginBottom: 20,
 		overflow: "hidden",
 	},
-	containerText: {
-		flex: 2,
-	},
 	poiText: {
+		flex: 1,
 		padding: 15,
 		fontSize: 18,
 	},
 
 	poiPicture: {
 		flex: 1,
-		height: 150,
-		// borderBottomRightRadius: 40,
+		height: 250,
+		borderBottomRightRadius: 40,
 		borderBottomLeftRadius: 40,
 	},
 });
