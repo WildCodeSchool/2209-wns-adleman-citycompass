@@ -1,25 +1,23 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { NavigationContainer } from "@react-navigation/native";
+import ListingScreen from "./screens/ListingScreen";
+
+const Tab = createBottomTabNavigator();
 
 export default function App() {
 	return (
-		<View style={styles.container}>
-			<View style={styles.header}>
-				<Text>City Compass</Text>
-			</View>
-			<StatusBar style="auto" />
-		</View>
+		<>
+			<NavigationContainer>
+				<Tab.Navigator>
+					<Tab.Screen
+						name="Listing"
+						component={ListingScreen}
+						options={{ unmountOnBlur: true }}
+					/>
+				</Tab.Navigator>
+			</NavigationContainer>
+		</>
 	);
 }
-
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: "#fff",
-		alignItems: "center",
-		justifyContent: "center",
-	},
-	header: {
-		backgroundColor: "#fff",
-	},
-});
