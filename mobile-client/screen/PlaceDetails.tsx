@@ -1,5 +1,6 @@
 import React from "react";
-import { StyleSheet, View, Text, Image } from "react-native";
+import { StyleSheet, View, Text, Image, ScrollView } from "react-native";
+import { useGetPlacesQuery } from "../gql/generated/schema";
 
 const POI1 = {
   name: "Place Bellecour",
@@ -11,9 +12,18 @@ const POI1 = {
   website: "https://fr.wikipedia.org/wiki/Place_Bellecour",
 };
 
-export default function PlaceDetails() {
+export default function PlaceDetails({ route }: any) {
+  const { itemId } = route.params;
+  console.log(itemId);
+
+  const { data, error } = useGetPlacesQuery();
+  const place = data?.getPlaces|| [];
+
+  console.log(error);
+
+
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       {/* first section : presentation */}
       <View style={styles.firstSection}>
         <Image source={{ uri: POI1.picture }} style={styles.image} />
@@ -41,7 +51,7 @@ export default function PlaceDetails() {
         <Text style={styles.title2}>Description</Text>
         <Text style={styles.description}>{POI1.description}</Text>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -69,7 +79,7 @@ const styles = StyleSheet.create({
   },
   title1: {
     color: "#23272D",
-    fontSize: 40,
+    fontSize: 30,
     padding: 20,
     fontWeight: "500",
     textTransform: "uppercase",
