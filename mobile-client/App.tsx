@@ -1,25 +1,19 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import PlaceDetails from "./screen/PlaceDetails";
+import Home from "./screen/Home";
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
-	return (
-		<View style={styles.container}>
-			<View style={styles.header}>
-				<Text>City Compass</Text>
-			</View>
-			<StatusBar style="auto" />
-		</View>
-	);
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name="Place-details" component={PlaceDetails} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
 }
-
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: "#fff",
-		alignItems: "center",
-		justifyContent: "center",
-	},
-	header: {
-		backgroundColor: "#fff",
-	},
-});
