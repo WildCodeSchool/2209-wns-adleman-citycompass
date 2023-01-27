@@ -1,7 +1,0 @@
-query GetCities {
-	getCities {
-		id
-		name
-		picture
-	}
-}

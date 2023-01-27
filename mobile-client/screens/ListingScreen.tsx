@@ -20,7 +20,6 @@ const data_City = [
 ];
 
 export default function ListingScreen() {
-	// const { data, error } = useGetCitiesQuery();
 	const { data } = useGetPlacesQuery();
 	const DATA_POI = data?.getPlaces || [];
 

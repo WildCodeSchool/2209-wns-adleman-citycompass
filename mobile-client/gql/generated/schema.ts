@@ -133,53 +133,12 @@ export type QueryGetOnePlacebyIdArgs = {
   id: Scalars['String'];
 };
 
-export type GetCitiesQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetCitiesQuery = { __typename?: 'Query', getCities: Array<{ __typename?: 'City', id: number, name: string, picture: string }> };
-
 export type GetPlacesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetPlacesQuery = { __typename?: 'Query', getPlaces: Array<{ __typename?: 'Place', name: string, id: number, cityId: number, picture: string }> };
 
 
-export const GetCitiesDocument = gql`
-    query GetCities {
-  getCities {
-    id
-    name
-    picture
-  }
-}
-    `;
-
-/**
- * __useGetCitiesQuery__
- *
- * To run a query within a React component, call `useGetCitiesQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetCitiesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetCitiesQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetCitiesQuery(baseOptions?: Apollo.QueryHookOptions<GetCitiesQuery, GetCitiesQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetCitiesQuery, GetCitiesQueryVariables>(GetCitiesDocument, options);
-      }
-export function useGetCitiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCitiesQuery, GetCitiesQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetCitiesQuery, GetCitiesQueryVariables>(GetCitiesDocument, options);
-        }
-export type GetCitiesQueryHookResult = ReturnType<typeof useGetCitiesQuery>;
-export type GetCitiesLazyQueryHookResult = ReturnType<typeof useGetCitiesLazyQuery>;
-export type GetCitiesQueryResult = Apollo.QueryResult<GetCitiesQuery, GetCitiesQueryVariables>;
 export const GetPlacesDocument = gql`
     query GetPlaces {
   getPlaces {
