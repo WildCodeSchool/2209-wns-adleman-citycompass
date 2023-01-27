@@ -132,6 +132,22 @@ export type QueryGetOnePlacebyIdArgs = {
 };
 
 export type GetPlacesQueryVariables = Exact<{ [key: string]: never }>;
+export type GetOnePlacebyIdQueryVariables = Exact<{
+  getOnePlacebyIdId: Scalars["String"];
+}>;
+
+export type GetOnePlacebyIdQuery = {
+  __typename?: "Query";
+  getOnePlacebyId: {
+    __typename?: "Place";
+    id: number;
+    name: string;
+    adress: string;
+    website?: string | null;
+    picture: string;
+    description: string;
+  };
+};
 
 export type GetPlacesQuery = {
   __typename?: "Query";
@@ -154,19 +170,32 @@ export const GetPlacesDocument = gql`
     }
   }
 `;
+export const GetOnePlacebyIdDocument = gql`
+  query GetOnePlacebyId($getOnePlacebyIdId: String!) {
+    getOnePlacebyId(id: $getOnePlacebyIdId) {
+      id
+      name
+      adress
+      website
+      picture
+      description
+    }
+  }
+`;
 
 /**
- * __useGetPlacesQuery__
+ * __useGetOnePlacebyIdQuery__
  *
- * To run a query within a React component, call `useGetPlacesQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetPlacesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetOnePlacebyIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetOnePlacebyIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetPlacesQuery({
+ * const { data, loading, error } = useGetOnePlacebyIdQuery({
  *   variables: {
+ *      getOnePlacebyIdId: // value for 'getOnePlacebyIdId'
  *   },
  * });
  */
@@ -198,4 +227,38 @@ export type GetPlacesLazyQueryHookResult = ReturnType<
 export type GetPlacesQueryResult = Apollo.QueryResult<
   GetPlacesQuery,
   GetPlacesQueryVariables
+>;
+export function useGetOnePlacebyIdQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetOnePlacebyIdQuery,
+    GetOnePlacebyIdQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetOnePlacebyIdQuery, GetOnePlacebyIdQueryVariables>(
+    GetOnePlacebyIdDocument,
+    options
+  );
+}
+export function useGetOnePlacebyIdLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetOnePlacebyIdQuery,
+    GetOnePlacebyIdQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetOnePlacebyIdQuery,
+    GetOnePlacebyIdQueryVariables
+  >(GetOnePlacebyIdDocument, options);
+}
+export type GetOnePlacebyIdQueryHookResult = ReturnType<
+  typeof useGetOnePlacebyIdQuery
+>;
+export type GetOnePlacebyIdLazyQueryHookResult = ReturnType<
+  typeof useGetOnePlacebyIdLazyQuery
+>;
+export type GetOnePlacebyIdQueryResult = Apollo.QueryResult<
+  GetOnePlacebyIdQuery,
+  GetOnePlacebyIdQueryVariables
 >;

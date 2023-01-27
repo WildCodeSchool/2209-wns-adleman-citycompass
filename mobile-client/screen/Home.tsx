@@ -3,7 +3,6 @@ import { StyleSheet, View, Text, Button } from "react-native";
 
 // Type any is from documentation
 export default function Home({ navigation }: any) {
-
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
       <Text>Home Screen</Text>

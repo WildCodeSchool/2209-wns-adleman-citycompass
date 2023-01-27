@@ -13,13 +13,17 @@ docker compose -f docker-compose.yml up --build
 
 ### test environment (3 others containers, including another DB)
 
+1. create and configure .env
+2. Run
+
 ```sh
 docker compose -f docker-compose.integration-tests.yml up --build
 ```
 
 ### run tests locally (alternative to docker)
 
-Into integration-tests file :
+1. create and configure .env
+2. in your terminal, in integration-tests file, run:
 
 ```sh
 docker compose -f docker-compose.yml up --build
@@ -29,7 +33,8 @@ npm run test
 
 ### React Native App using Expo
 
-Into mobile-client file
+1. create and configure .env
+2. in your terminal, in mobile-client file
 
 ```sh
 docker compose -f docker-compose.yml up --build

@@ -1,40 +1,29 @@
 import React from "react";
 import { StyleSheet, View, Text, Image, ScrollView } from "react-native";
-import { useGetPlacesQuery } from "../gql/generated/schema";
-
-const POI1 = {
-  name: "Place Bellecour",
-  adress: "Pl Bellecour, 69002 Lyon",
-  description:
-    "La place Bellecour est une place du 2ᵉ arrondissement de Lyon, en France. Élément majeur de la ville et sa plus grande place avec ses 62 000 m², cinquième plus grande place de France, elle est la plus grande place piétonnière d'Europe.",
-  picture:
-    "https://www.republique-grolee-carnot.com/wp-content/uploads/2021/10/place-bellecour-lyon-1.webp",
-  website: "https://fr.wikipedia.org/wiki/Place_Bellecour",
-};
+import { useGetOnePlacebyIdQuery } from "../gql/generated/schema";
 
 export default function PlaceDetails({ route }: any) {
   const { itemId } = route.params;
-  console.log(itemId);
 
-  const { data, error } = useGetPlacesQuery();
-  const place = data?.getPlaces|| [];
+  const { data } = useGetOnePlacebyIdQuery({
+    variables: { getOnePlacebyIdId: itemId.toString() },
+  });
 
-  console.log(error);
-
+  const place = data?.getOnePlacebyId;
 
   return (
     <ScrollView style={styles.container}>
       {/* first section : presentation */}
       <View style={styles.firstSection}>
-        <Image source={{ uri: POI1.picture }} style={styles.image} />
-        <Text style={styles.title1}>{POI1.name}</Text>
+        <Image source={{ uri: place?.picture }} style={styles.image} />
+        <Text style={styles.title1}>{place?.name}</Text>
         {/* adress block */}
         <View style={styles.innerBlock}>
           <Image
             source={require("../assets/address-icon-mobile.png")}
             style={styles.icon}
           />
-          <Text>{POI1.adress}</Text>
+          <Text>{place?.adress}</Text>
         </View>
         {/* website block */}
         <View style={styles.innerBlock}>
@@ -42,14 +31,14 @@ export default function PlaceDetails({ route }: any) {
             source={require("../assets/website-icon-mobile.png")}
             style={styles.icon}
           />
-          <Text>{POI1.website}</Text>
+          <Text>{place?.website}</Text>
         </View>
       </View>
 
       {/* second section : description */}
       <View style={styles.secondSection}>
         <Text style={styles.title2}>Description</Text>
-        <Text style={styles.description}>{POI1.description}</Text>
+        <Text style={styles.description}>{place?.description}</Text>
       </View>
     </ScrollView>
   );
