@@ -9,40 +9,33 @@ import {
 import { useCallback } from "react";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
-import { useGetCitiesQuery } from "../gql/generated/schema";
+import { useGetCitiesQuery, useGetPlacesQuery } from "../gql/generated/schema";
 
 SplashScreen.preventAutoHideAsync();
 
-// const data_City = [
-// 	{ id: 1, name: "Chartres", picture: "https://picsum.photos/500/400" },
-// 	{ id: 2, name: "Lyon", picture: "https://picsum.photos/500/400" },
-// 	{ id: 3, name: "Strasbourg", picture: "https://picsum.photos/500/400" },
-// ];
-
-const DATA_POI = [
-	{ id: 1, name: "Cathédrale Notre Dame", city_id: 1 },
-	{ id: 2, name: "Gare", adress: "12 avenue de la gare 28300", city_id: 1 },
-	{ id: 3, name: "Musée", city_id: 1 },
-	{ id: 4, name: "Fourvière", city_id: 2 },
-	{ id: 5, name: "Traboules", city_id: 2 },
-	{ id: 6, name: "Stade de la Meinau", city_id: 3 },
+const data_City = [
+	{ id: 1, name: "Chartres", picture: "https://picsum.photos/500/400" },
+	{ id: 2, name: "Lyon", picture: "https://picsum.photos/500/400" },
+	{ id: 16, name: "Strasbourg", picture: "https://picsum.photos/500/400" },
 ];
 
 export default function ListingScreen() {
-	const { data, error } = useGetCitiesQuery();
-	const data_City = data?.getCities || [];
+	// const { data, error } = useGetCitiesQuery();
+	const { data } = useGetPlacesQuery();
+	const DATA_POI = data?.getPlaces || [];
 
-	const [fontsLato] = useFonts({
+	const [fontsLoaded] = useFonts({
 		"Lato-Black": require("../assets/fonts/Lato/Lato-Black.ttf"),
+		"Karla-Medium": require("../assets/fonts/Karla/static/Karla-Medium.ttf"),
 	});
 
 	const onLayoutRootView = useCallback(async () => {
-		if (fontsLato) {
+		if (fontsLoaded) {
 			await SplashScreen.hideAsync();
 		}
-	}, [fontsLato]);
+	}, [fontsLoaded]);
 
-	if (!fontsLato) {
+	if (!fontsLoaded) {
 		return null;
 	}
 
@@ -55,6 +48,7 @@ export default function ListingScreen() {
 			renderItem={(cityData) => {
 				return (
 					<>
+						{}
 						<Text style={styles.title}>{cityData.item.name}</Text>
 
 						<FlatList
@@ -63,7 +57,7 @@ export default function ListingScreen() {
 							renderItem={(poiData) => {
 								return (
 									<>
-										{poiData.item.city_id === cityData.item.id ? (
+										{poiData.item.cityId === cityData.item.id ? (
 											<TouchableOpacity
 												onPress={() => console.log(poiData.item.id)}
 											>
@@ -124,6 +118,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 		padding: 15,
 		fontSize: 18,
+		fontFamily: "Karla-Medium",
 	},
 
 	poiPicture: {

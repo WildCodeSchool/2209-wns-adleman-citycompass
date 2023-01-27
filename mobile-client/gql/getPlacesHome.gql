@@ -1,0 +1,8 @@
+query GetPlaces {
+	getPlaces {
+		name
+		id
+		cityId
+		picture
+	}
+}
