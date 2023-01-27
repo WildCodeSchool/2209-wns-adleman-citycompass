@@ -14,9 +14,9 @@ import { useGetPlacesQuery } from "../gql/generated/schema";
 SplashScreen.preventAutoHideAsync();
 
 const data_City = [
-  { id: 1, name: "Chartres", picture: "https://picsum.photos/500/400" },
-  { id: 2, name: "Lyon", picture: "https://picsum.photos/500/400" },
-  { id: 16, name: "Strasbourg", picture: "https://picsum.photos/500/400" },
+  { id: 1, name: "Chartres" },
+  { id: 2, name: "Lyon" },
+  { id: 16, name: "Strasbourg" },
 ];
 
 // Type any is from documentation
@@ -72,7 +72,7 @@ export default function ListingScreen({ navigation }: any) {
                           <Image
                             style={styles.poiPicture}
                             source={{
-                              uri: cityData.item.picture,
+                              uri: poiData.item.picture,
                             }}
                           />
                         </View>
@@ -110,7 +110,6 @@ const styles = StyleSheet.create({
   },
   cardPoi: {
     flex: 1,
-    // flexDirection: "row",
     borderTopRightRadius: 40,
     borderBottomRightRadius: 40,
     borderBottomLeftRadius: 40,
