@@ -1,0 +1,10 @@
+query GetOnePlacebyId($getOnePlacebyIdId: String!) {
+  getOnePlacebyId(id: $getOnePlacebyIdId) {
+    id
+    name
+    adress
+    website
+    picture
+    description
+  }
+}
