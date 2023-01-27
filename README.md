@@ -40,3 +40,16 @@ npm run test
 docker compose -f docker-compose.yml up --build
 npx expo start
 ```
+
+## Work on project
+
+### CodeGen
+
+This is a GraphQL app using codeGen.
+To run CodeGen and generate schemas automatically on client, run :
+
+```sh
+npm run codegen
+```
+
+- [CodeGen-doc](https://the-guild.dev/graphql/codegen/docs/getting-started)
