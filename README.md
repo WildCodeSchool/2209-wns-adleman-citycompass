@@ -1,12 +1,55 @@
 # Getting started
 
-[Install Docker](https://www.docker.com/products/docker-desktop/) and then :
+- [Install Docker](https://www.docker.com/products/docker-desktop/)
+- [Install expo and expo GO](https://expo.dev/tools)
+
+## Run the project
+
+### development environment (3 containers)
 
 ```sh
-Pour le docker de dev = docker compose -f docker-compose.yml up --build
-Pour le docker de test = docker compose -f docker-compose.integration-tests.yml up --build
+docker compose -f docker-compose.yml up --build
 ```
 
-Pour pouvoir lancer les tests hors Docker -> lancer la commande du docker compose de dev, se mettre dans le dossier "integration-tests", installer les dépendances et lancer la commande "npm run test" ou "pnpm run test"
+### test environment (3 others containers, including another DB)
 
-That's all folks !
+1. create and configure .env
+2. Run
+
+```sh
+docker compose -f docker-compose.integration-tests.yml up --build
+```
+
+### run tests locally (alternative to docker)
+
+1. create and configure .env
+2. in your terminal, in integration-tests file, run:
+
+```sh
+docker compose -f docker-compose.yml up --build
+npm i
+npm run test
+```
+
+### React Native App using Expo
+
+1. create and configure .env
+2. in your terminal, in mobile-client file
+
+```sh
+docker compose -f docker-compose.yml up --build
+npx expo start
+```
+
+## Work on project
+
+### CodeGen
+
+This is a GraphQL app using codeGen.
+To run CodeGen and generate schemas automatically on client, run :
+
+```sh
+npm run codegen
+```
+
+- [CodeGen-doc](https://the-guild.dev/graphql/codegen/docs/getting-started)

@@ -1,8 +1,8 @@
 query GetPlaces {
-	getPlaces {
-		name
-		id
-		cityId
-		picture
-	}
+  getPlaces {
+    name
+    id
+    cityId
+    picture
+  }
 }
