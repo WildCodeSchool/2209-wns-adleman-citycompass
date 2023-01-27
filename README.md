@@ -1,12 +1,37 @@
 # Getting started
 
-[Install Docker](https://www.docker.com/products/docker-desktop/) and then :
+- [Install Docker](https://www.docker.com/products/docker-desktop/)
+- [Install expo and expo GO](https://expo.dev/tools)
+
+## Run the project
+
+### development environment (3 containers)
 
 ```sh
-Pour le docker de dev = docker compose -f docker-compose.yml up --build
-Pour le docker de test = docker compose -f docker-compose.integration-tests.yml up --build
+docker compose -f docker-compose.yml up --build
 ```
 
-Pour pouvoir lancer les tests hors Docker -> lancer la commande du docker compose de dev, se mettre dans le dossier "integration-tests", installer les dépendances et lancer la commande "npm run test" ou "pnpm run test"
+### test environment (3 others containers, including another DB)
 
-That's all folks !
+```sh
+docker compose -f docker-compose.integration-tests.yml up --build
+```
+
+### run tests locally (alternative to docker)
+
+Into integration-tests file :
+
+```sh
+docker compose -f docker-compose.yml up --build
+npm i
+npm run test
+```
+
+### React Native App using Expo
+
+Into mobile-client file
+
+```sh
+docker compose -f docker-compose.yml up --build
+npx expo start
+```
