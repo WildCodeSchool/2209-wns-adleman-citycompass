@@ -9,7 +9,7 @@ import {
 import { useCallback } from "react";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
-import { useGetCitiesQuery, useGetPlacesQuery } from "../gql/generated/schema";
+import { useGetPlacesQuery } from "../gql/generated/schema";
 
 SplashScreen.preventAutoHideAsync();
 
