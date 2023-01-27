@@ -1,25 +1,26 @@
+import { ApolloProvider } from "@apollo/client";
+import client from "./gql/client";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import ListingScreen from "./screens/ListingScreen";
+import PlaceDetails from "./screens/PlaceDetails";
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
 	return (
-		<View style={styles.container}>
-			<View style={styles.header}>
-				<Text>City Compass</Text>
-			</View>
-			<StatusBar style="auto" />
-		</View>
+		<ApolloProvider client={client}>
+			<NavigationContainer>
+				<Stack.Navigator>
+					<Stack.Screen name="Listing" component={ListingScreen} />
+					<Stack.Screen
+						name="Place-details"
+						component={PlaceDetails}
+						options={{ title: "Details" }}
+					/>
+				</Stack.Navigator>
+			</NavigationContainer>
+		</ApolloProvider>
 	);
 }
-
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: "#fff",
-		alignItems: "center",
-		justifyContent: "center",
-	},
-	header: {
-		backgroundColor: "#fff",
-	},
-});
