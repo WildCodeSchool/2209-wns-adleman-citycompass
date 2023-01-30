@@ -1,8 +1,16 @@
 import Footer from "../components/Footer";
 
 export default function Home() {
-  return (<div className="flex h-full flex-col justify-between">
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit nobis rerum sint, earum eligendi quibusdam expedita sed ab hic perspiciatis animi dolorum unde harum et vero sunt tenetur possimus sequi.</p>
-    <Footer />
-  </div>);
+  return (
+    <div className="flex h-full flex-col justify-between">
+      <div className="h-96 w-96 rounded shadow m-12">
+        <h1 className=" drop-shadow-xl">Titre 1</h1>
+        <h2 className="drop">Titre 2</h2>
+        <h3>Titre 3</h3>
+        <h4>Titre 4</h4>
+        <p className="">Mon super test</p>
+      </div>
+      <Footer />
+    </div>
+  );
 }
