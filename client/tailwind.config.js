@@ -2,6 +2,9 @@
 module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
+    borderRadius: {
+      DEFAULT: "0 3rem 3rem 3rem",
+    },
     extend: {
       colors: {
         transparent: "transparent",
