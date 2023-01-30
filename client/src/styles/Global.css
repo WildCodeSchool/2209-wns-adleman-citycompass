@@ -1,23 +1,24 @@
 h1 {
-    font-family: theme('fontFamily.latoBlack');
+    font-family: 'Lato Black';
 	color: theme('colors.darkBlue');
     font-size: theme('fontSize.xl');
+	text-transform: uppercase;
 }
 
 h2 {
-    font-family: theme('fontFamily.latoBlack');
+    font-family:'Lato Black';
 	color: theme('colors.darkBlue');
     font-size: theme('fontSize.l');
 }
 
 h3 {
-    font-family: theme('fontFamily.latoBlack');
+    font-family: 'Lato Regular';
 	color: theme('colors.darkBlue');
     font-size: theme('fontSize.m');
 }
 
 p {
-    font-family: theme('fontFamily.karla');
+    font-family: 'Karla Medium';
 	color: theme('colors.darkBlue');
     font-size: theme('fontSize.base');
 }

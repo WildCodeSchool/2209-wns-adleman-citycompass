@@ -2,33 +2,48 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Fichier de css pour le body */ 
+@font-face {
+  font-family:"Lato Regular";
+  src:url("./assets/fonts/Lato/Lato-Regular.woff2") format("woff2"),url("./assets/fonts/Lato/Lato-Regular.woff") format("woff"),url("./assets/fonts/Lato/Lato-Regular.ttf") format("ttf");
+  font-style:normal;font-weight:400;
+}
 
+@font-face {
+  font-family:"Lato Black";
+  src:url("./assets/fonts/Lato/Lato-Black.woff2") format("woff2"),url("./assets/fonts/Lato/Lato-Black.woff") format("woff"),url("./assets/fonts/Lato/Lato-Black.ttf") format("ttf");
+  font-style:normal;font-weight:400;
+}
+
+@font-face {
+  font-family:"Karla Medium";
+  src:url("./assets/fonts/Karla/Karla-Medium.woff2") format("woff2"),url("./assets/fonts/Karla/Karla-Medium.woff") format("woff"),url("./assets/fonts/Karla/Karla-Medium.ttf") format("ttf");
+  font-style:normal;font-weight:400;
+}
+      
+
+/* Fichier de css pour le body */ 
 html,
 body, #root {
   height: 100%;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  font-family: 'Lato-Regular';
+  font-family: 'Karla Medium', 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   display: flex;
   flex-direction: column;
-  @apply bg-cream
 }
 
 main {
   flex-grow: 1;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
-
 body {
-  font-family: sans-serif;
-  color: #222;
+  font-family: 'Karla Medium';
+  color: theme('colors.darkBlue');
   margin: 0;
 }
+
+      

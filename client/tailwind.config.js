@@ -15,30 +15,10 @@ module.exports = {
         darkBlue: "#23272D",
         red: "#E91616",
       },
-      fontFace: {
-        karla: [
-          {
-            filename: "./assets/fonts/karla/Karla-Medium",
-            weigth: 400,
-          },
-        ],
-        latoBlack: [
-          {
-            filename: "./assets/fonts/lato/Lato-Black",
-            weigth: 900,
-          },
-        ],
-        latoRegular: [
-          {
-            filename: "./assets/fonts/lato/Lato-Regular",
-            weigth: 400,
-          },
-        ],
-      },
       fontFamily: {
-        karla: ["karla", "sans-serif"],
-        latoBlack: ["latoBlack", "system-ui"],
-        latoRegular: ["latoRegular", "sans-serif"],
+        karla: ["Karla Medium", "sans-serif"],
+        latoBlack: ["Lato Black", "system-ui"],
+        latoRegular: ["Lato Regular", "sans-serif"],
       },
       fontSize: {
         sm: "0.8rem",
@@ -46,6 +26,13 @@ module.exports = {
         m: "2rem",
         l: "2.5rem",
         xl: "4rem",
+      },
+      dropShadow: {
+        l: "0.2rem 0.2rem 0 theme('colors.orange')",
+        xl: "0.30rem 0.30rem 0 theme('colors.orange')",
+      },
+      boxShadow: {
+        DEFAULT: "0.5rem 0.5rem 0 theme('colors.orange')",
       },
     },
   },
