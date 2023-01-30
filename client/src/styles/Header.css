@@ -1,0 +1,8 @@
+.header_container { 
+    @apply w-full h-40 bg-black text-white;
+}
+
+.header_container_flex {
+    display: flex; 
+    justify-content: space-around;
+}
