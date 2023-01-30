@@ -43,6 +43,7 @@ class Place {
   @Column()
   cityId: number;
 
+  @Field(() => City)
   @ManyToOne(() => City, (city) => city.places)
   city: City;
 
