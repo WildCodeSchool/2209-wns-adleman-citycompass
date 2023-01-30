@@ -13,32 +13,56 @@ export default function Footer() {
   return (
     <div className="footer-container">
       <div className="logo-container">
-        <img className="w-16 lg:w-20" src={compasLogo} alt="logo city compass" />
+        <img
+          className="w-16 lg:w-20"
+          src={compasLogo}
+          alt="logo city compass"
+        />
         <p>City Compass</p>
       </div>
       <div className="contributors-container">
         <p>Made with love by</p>
         <div className="flex space-x-4">
-          <img
-            className="avatar-footer"
-            src={claraContributor}
-            alt="julie avatar"
-          />
-          <img
-            className="avatar-footer"
-            src={elodieContributor}
-            alt="julie avatar"
-          />
-          <img
-            className="avatar-footer"
-            src={alexandreContributor}
-            alt="julie avatar"
-          />
-          <img
-            className="avatar-footer"
-            src={julieContributor}
-            alt="julie avatar"
-          />
+          <a href="https://github.com/Liax" rel="noreferrer" target="_blank">
+            <img
+              className="avatar-footer"
+              src={claraContributor}
+              alt="clara avatar"
+            />
+          </a>
+          <a
+            href="https://github.com/elodiedaubie"
+            rel="noreferrer"
+            target="_blank"
+          >
+            <img
+              className="avatar-footer"
+              src={elodieContributor}
+              alt="élodie avatar"
+            />
+          </a>
+          <a
+            href="https://github.com/kaitolight"
+            rel="noreferrer"
+            target="_blank"
+          >
+            <img
+              className="avatar-footer"
+              src={alexandreContributor}
+              alt="alexandre avatar"
+            />
+          </a>
+          <a
+            href="https://github.com/JulieCombeau"
+            rel="noreferrer"
+            target="_blank"
+          >
+            <img
+              className="avatar-footer"
+              src={julieContributor}
+              alt="julie avatar"
+            />
+          </a>
         </div>
       </div>
       <div className="reseaux-container">
@@ -46,7 +70,13 @@ export default function Footer() {
         <div className="reseau-footer">
           <img src={instagramLogo} alt="instagram logo" />
           <img src={facebookLogo} alt="facebook logo" />
-          <img src={githubLogo} alt="gitHub logo" />
+          <a
+            href="https://github.com/WildCodeSchool/2209-wns-adleman-citycompass"
+            rel="noreferrer"
+            target="_blank"
+          >
+            <img src={githubLogo} alt="gitHub logo" />
+          </a>
           <img src={linkedinLogo} alt="linkedIn logo" />
         </div>
       </div>
