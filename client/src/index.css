@@ -26,7 +26,6 @@ html,
 body, #root {
   height: 100%;
   margin: 0;
-  font-family: 'Lato-Regular';
   font-family: 'Karla Medium', 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;

@@ -2,9 +2,6 @@
 module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
-    borderRadius: {
-      DEFAULT: "0 3rem 3rem 3rem",
-    },
     extend: {
       colors: {
         transparent: "transparent",
@@ -33,6 +30,9 @@ module.exports = {
       },
       boxShadow: {
         DEFAULT: "0.5rem 0.5rem 0 theme('colors.orange')",
+      },
+      borderRadius: {
+        DEFAULT: "0 3rem 3rem 3rem",
       },
     },
   },
