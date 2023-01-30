@@ -1,0 +1,23 @@
+h1 {
+    font-family: theme('fontFamily.latoBlack');
+	color: theme('colors.darkBlue');
+    font-size: theme('fontSize.xl');
+}
+
+h2 {
+    font-family: theme('fontFamily.latoBlack');
+	color: theme('colors.darkBlue');
+    font-size: theme('fontSize.l');
+}
+
+h3 {
+    font-family: theme('fontFamily.latoBlack');
+	color: theme('colors.darkBlue');
+    font-size: theme('fontSize.m');
+}
+
+p {
+    font-family: theme('fontFamily.karla');
+	color: theme('colors.darkBlue');
+    font-size: theme('fontSize.base');
+}
