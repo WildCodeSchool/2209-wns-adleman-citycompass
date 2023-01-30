@@ -1,0 +1,19 @@
+.header_container {
+  @apply w-full h-40 bg-white justify-around;
+}
+
+.header_compass {
+  @apply flex-initial w-32 basis-1/4;
+}
+
+.header_title {
+  @apply flex-auto basis-1/2 text-center;
+}
+
+.header_glass_img {
+  @apply flex-initial w-8;
+}
+
+.header_profile_search {
+  @apply flex-initial basis-1/4 flex;
+}
