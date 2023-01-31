@@ -11,7 +11,7 @@ import linkedinLogo from "../assets/linkedin-logo.svg";
 
 export default function Footer() {
   return (
-    <footer className="bg-[theme('colors.green.DEFAULT')]">
+    <footer className="bg-green">
       <div className="footer-container">
         <div className="logo-container">
           <img
