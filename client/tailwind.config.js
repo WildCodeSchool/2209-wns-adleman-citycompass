@@ -26,7 +26,9 @@ module.exports = {
       },
       dropShadow: {
         l: "0.2rem 0.2rem 0 theme('colors.orange')",
-        xl: "0.30rem 0.30rem 0 theme('colors.orange')",
+        xl: "0.3rem 0.3rem 0 theme('colors.orange')",
+        green: "0.3rem 0.3rem 0 theme('colors.green.DEFAULT')",
+        cream: "0.2rem 0.2rem 0 theme('colors.cream')",
       },
       boxShadow: {
         DEFAULT: "0.5rem 0.5rem 0 theme('colors.orange')",
