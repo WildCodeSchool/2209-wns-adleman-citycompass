@@ -7,9 +7,7 @@ import person from "../assets/person-circle-outline.svg";
 function Header() {
   return (
     <div className="header_container">
-      <div className="header_compass">
-        <img src={compasLogo} alt="compass" className="header_compass" />
-      </div>{" "}
+      <img src={compasLogo} alt="compass" className="header_compass" />
       <h1 className="header_title">CITY COMPASS</h1>
       <div className="header_profile_search">
         <img src={loupe} alt="loupe" className="header_glass_img" />

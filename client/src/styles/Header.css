@@ -1,13 +1,13 @@
 .header_container {
-  @apply w-full h-40 bg-green-dark justify-around flex align-middle;
+  @apply w-full h-40 bg-green-dark justify-around flex align-middle sticky top-0 z-50;
 }
 
 .header_compass {
-  @apply flex flex-initial basis-1/4 justify-center w-0.5;
+  @apply invisible lg:visible lg:flex lg:flex-initial lg:basis-1/4 lg:justify-center lg:w-0.5;
 }
 
 .header_title {
-  @apply flex-auto basis-1/2 drop-shadow-xl text-xl font-bold font-karla text-center;
+  @apply flex-auto basis-1/2 drop-shadow-xl text-m font-bold font-karla text-center md:text-l xl:text-xl;
 }
 
 .header_glass_img {
