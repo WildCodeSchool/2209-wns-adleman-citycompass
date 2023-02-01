@@ -1,4 +1,5 @@
 import React from "react";
+import "../styles/breadcrumbs.css";
 
 function Hero({ heroContent, breadcrumbs }: any) {
 	return (
@@ -11,7 +12,7 @@ function Hero({ heroContent, breadcrumbs }: any) {
 						alt={heroContent.name + "picture"}
 					/>
 				</div>
-				<div className="w-full sm:w-1/2 px-6 sm:pr-9 flex flex-col justify-center sm:space-y-8 max-w-2xl">
+				<div className="container w-full sm:w-1/2 px-6 sm:pr-9 flex flex-col justify-center sm:space-y-8 max-w-2xl">
 					<div className="breadcrumbs hidden sm:flex">
 						{breadcrumbs && (
 							<div className="max-w-3xl">

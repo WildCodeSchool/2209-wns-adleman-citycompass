@@ -20,6 +20,9 @@ export default function City() {
 	return (
 		<>
 			<Hero heroContent={city} breadcrumbs={breadcrumbs} />
+			<div className="container py-20">
+				<h2 className="text-center">Les Points d'intérêts</h2>
+			</div>
 			<MapCity />
 		</>
 	);

@@ -2,22 +2,6 @@
 	margin: auto;
 }
 
-.breadcrumbs a span:hover {
-	@apply text-darkBlue transition-colors;
-}
-
-.breadcrumbs a:not(:last-child) {
-	padding-right: 0.5rem;
-}
-
-.breadcrumbs a:not(:last-child)::after {
-	content: "-";
-	padding-left: 0.5rem;
-	@screen sm {
-		padding-left: 2.5rem;
-	}
-}
-
 h1 {
 	font-family: "Lato Black";
 	color: theme("colors.darkBlue");
