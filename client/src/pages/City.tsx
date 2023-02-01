@@ -23,7 +23,14 @@ export default function City() {
 			<div className="container py-20">
 				<h2 className="text-center">Les Points d'intérêts</h2>
 			</div>
-			<MapCity />
+			<div className="flex flex-col sm:flex-row relative sm:gap-6">
+				<div className="w-full md:w-1/2 lg:w-2/3 h-[80vh] z-0">
+					<MapCity />
+				</div>
+				<div className="bg-cream sm:bg-transparent w-full md:w-1/2 lg:w-1/3 absolute sm:relative min-h-[100px] bottom-0 z-10">
+					<h3 className="text-center sm:text-left">à découvrir</h3>
+				</div>
+			</div>
 		</>
 	);
 }
