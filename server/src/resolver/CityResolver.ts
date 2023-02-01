@@ -56,7 +56,7 @@ export class CityResolver {
   async getOneCitybyId(@Arg("id") id: string): Promise<City> {
     const cityToFind = await datasource
       .getRepository(City)
-      .findOne({ where: { id: parseInt(id, 10) } });
+      .findOne({ where: { id: parseInt(id, 10) }, relations: { places: true } });
 
     if (cityToFind === null)
       throw new ApolloError("City not found", "NOT_FOUND");
