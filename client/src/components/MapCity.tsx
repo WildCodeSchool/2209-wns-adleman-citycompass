@@ -6,15 +6,7 @@ import { useNavigate } from "react-router-dom";
 export default function MapCity({ cityName, cityLat, cityLong, places }: any) {
   const navigate = useNavigate();
 
-  const restaurantIcon = L.icon({
-    iconUrl: places[0].category.picto,
-    iconSize: [50, 50],
-    iconAnchor: [12, 12],
-    popupAnchor: [0, 0],
-  });
-
   return (
-    
     <div>
       <MapContainer
         center={[parseFloat(cityLat), parseFloat(cityLong)]}
@@ -28,7 +20,12 @@ export default function MapCity({ cityName, cityLat, cityLong, places }: any) {
         {places.map((place: any) => (
           <Marker
             position={[parseFloat(place.latitude), parseFloat(place.longitude)]}
-            icon={restaurantIcon}
+            icon={L.icon({
+              iconUrl: place.category.picto,
+              iconSize: [50, 50],
+              iconAnchor: [12, 12],
+              popupAnchor: [0, 0],
+            })}
           >
             <Popup>
               <div>
