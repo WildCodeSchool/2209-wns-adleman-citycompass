@@ -1,24 +1,44 @@
+.container {
+	margin: auto;
+}
+
+.breadcrumbs a span:hover {
+	@apply text-darkBlue transition-colors;
+}
+
+.breadcrumbs a:not(:last-child) {
+	padding-right: 0.5rem;
+}
+
+.breadcrumbs a:not(:last-child)::after {
+	content: "-";
+	padding-left: 0.5rem;
+	@screen sm {
+		padding-left: 2.5rem;
+	}
+}
+
 h1 {
-    font-family: 'Lato Black';
-	color: theme('colors.darkBlue');
-    font-size: theme('fontSize.xl');
+	font-family: "Lato Black";
+	color: theme("colors.darkBlue");
+	font-size: theme("fontSize.xl");
 	text-transform: uppercase;
 }
 
 h2 {
-    font-family:'Lato Black';
-	color: theme('colors.darkBlue');
-    font-size: theme('fontSize.l');
+	font-family: "Lato Black";
+	color: theme("colors.darkBlue");
+	font-size: theme("fontSize.l");
 }
 
 h3 {
-    font-family: 'Lato Regular';
-	color: theme('colors.darkBlue');
-    font-size: theme('fontSize.m');
+	font-family: "Lato Regular";
+	color: theme("colors.darkBlue");
+	font-size: theme("fontSize.m");
 }
 
 p {
-    font-family: 'Karla Medium';
-	color: theme('colors.darkBlue');
-    font-size: theme('fontSize.base');
+	font-family: "Karla Medium";
+	color: theme("colors.darkBlue");
+	font-size: theme("fontSize.base");
 }
