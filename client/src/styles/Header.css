@@ -1,19 +1,23 @@
 .header_container {
-  @apply w-full h-40 bg-white justify-around;
+  @apply w-full h-40 bg-green-dark justify-around flex align-middle;
 }
 
 .header_compass {
-  @apply flex-initial w-32 basis-1/4;
+  @apply flex flex-initial basis-1/4 justify-center w-0.5;
 }
 
 .header_title {
-  @apply flex-auto basis-1/2 text-center;
+  @apply flex-auto basis-1/2 drop-shadow-xl text-xl font-bold font-karla text-center;
 }
 
 .header_glass_img {
-  @apply flex-initial w-8;
+  @apply flex-initial w-12 mr-4;
+}
+
+.header_profile_img {
+  @apply flex-initial w-14 justify-end;
 }
 
 .header_profile_search {
-  @apply flex-initial basis-1/4 flex;
+  @apply flex-initial basis-1/4 flex justify-end mr-2;
 }
