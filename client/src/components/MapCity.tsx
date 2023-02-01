@@ -1,16 +1,20 @@
 import L from "leaflet";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "../styles/MapCity.css";
+import { useNavigate } from "react-router-dom";
 
-export default function MapCity({ cityLat, cityLong, places }: any) {
+export default function MapCity({ cityName, cityLat, cityLong, places }: any) {
+  const navigate = useNavigate();
+
   const restaurantIcon = L.icon({
     iconUrl: places[0].category.picto,
     iconSize: [50, 50],
     iconAnchor: [12, 12],
     popupAnchor: [0, 0],
   });
-  console.log(restaurantIcon);
+
   return (
+    
     <div>
       <MapContainer
         center={[parseFloat(cityLat), parseFloat(cityLong)]}
@@ -28,7 +32,11 @@ export default function MapCity({ cityLat, cityLong, places }: any) {
           >
             <Popup>
               <div>
-                <img src={place.picture} alt="Place" />
+                <img
+                  src={place.picture}
+                  alt="Place"
+                  onClick={() => navigate(`/cities/${cityName}/${place.id}`)}
+                />
                 <div>
                   <p>{place.name}</p>
                   <p>{place.adress}</p>
