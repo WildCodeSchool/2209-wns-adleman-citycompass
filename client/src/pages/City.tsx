@@ -15,6 +15,7 @@ export default function City() {
 		{ name: "Accueil", link: "/" },
 		{ name: "cities", link: "" },
 		{ name: " Lyon", link: "" },
+		{ name: " Autre", link: "" },
 	];
 
 	return (
