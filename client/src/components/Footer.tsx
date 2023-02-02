@@ -19,9 +19,7 @@ export default function Footer() {
             src={compasLogo}
             alt="logo city compass"
           />
-          <h2 className="drop-shadow-cream w-44">
-            City Compass
-          </h2>
+          <h2 className="drop-shadow-cream w-44">City Compass</h2>
         </div>
         <div className="footer__contributors">
           <p className="font-latoRegular">Made with love by</p>

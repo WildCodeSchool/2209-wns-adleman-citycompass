@@ -1,10 +1,6 @@
-import Footer from "../components/Footer";
-import Header from "../components/Header";
-
 export default function Home() {
   return (
     <>
-      <Header />
       {/* Container parent à definir : pour l'instant cela force le footer à être
       en bas de page peut importe le contenu*/}
       <div className="flex h-full flex-col justify-between">

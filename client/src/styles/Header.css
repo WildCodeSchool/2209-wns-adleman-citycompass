@@ -1,28 +1,27 @@
-.header_container {
-  @apply h-auto w-full bg-green-dark justify-around flex align-middle sticky top-0 z-50;
+.header {
+  @apply h-auto w-full justify-around flex align-middle sticky top-0 z-50 bg-white m-auto;
 }
 
-.header_compass {
-  @apply invisible lg:visible;
+.header__compass {
+  @apply basis-0 flex-initial align-middle lg:basis-1/4 hidden lg:flex;
+}
+
+.header__compass img {
   width: 4.5rem;
 }
 
-.header_div_compass {
-  @apply basis-0 flex flex-initial align-middle justify-center lg:basis-1/4;
-}
-
-.header_title {
+.header__title {
   @apply flex-auto basis-1/4 drop-shadow-xl text-m font-bold font-karla text-center md:text-l lg:text-xl;
 }
 
-.header_glass_img {
+.header__profile {
+  @apply lg:basis-1/4 flex-initial flex justify-end;
+}
+
+.header__profile--loupe {
   @apply flex-initial w-8 md:w-12 mr-1 md:mr-4;
 }
 
-.header_profile_img {
+.header__profile--search {
   @apply flex-initial justify-end w-10 md:w-14;
-}
-
-.header_profile_search {
-  @apply lg:basis-1/4 flex-initial flex justify-end mr-2;
 }

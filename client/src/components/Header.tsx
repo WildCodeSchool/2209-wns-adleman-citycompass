@@ -1,24 +1,32 @@
 import React from "react";
 import "../styles/Header.css";
-import compasLogo from "../assets/compas_logo.svg";
+import compasHeader from "../assets/compass_header.svg";
 import loupe from "../assets/magnifying-glass.svg";
 import person from "../assets/person-circle-outline.svg";
 
 function Header() {
   return (
     <>
-      <div className="header_container">
-        <div className="header_div_compass">
+      <div className="container header">
+        <div className="header__compass">
           <img
-            src={compasLogo}
+            src={compasHeader}
             alt="logo city compass"
-            className="header_compass"
+            className="header__compass-img"
           />
         </div>
-        <h1 className="header_title">CITY COMPASS</h1>
-        <div className="header_profile_search">
-          <img src={loupe} alt="loupe" className="header_glass_img" />
-          <img src={person} alt="person" className="header_profile_img" />
+        <h1 className="header__title">CITY COMPASS</h1>
+        <div className="header__profile">
+          <img
+            src={loupe}
+            alt="loupe search bar"
+            className="header__profile--loupe"
+          />
+          <img
+            src={person}
+            alt="person icon to profile"
+            className="header__profile--search"
+          />
         </div>
       </div>
     </>
