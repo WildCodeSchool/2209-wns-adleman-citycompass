@@ -15,7 +15,6 @@ export default function Home() {
           <h4>Titre 4</h4>
           <p className="">Mon super test</p>
         </div>
-        <Footer />
       </div>
     </>
   );
