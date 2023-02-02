@@ -17,8 +17,8 @@ function App() {
 			<main>
 				<Routes>
 					<Route path="/" element={<Home />} />
-					<Route path="/cities/:cityName" element={<City />} />
-					<Route path="/cities/:cityName/:placeId" element={<Place />} />
+					<Route path="/cities/:cityId" element={<City />} />
+					<Route path="/cities/:cityId/:placeId" element={<Place />} />
 					<Route path="/account/:userId" element={<Account />} />
 					<Route path="/dashboard/:userId" element={<Dashboard />} />
 				</Routes>

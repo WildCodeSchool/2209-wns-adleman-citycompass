@@ -1,11 +1,13 @@
 import MapCity from "../components/MapCity";
 import Hero from "../components/Hero";
 import { useGetOneCitybyIdQuery } from "../gql/generated/schema";
+import { useParams } from "react-router-dom";
 
 export default function City() {
-	const id = "14";
+	const { cityId = "" } = useParams();
+
 	const { data } = useGetOneCitybyIdQuery({
-		variables: { getOneCitybyId: id },
+		variables: { getOneCitybyId: cityId },
 	});
 
 	const city = data?.getOneCitybyId;
