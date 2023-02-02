@@ -16,11 +16,11 @@
 }
 
 .header_glass_img {
-  @apply flex-initial w-8 lg:w-12 mr-1 lg:mr-4;
+  @apply flex-initial w-8 md:w-12 mr-1 md:mr-4;
 }
 
 .header_profile_img {
-  @apply flex-initial justify-end w-10 lg:w-14;
+  @apply flex-initial justify-end w-10 md:w-14;
 }
 
 .header_profile_search {
