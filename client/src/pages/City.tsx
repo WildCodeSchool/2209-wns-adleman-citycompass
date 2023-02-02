@@ -1,7 +1,7 @@
 import MapCity from "../components/MapCity";
 import Hero from "../components/Hero";
 import { useGetOneCitybyIdQuery } from "../gql/generated/schema";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 
 export default function City() {
 	const { cityId = "" } = useParams();
@@ -12,13 +12,22 @@ export default function City() {
 
 	const city = data?.getOneCitybyId;
 
-	//https://medium.com/@mattywilliams/generating-an-automatic-breadcrumb-in-react-router-fed01af1fc3
-	const breadcrumbs = [
-		{ name: "Accueil", link: "/" },
-		{ name: "cities", link: "" },
-		{ name: " Lyon", link: "" },
-		{ name: " Autre", link: "" },
-	];
+	// Get the url and get each individual link for breadcrumbs /
+	function GenerateBreadcrumbs() {
+		const router = useLocation()
+			.pathname.split("/")
+			.filter((v) => v.length > 0);
+
+		const crumblist = router.map((subpath, id) => {
+			const href = "/" + router.slice(0, id + 1).join("/");
+			const title = subpath;
+			return { href, title };
+		});
+		return [{ href: "/", title: "Accueil" }, ...crumblist];
+	}
+	const breadcrumbs = GenerateBreadcrumbs();
+
+	console.log(breadcrumbs);
 
 	return (
 		<>

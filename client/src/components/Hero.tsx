@@ -18,10 +18,10 @@ function Hero({ heroContent, breadcrumbs }: any) {
 							<div className="max-w-3xl">
 								{breadcrumbs.map((breadcrumb: any) => (
 									<a
-										href={breadcrumb.link}
+										href={breadcrumb.href}
 										className="text-xs text-darkBlue/30"
 									>
-										<span>{breadcrumb.name}</span>
+										<span>{breadcrumb.title}</span>
 									</a>
 								))}
 							</div>
