@@ -35,7 +35,9 @@ export default function City() {
         </div>
         <div className="bg-cream px-8 pb-12 sm:bg-transparent w-full md:w-1/2 lg:w-1/3 absolute sm:relative min-h-[100px] bottom-0 z-10">
           <h3 className="text-center sm:text-left pb-12">À découvrir</h3>
-          <MiniCardPoi places={city.places} />
+          {city.places?.map((place) => (
+            <MiniCardPoi place={place} />
+          ))}
         </div>
       </div>
     </>

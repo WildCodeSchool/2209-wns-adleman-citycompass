@@ -2,13 +2,13 @@ import React from "react";
 import { PlaceProps } from "./MapCity";
 
 interface cardProps {
-  places: PlaceProps[] | undefined;
+  place: PlaceProps | undefined;
 }
 
-function MiniCardPoi({ places }: cardProps) {
+function MiniCardPoi({ place }: cardProps) {
   return (
     <>
-      {places?.map((place) => (
+      {place && (
         <div className="w-full bg-white drop-shadow-green border-green border-2 overflow-hidden rounded flex">
           <div className="w-1/3 h-28 overflow-hidden">
             <img
@@ -22,7 +22,7 @@ function MiniCardPoi({ places }: cardProps) {
             <p>{place.adress}</p>
           </div>
         </div>
-      ))}
+      )}
     </>
   );
 }
