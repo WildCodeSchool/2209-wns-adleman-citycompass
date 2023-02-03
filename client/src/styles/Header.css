@@ -1,0 +1,27 @@
+.header {
+  @apply h-auto w-full justify-around flex align-middle m-auto;
+}
+
+.header__compass {
+  @apply basis-0 flex-initial align-middle lg:basis-1/4 hidden lg:flex;
+}
+
+.header__compass img {
+  width: 4.5rem;
+}
+
+.header__title {
+  @apply flex-auto basis-1/4 drop-shadow-xl text-m font-bold font-karla text-center md:text-l lg:text-xl;
+}
+
+.header__profile {
+  @apply lg:basis-1/4 flex-initial flex justify-end;
+}
+
+.header__profile--loupe {
+  @apply flex-initial w-8 md:w-12 mr-1 md:mr-4;
+}
+
+.header__profile--search {
+  @apply flex-initial justify-end w-10 md:w-14;
+}
