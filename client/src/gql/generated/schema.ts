@@ -47,6 +47,14 @@ export type CityInput = {
   picture: Scalars['String'];
 };
 
+export type CityUpdate = {
+  description?: InputMaybe<Scalars['String']>;
+  latitude?: InputMaybe<Scalars['String']>;
+  longitude?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
+  picture?: InputMaybe<Scalars['String']>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createCategory: Category;
@@ -80,7 +88,7 @@ export type MutationUpdateCategoryArgs = {
 
 
 export type MutationUpdateCityArgs = {
-  data: CityInput;
+  data: CityUpdate;
   id: Scalars['String'];
 };
 

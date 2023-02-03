@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import Home from "./pages/Home";
 import City from "./pages/City";
@@ -20,7 +20,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/cities/:cityId" element={<City />} />
-          <Route path="/cities/:cityId/:placeId" element={<Place />} />
+          <Route path="/cities/:cityName/:placeName" element={<Place />} />
           <Route path="/account/:userId" element={<Account />} />
           <Route path="/dashboard/:userId" element={<Dashboard />} />
         </Routes>

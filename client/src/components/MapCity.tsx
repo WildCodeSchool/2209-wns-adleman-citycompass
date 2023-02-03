@@ -4,13 +4,13 @@ import "../styles/MapCity.css";
 import { useNavigate } from "react-router-dom";
 
 interface CityProps {
-  cityName: string;
-  cityLat: string;
-  cityLong: string;
-  places: PlaceProps[];
+  cityName: string | undefined;
+  cityLat: string | undefined;
+  cityLong: string | undefined;
+  places: PlaceProps[] | undefined;
 }
 
-interface PlaceProps {
+export interface PlaceProps {
   id: number;
   picture: string;
   latitude: string;
@@ -32,7 +32,7 @@ export default function MapCity({
 
   return (
     <>
-      {cityName && (
+      {cityName && cityLat && cityLong && (
         <MapContainer
           center={[parseFloat(cityLat), parseFloat(cityLong)]}
           zoom={13}
@@ -62,7 +62,9 @@ export default function MapCity({
                       src={place.picture}
                       alt="Place"
                       onClick={() =>
-                        navigate(`/cities/${cityName}/${place.id}`)
+                        navigate(
+                          `/cities/${cityName}/${place.name.replace(" ", "-")}`
+                        )
                       }
                     />
                     <div>
