@@ -7,7 +7,7 @@ import person from "../assets/person-circle-outline.svg";
 function Header() {
   return (
     <>
-      <div className="bg-white w-full">
+      <div className="bg-white w-full sticky top-0 z-50">
         <div className="header container">
           <div className="header__compass">
             <img
