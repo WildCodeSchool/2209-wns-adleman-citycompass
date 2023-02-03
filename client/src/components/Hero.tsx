@@ -3,6 +3,7 @@ import Breadcrumbs from "./Breadcrumbs";
 import "../styles/button.css";
 
 import { useLocation } from "react-router-dom";
+import { PlaceProps } from "./MapCity";
 
 export interface HeroProps {
   heroContent: heroContent;
@@ -17,6 +18,7 @@ export interface heroContent {
   longitude?: string | undefined;
   name?: string | undefined;
   picture?: string | undefined;
+  places?: PlaceProps[] | undefined;
 }
 
 function Hero({ heroContent, action }: HeroProps) {
