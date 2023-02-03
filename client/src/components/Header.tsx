@@ -10,13 +10,18 @@ function Header() {
       <div className="bg-white w-full sticky top-0 z-50">
         <div className="header container">
           <div className="header__compass">
-            <img
-              src={compasHeader}
-              alt="logo city compass"
-              className="header__compass-img"
-            />
+            <a href="/" className="flex">
+              <img
+                src={compasHeader}
+                alt="logo city compass"
+                className="header__compass-img"
+              />
+            </a>
           </div>
-          <h1 className="header__title">CITY COMPASS</h1>
+
+          <a href="/" title="Accueil" className="type-h1 header__title">
+            CITY COMPASS
+          </a>
           <div className="header__profile">
             <img
               src={loupe}
