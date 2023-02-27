@@ -11,6 +11,8 @@ export class CityResolver {
     if (data === null)
       throw new ApolloError("No data in query", "BAD_USER_INPUT");
 
+    // delete blank spaces before and after city name
+    data.name = data.name.trim();
     // change city name first letter to Uppercase
     data.name = data.name.charAt(0).toUpperCase() + data.name.slice(1);
 

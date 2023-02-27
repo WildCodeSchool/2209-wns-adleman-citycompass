@@ -103,7 +103,7 @@ describe("City resolver", () => {
       });
 
       expect(res.data?.createCity).toHaveProperty("id");
-      expect(res.data?.createCity).toHaveProperty("name", " Marseille");
+      expect(res.data?.createCity).toHaveProperty("name", "Marseille");
       expect(res.data?.createCity).toHaveProperty(
         "description",
         "La description de Marseille"
@@ -111,7 +111,8 @@ describe("City resolver", () => {
       expect(res.data?.createCity).toHaveProperty("latitude", "43.300000");
       expect(res.data?.createCity).toHaveProperty("longitude", "5.400000");
     });
-    // a city name should not be created twice
+    // a city should not be created twice based on name
+
     // a city with same latitude and longitude should not be created twice
     // a city with empty name should not be created
     // a city with empty description should not be created
