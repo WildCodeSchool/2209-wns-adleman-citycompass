@@ -8,5 +8,7 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v2
+      - name: Clean cache
+        run: npm cache clean --force
       - name: Run integration test
         run: npm i -g pnpm && pnpm run integration-test
