@@ -1,5 +1,9 @@
 {
   "dependencies": {
     "pnpm": "^7.16.0"
+  },
+  "scripts": {
+    "integration-test": "docker compose -f docker-compose.integration-tests.yml up --build",
+    "start": "docker compose -f docker-compose.yml up --build"
   }
 }

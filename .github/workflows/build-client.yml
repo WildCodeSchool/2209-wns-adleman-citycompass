@@ -6,34 +6,16 @@ on:
       - main
 
 jobs:
-  test-client:
+  integration-test:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
-        uses: actions/checkout@v3
-      - name: Install pnpm and deps
-        run: cd client && pnpm i
-
-  test-server:
-    needs: test-client
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v3
-      - name: Install pnpm and deps
-        run: cd serveur && pnpm i
-
-  test-integration:
-    needs: test-server
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v3
-      - name: Go to integration-tests and run tests
-        run: cd integration-tests && pnpm run test
+        uses: actions/checkout@v2
+      - name: Run integration test
+        run: pnpm run integration-test
 
   build:
-    needs: test-integration
+    needs: integration-test
     runs-on: ubuntu-latest
     steps:
       - name: Set up QEMU
