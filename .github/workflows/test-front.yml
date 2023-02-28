@@ -1,0 +1,12 @@
+name: tests-front
+
+on: pull_request
+
+jobs:
+  test-client:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+      - name: Install pnpm and deps
+        run: cd client && pnpm i

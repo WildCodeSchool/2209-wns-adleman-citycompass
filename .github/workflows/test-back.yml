@@ -1,0 +1,21 @@
+name: tests-back
+
+on: pull_request
+
+jobs:
+  test-server:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+      - name: Install pnpm and deps
+        run: cd serveur && pnpm i
+
+  test-integration:
+    needs: test-server
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+      - name: Go to integration-tests and run tests
+        run: cd integration-tests && pnpm run test
