@@ -9,4 +9,4 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v2
       - name: Run integration test
-        run: pnpm run integration-test
+        run: npm i && pnpm run integration-test
