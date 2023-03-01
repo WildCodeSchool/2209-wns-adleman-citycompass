@@ -36,7 +36,7 @@ jobs:
         with:
           envkey_CHOKIDAR_USEPOLLING: true
           envkey_WATCHPACK_POLLING: true
-          directory: client
+          directory: ./
           file_name: .env
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
