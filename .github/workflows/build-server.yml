@@ -27,6 +27,15 @@ jobs:
     needs: integration-test
     runs-on: ubuntu-latest
     steps:
+      - name: Create Dotenv File
+        uses: actually-colab/github-action-create-env-file@v2.3
+        with:
+          envkey_NODE_ENV: "development"
+          envkey_SERVER_HOST: "localhost"
+          envkey_SERVER_PORT: "4000"
+          envkey_DB_HOST: "db"
+          directory: server
+          file_name: .env
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
       - name: Set up Docker Buildx
@@ -34,11 +43,11 @@ jobs:
       - name: Login to Docker Hub
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
           push: true
           context: "{{defaultContext}}:server"
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/2209-wns-adleman-citycompass:latest
+          tags: ${{ vars.DOCKERHUB_USERNAME }}/2209-wns-adleman-citycompass:latest
