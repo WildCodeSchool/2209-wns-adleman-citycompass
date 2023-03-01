@@ -53,10 +53,9 @@ export default function MapCity({
                   ]}
                   icon={L.icon({
                     iconUrl: place.category.picto,
-                    iconSize: [30, 30],
+                    iconSize: [35, 35],
                     iconAnchor: [12, 12],
-                    popupAnchor: [0, 0],
-                    className: "rounded-t-3xl rounded-br-3xl",
+                    popupAnchor: [0, 0]
                   })}
                 >
                   <Popup maxWidth={200}>
@@ -74,7 +73,9 @@ export default function MapCity({
                         }
                       />
                       <div>
-                        <p className="font-bold font-latoBlack text-center">{place.name}</p>
+                        <p className="font-bold font-latoBlack text-center">
+                          {place.name}
+                        </p>
                         <p>{place.adress}</p>
                       </div>
                     </div>
