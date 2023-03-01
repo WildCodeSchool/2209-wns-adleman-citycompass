@@ -7,9 +7,11 @@ import { CityResolver } from "./resolver/CityResolver";
 import { CategoryResolver } from "./resolver/CategoryResolver";
 import { PlaceResolver } from "./resolver/PlaceResolver";
 import { SearchResolver } from "./resolver/SearchResolver";
+import { runSeeders } from 'typeorm-extension';
 
 const start = async (): Promise<void> => {
   await datasource.initialize();
+  await runSeeders(datasource);
 
   const schema = await buildSchema({
     resolvers: [CategoryResolver, CityResolver, PlaceResolver, SearchResolver],
