@@ -29,15 +29,6 @@ jobs:
     needs: integration-test
     runs-on: ubuntu-latest
     steps:
-      - name: Check out code
-        uses: actions/checkout@v2
-      - name: Create Dotenv File
-        uses: actually-colab/github-action-create-env-file@v2.3
-        with:
-          envkey_CHOKIDAR_USEPOLLING: true
-          envkey_WATCHPACK_POLLING: true
-          directory: ./
-          file_name: .env
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
       - name: Set up Docker Buildx
