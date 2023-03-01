@@ -1,9 +1,11 @@
 name: jest-and-docker-ci
 
-on:
-  push:
-    branches:
-      - main
+# on:
+#   push:
+#     branches:
+#       - main
+
+on: pull_request
 
 jobs:
   integration-test:
@@ -27,15 +29,6 @@ jobs:
     needs: integration-test
     runs-on: ubuntu-latest
     steps:
-      - name: Create Dotenv File
-        uses: actually-colab/github-action-create-env-file@v2.3
-        with:
-          envkey_NODE_ENV: "development"
-          envkey_SERVER_HOST: "localhost"
-          envkey_SERVER_PORT: "4000"
-          envkey_DB_HOST: "db"
-          directory: server
-          file_name: .env
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
       - name: Set up Docker Buildx
