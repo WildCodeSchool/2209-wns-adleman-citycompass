@@ -11,6 +11,15 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v2
+      - name: Create Dotenv File
+        uses: actually-colab/github-action-create-env-file@v2.3
+        with:
+          envkey_NODE_ENV: "development"
+          envkey_SERVER_HOST: "localhost"
+          envkey_SERVER_PORT: "4000"
+          envkey_DB_HOST: "db"
+          directory: server
+          file_name: .env
       - name: Run integration test
         run: npm i -g pnpm && pnpm run integration-test
 
