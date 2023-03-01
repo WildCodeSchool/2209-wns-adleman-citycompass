@@ -7,18 +7,24 @@ import Place from "./pages/Place";
 import Account from "./pages/Account";
 import Dashboard from "./pages/Dashboard";
 
+import "./styles/Global.css";
+import Footer from "./components/Footer";
+import Header from "./components/Header";
+
 function App() {
   return (
     <>
       <Toaster position="bottom-center" />
       <main>
+        <Header />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/cities/:cityName" element={<City />} />
-          <Route path="/cities/:cityName/:placeId" element={<Place />} />
+          <Route path="/cities/:cityId" element={<City />} />
+          <Route path="/cities/:cityName/:placeName" element={<Place />} />
           <Route path="/account/:userId" element={<Account />} />
           <Route path="/dashboard/:userId" element={<Dashboard />} />
         </Routes>
+        <Footer />
       </main>
     </>
   );

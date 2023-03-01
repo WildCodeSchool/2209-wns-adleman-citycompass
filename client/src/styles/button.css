@@ -1,0 +1,14 @@
+.button--primary {
+  width: auto;
+  padding: 1rem 1.75rem;
+  line-height: 1;
+  text-align: center;
+  background-color: theme("colors.darkBlue");
+  border-radius: 50px;
+  color: white;
+  @apply transition;
+}
+
+.button--primary:hover {
+  opacity: 0.8;
+}

@@ -10,14 +10,14 @@ export class PlaceResolver {
 	async getPlaces(): Promise<Place[]> {
 		return await datasource
 			.getRepository(Place)
-			.find({ relations: { city: true } });
+			.find({ relations: { city: true, category: true } });
 	}
 
 	@Query(() => Place)
 	async getOnePlacebyId(@Arg("id") id: string): Promise<Place> {
 		const placeToFind = await datasource.getRepository(Place).findOne({
 			where: { id: parseInt(id, 10) },
-			relations: { city: true },
+			relations: { city: true, category: true },
 		});
 
 		if (placeToFind === null)

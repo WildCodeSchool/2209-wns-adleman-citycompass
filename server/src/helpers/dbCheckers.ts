@@ -1,6 +1,6 @@
 import datasource from "../db";
 import { ApolloError } from "apollo-server-errors";
-import City, { CityInput } from "../entity/City";
+import City, { CityInput, CityUpdate } from "../entity/City";
 import Place, { PlaceInput } from "../entity/Place";
 
 /**
@@ -8,7 +8,7 @@ import Place, { PlaceInput } from "../entity/Place";
  */
 
 export const existingCity = async (
-	data: CityInput,
+	data: CityInput | CityUpdate,
 	id?: string | undefined
 ): Promise<void> => {
 	const nameExists = await datasource
@@ -32,7 +32,9 @@ export const existingCity = async (
 	}
 };
 
-export const existingCoordinates = async (data: CityInput): Promise<void> => {
+export const existingCoordinates = async (
+	data: CityInput | CityUpdate
+): Promise<void> => {
 	const coordo = await datasource.getRepository(City).findOne({
 		where: { latitude: data.latitude, longitude: data.longitude },
 	});

@@ -43,6 +43,7 @@ class Place {
   @Column()
   cityId: number;
 
+  @Field(() => City)
   @ManyToOne(() => City, (city) => city.places)
   city: City;
 
@@ -50,6 +51,7 @@ class Place {
   @Column()
   categoryId: number;
 
+  @Field(() => Category)
   @ManyToOne(() => Category, (category) => category.places)
   category: Category;
 }
