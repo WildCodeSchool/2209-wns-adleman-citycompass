@@ -29,6 +29,8 @@ jobs:
     needs: integration-test
     runs-on: ubuntu-latest
     steps:
+      - name: Check out code
+        uses: actions/checkout@v2
       - name: Create Dotenv File
         uses: actually-colab/github-action-create-env-file@v2.3
         with:
