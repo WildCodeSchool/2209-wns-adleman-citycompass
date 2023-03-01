@@ -8,8 +8,8 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v2
-      - name: Create .env
-        uses: actions/github-action-create-env-file@v2
+      - name: Create Dotenv File
+        uses: actually-colab/github-action-create-env-file@v2.3
         with:
           envkey_JWT_PRIVATE_KEY: zeyfgzeigfyzegfyuzegf
           envkey_NODE_ENV: "development"
