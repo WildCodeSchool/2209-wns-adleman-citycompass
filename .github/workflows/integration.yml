@@ -9,7 +9,7 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v2
       - name: Create .env
-        uses: actions/create-dotenv-file
+        uses: actions/create-dotenv-file@v2
         with:
           envkey_JWT_PRIVATE_KEY: zeyfgzeigfyzegfyuzegf
           envkey_NODE_ENV: "development"
