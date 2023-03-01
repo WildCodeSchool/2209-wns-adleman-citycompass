@@ -8,7 +8,14 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v2
-      - name: Clean cache
-        run: npm cache clean --force
+      - name: Create .env
+        uses: actions/create-dotenv-file
+        with: envkey_JWT_PRIVATE_KEY=zeyfgzeigfyzegfyuzegf
+          envkey_NODE_ENV="development"
+          envkey_SERVER_HOST="localhost"
+          envkey_SERVER_PORT="4000"
+          envkey_ DB_HOST="db"
+          directory: server
+          file_name: .env
       - name: Run integration test
         run: npm i -g pnpm && pnpm run integration-test
