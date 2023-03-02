@@ -6,11 +6,7 @@ import {
 
 @ValidatorConstraint({ name: "isDotInString", async: false })
 export class IsDotInString implements ValidatorConstraintInterface {
-  validate(
-    value: string,
-    args: ValidationArguments
-  ): boolean | Promise<boolean> {
-    console.log(args);
+  validate(value: string): boolean | Promise<boolean> {
     return value.includes(".");
   }
 
