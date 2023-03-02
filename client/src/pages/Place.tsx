@@ -1,11 +1,15 @@
 import Hero from "../components/Hero";
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { useGetOnePlacebyNameQuery } from "../gql/generated/schema";
 
 export default function Place() {
-  const location = useLocation();
-  const place = location.state.place;
+  let { placeName = "" } = useParams();
 
-  console.log(place);
+  const { data } = useGetOnePlacebyNameQuery({
+    variables: { name: placeName },
+  });
+
+  const place = data?.getOnePlacebyName;
 
   return (
     <>
