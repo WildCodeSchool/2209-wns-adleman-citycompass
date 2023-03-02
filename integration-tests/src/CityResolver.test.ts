@@ -201,7 +201,58 @@ describe("City resolver", () => {
       ).rejects.toThrow();
     });
     // a city should not be created twice based on name
+    it("a city should not be created twice based on name ", async () => {
+      await db.getRepository(City).insert([
+        {
+          name: "Chartres",
+          description: "La description de Chartres",
+          picture: "https://picsum.photos/200/300",
+          latitude: "48.443854",
+          longitude: "1.489012",
+        },
+      ]);
+      expect(() =>
+        client.mutate({
+          mutation: createCityMutation,
+          variables: {
+            data: {
+              name: "Chartres",
+              description: "La description de Chartres",
+              picture: "https://picsum.photos/200/300",
+              latitude: "48.443854",
+              longitude: "1.489012",
+            },
+          },
+        })
+      ).rejects.toThrow("City name already found in database (creation)");
+    });
     // a city with same latitude and longitude should not be created twice
+    it("a city with same latitude and longitude should not be created twice", async () => {
+      await db.getRepository(City).insert([
+        {
+          name: "Chartres",
+          description: "La description de Chartres",
+          picture: "https://picsum.photos/200/300",
+          latitude: "48.443854",
+          longitude: "1.489012",
+        },
+      ]);
+      expect(() =>
+        client.mutate({
+          mutation: createCityMutation,
+          variables: {
+            data: {
+              name: "Paris",
+              description: "La description de Paris",
+              picture: "https://picsum.photos/200/300",
+              latitude: "48.443854",
+              longitude: "1.489012",
+            },
+          },
+        })
+      ).rejects.toThrow("City coordinates found in database");
+    });
+    // a city with no data should return an error
     // a picture should be only URLs
     // unvalid longitude should not be accepted (ex : other caracters than 0 to 9)
     // unvalid latitude should not be accepted (ex : other caracters than 0 to 9)
