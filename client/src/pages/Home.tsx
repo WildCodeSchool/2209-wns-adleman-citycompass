@@ -1,5 +1,6 @@
 import Hero from "../components/Hero";
 import heroHomeImg from "../assets/images/homeHeroBG.png";
+import SearchBar from "../components/SearchBar";
 
 export default function Home() {
   const heroHome = {
@@ -18,6 +19,7 @@ export default function Home() {
       <Hero heroContent={heroHome} action={action} />
       <div className="container">
         <h3 className="text-center">à découvrir</h3>
+        <SearchBar />
       </div>
     </div>
   );
