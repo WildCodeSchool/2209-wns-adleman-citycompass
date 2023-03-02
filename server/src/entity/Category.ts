@@ -1,4 +1,4 @@
-import { Column, Entity, OneToMany, PrimaryColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Field, ObjectType, InputType } from "type-graphql";
 import Place from "./Place";
 
@@ -6,7 +6,7 @@ import Place from "./Place";
 @Entity()
 class Category {
   @Field()
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
   id: number;
 
   @Field()
@@ -18,9 +18,7 @@ class Category {
   picto: string;
 
   @Field(() => [Place])
-  @OneToMany(() => Place, (place) => place.category, {
-    onDelete: "CASCADE"
-  })
+  @OneToMany(() => Place, (place) => place.category)
   places?: Place[];
 }
 

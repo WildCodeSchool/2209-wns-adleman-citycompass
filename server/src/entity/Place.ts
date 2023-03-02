@@ -52,9 +52,7 @@ class Place {
   categoryId: number;
 
   @Field(() => Category)
-  @ManyToOne(() => Category, (category) => category.places, {
-    onDelete: "CASCADE",
-  })
+  @ManyToOne(() => Category, (category) => category.places)
   category: Category;
 }
 
