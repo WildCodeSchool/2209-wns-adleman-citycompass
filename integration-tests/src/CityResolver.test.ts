@@ -250,7 +250,7 @@ describe("City resolver", () => {
           name: "Chartres",
           description: "La description de Chartres",
           picture: "https://picsum.photos/200/300",
-          latitude: "48.443854",
+          latitude: "47.443854",
           longitude: "1.489012",
         },
       ]);
@@ -262,7 +262,7 @@ describe("City resolver", () => {
               name: "Paris",
               description: "La description de Paris",
               picture: "https://picsum.photos/200/300",
-              latitude: "48.443854",
+              latitude: "47.443854",
               longitude: "1.489012",
             },
           },
@@ -369,6 +369,21 @@ describe("City resolver", () => {
               description: "La description de Marseille",
               picture: "https://picsum.photos/200/300",
               latitude: "-47.4438547",
+              longitude: "1.489012",
+            },
+          },
+        })
+      ).rejects.toThrow();
+      //test with 7 decimal (should not be over 6) for a positive latitude
+      await expect(() =>
+        client.mutate({
+          mutation: createCityMutation,
+          variables: {
+            data: {
+              name: "Marseille",
+              description: "La description de Marseille",
+              picture: "https://picsum.photos/200/300",
+              latitude: "47.4438547",
               longitude: "1.489012",
             },
           },

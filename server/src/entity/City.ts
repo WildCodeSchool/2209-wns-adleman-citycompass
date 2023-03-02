@@ -8,7 +8,7 @@ import {
   Validate,
 } from "class-validator";
 import Place from "./Place";
-import { IsDotInString } from "../helpers/customValidators";
+import { HasSixDecimalMax, IsDotInString } from "../helpers/customValidators";
 
 @Entity()
 @ObjectType()
@@ -35,7 +35,6 @@ class City {
   @IsLatitude()
   // custom Validation
   @Validate(IsDotInString)
-  @MaxLength(10)
   latitude: string;
 
   @Field()
@@ -69,6 +68,7 @@ export class CityInput {
   @IsLatitude()
   // custom Validation
   @Validate(IsDotInString)
+  @Validate(HasSixDecimalMax)
   latitude: string;
 
   @Field()
@@ -99,6 +99,7 @@ export class CityUpdate {
   @IsLatitude()
   // custom Validation
   @Validate(IsDotInString)
+  @Validate(HasSixDecimalMax)
   latitude?: string;
 
   @Field({ nullable: true })
