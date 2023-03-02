@@ -41,6 +41,7 @@ describe("City resolver", () => {
   describe("create city", () => {
     //a city with valid paramters should be created
     it("should create city with valid parameters", async () => {
+      //test with positive coordinates
       const res = await client.mutate({
         mutation: createCityMutation,
         variables: {
@@ -62,6 +63,23 @@ describe("City resolver", () => {
       );
       expect(res.data?.createCity).toHaveProperty("latitude", "45.764043");
       expect(res.data?.createCity).toHaveProperty("longitude", "4.835659");
+
+      //test with negatives latitude and longitude
+      const res2 = await client.mutate({
+        mutation: createCityMutation,
+        variables: {
+          data: {
+            name: "Marseille",
+            description: "La description de Marseille",
+            picture: "https://picsum.photos/200/300",
+            longitude: "-4.835659",
+            latitude: "-45.764043",
+          },
+        },
+      });
+
+      expect(res2.data?.createCity).toHaveProperty("id");
+      //
     });
 
     // a city should start with a capital letter
