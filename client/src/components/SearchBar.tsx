@@ -1,8 +1,17 @@
+import "../styles/searchBar.css";
 import React from "react";
+import loupe from "../assets/magnifying-glass.svg";
+import cross from "../assets/cross.svg";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useGetSearchResultQuery } from "../gql/generated/schema";
 
-function SearchBar() {
+interface searchBarProps {
+  showSearch: boolean;
+}
+
+function SearchBar(showSearch: searchBarProps) {
+  const navigate = useNavigate();
   const [searchInput, setSearchInput] = useState("");
 
   const { data } = useGetSearchResultQuery({
@@ -11,11 +20,16 @@ function SearchBar() {
   });
 
   const result = data?.Search;
-  console.log(result);
 
   return (
-    <div>
-      <div className="SearchBar">
+    <div className={showSearch ? "searchbar" : "searchbar--hidden"}>
+      <div className="searchbar__input">
+        <img
+          src={loupe}
+          alt="loupe search bar"
+          className="header__profile--loupe cursor-pointer"
+          style={{ fill: "#F6CDAF" }}
+        />
         <input
           type="text"
           name="searchBar"
@@ -23,19 +37,35 @@ function SearchBar() {
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
         ></input>
+        <img
+          src={cross}
+          alt="loupe search bar"
+          className="header__profile--loupe cursor-pointer"
+          style={{ fill: "#F6CDAF" }}
+        />
       </div>
-      <div className="flex flex-col">
-        <p>Les villes</p>
+      <div className="searchbar__result flex flex-col">
+        {result?.cities.length !== 0 && result?.cities && <p>Les villes</p>}
         {result?.cities?.map((city) => (
-          <div key={city.name}>{city.name}</div>
+          <h3
+            className="cursor-pointer"
+            key={city.name}
+            onClick={() => navigate(`/cities/${city.name}`)}
+          >
+            {city.name}
+          </h3>
         ))}
-        <p>Les POIs</p>
+        {result?.placesByName.length !== 0 && result?.placesByName && (
+          <p>Les points d'intérêts</p>
+        )}
         {result?.placesByName?.map((place) => (
-          <div key={place.name}>{place.name}</div>
+          <h3 key={place.name}>{place.name}</h3>
         ))}
-        <p>Les adresses</p>
+        {result?.placesByAddress.length !== 0 && result?.placesByAddress && (
+          <p>Les adresses</p>
+        )}
         {result?.placesByAddress?.map((place) => (
-          <div key={place.adress}>{place.adress}</div>
+          <h3 key={place.adress}>{place.adress}</h3>
         ))}
       </div>
     </div>
