@@ -1,6 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from "typeorm";
 import { Field, InputType, ObjectType } from "type-graphql";
-import { MaxLength, MinLength } from "class-validator";
+import { IsUrl, MaxLength, MinLength } from "class-validator";
 import Place from "./Place";
 
 @Entity()
@@ -16,6 +16,7 @@ class City {
 
   @Field()
   @Column({ length: 2083, type: "varchar" })
+  @IsUrl()
   picture: string;
 
   @Field()
@@ -44,7 +45,7 @@ export class CityInput {
 
   @Field()
   @MaxLength(2083)
-  @MinLength(21)
+  @IsUrl()
   picture: string;
 
   @Field()
@@ -71,7 +72,7 @@ export class CityUpdate {
 
   @Field({ nullable: true })
   @MaxLength(2083)
-  @MinLength(21)
+  @IsUrl()
   picture?: string;
 
   @Field({ nullable: true })
