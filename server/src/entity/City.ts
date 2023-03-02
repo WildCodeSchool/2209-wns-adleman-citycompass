@@ -35,6 +35,7 @@ class City {
   @IsLatitude()
   // custom Validation
   @Validate(IsDotInString)
+  @MaxLength(10)
   latitude: string;
 
   @Field()
@@ -63,7 +64,7 @@ export class CityInput {
   description: string;
 
   @Field()
-  @MaxLength(12)
+  @MaxLength(10)
   @MinLength(1)
   @IsLatitude()
   // custom Validation
@@ -93,7 +94,7 @@ export class CityUpdate {
   description?: string;
 
   @Field({ nullable: true })
-  @MaxLength(12)
+  @MaxLength(10)
   @MinLength(1)
   @IsLatitude()
   // custom Validation
