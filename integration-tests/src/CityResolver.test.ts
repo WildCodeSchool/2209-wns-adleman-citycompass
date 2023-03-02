@@ -453,8 +453,23 @@ describe("City resolver", () => {
         })
       ).rejects.toThrow();
     });
-    // city descriptions with less than 10 letters should not be accepted
-    
+    // city descriptions with less than 10 characters should not be accepted
+    it("a city description should not have less than 10 characters", async () => {
+      await expect(() =>
+        client.mutate({
+          mutation: createCityMutation,
+          variables: {
+            data: {
+              name: "",
+              description: "La descri",
+              picture: "https://picsum.photos/200/300",
+              longitude: "5.400000",
+              latitude: "43.300000",
+            },
+          },
+        })
+      ).rejects.toThrow();
+    });
   });
 
   describe("read cities", () => {
