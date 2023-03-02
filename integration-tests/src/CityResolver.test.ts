@@ -264,7 +264,7 @@ describe("City resolver", () => {
       ).rejects.toThrow();
     });
     // a citypicture should be only URLs
-    it("a city picture should not be an URL", async () => {
+    it("a city picture should be an URL", async () => {
       await expect(() =>
         client.mutate({
           mutation: createCityMutation,
@@ -280,8 +280,40 @@ describe("City resolver", () => {
         })
       ).rejects.toThrow();
     });
-    // unvalid longitude should not be accepted (ex : other caracters than 0 to 9)
     // unvalid latitude should not be accepted (ex : other caracters than 0 to 9)
+    it("unvalid latitude should not be accepted", async () => {
+      //test with a text
+      await expect(() =>
+        client.mutate({
+          mutation: createCityMutation,
+          variables: {
+            data: {
+              name: "Marseille",
+              description: "La description de Marseille",
+              picture: "https://picsum.photos/200/300",
+              latitude: "not a latitude",
+              longitude: "1.489012",
+            },
+          },
+        })
+      ).rejects.toThrow();
+      //test with no dot
+      await expect(() =>
+        client.mutate({
+          mutation: createCityMutation,
+          variables: {
+            data: {
+              name: "Marseille",
+              description: "La description de Marseille",
+              picture: "https://picsum.photos/200/300",
+              latitude: "48443854",
+              longitude: "1.489012",
+            },
+          },
+        })
+      ).rejects.toThrow();
+    });
+    // unvalid longitude should not be accepted (ex : other caracters than 0 to 9)
     // city descriptions with less than 10 letters should not be accepted
   });
 
