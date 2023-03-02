@@ -116,7 +116,7 @@ describe("City resolver", () => {
 
     // a city with empty name should not be created
     it("a city name should not be an empty string", async () => {
-      expect(() =>
+      await expect(() =>
         client.mutate({
           mutation: createCityMutation,
           variables: {
@@ -134,7 +134,7 @@ describe("City resolver", () => {
 
     // a city with empty description should not be created
     it("a city description should not be an empty string", async () => {
-      expect(() =>
+      await expect(() =>
         client.mutate({
           mutation: createCityMutation,
           variables: {
@@ -151,7 +151,7 @@ describe("City resolver", () => {
     });
     // a city with empty picture should not be created
     it("a city picture should not be an empty string", async () => {
-      expect(() =>
+      await expect(() =>
         client.mutate({
           mutation: createCityMutation,
           variables: {
@@ -168,7 +168,7 @@ describe("City resolver", () => {
     });
     // a city with empty longitude should not be created
     it("a city latitude should not be an empty string", async () => {
-      expect(() =>
+      await expect(() =>
         client.mutate({
           mutation: createCityMutation,
           variables: {
@@ -185,7 +185,7 @@ describe("City resolver", () => {
     });
     // a city with empty latitude should not be created
     it("a city longitude should not be an empty string", async () => {
-      expect(() =>
+      await expect(() =>
         client.mutate({
           mutation: createCityMutation,
           variables: {
@@ -237,7 +237,7 @@ describe("City resolver", () => {
           longitude: "1.489012",
         },
       ]);
-      expect(() =>
+      await expect(() =>
         client.mutate({
           mutation: createCityMutation,
           variables: {
@@ -253,6 +253,16 @@ describe("City resolver", () => {
       ).rejects.toThrow("City coordinates found in database");
     });
     // a city with no data should return an error
+    it("a city with no data should return an error", async () => {
+      await expect(() =>
+        client.mutate({
+          mutation: createCityMutation,
+          variables: {
+            data: null,
+          },
+        })
+      ).rejects.toThrow();
+    });
     // a picture should be only URLs
     // unvalid longitude should not be accepted (ex : other caracters than 0 to 9)
     // unvalid latitude should not be accepted (ex : other caracters than 0 to 9)
