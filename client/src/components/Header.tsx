@@ -3,15 +3,17 @@ import "../styles/Header.css";
 import compasHeader from "../assets/compass_header.svg";
 import loupe from "../assets/magnifying-glass.svg";
 import person from "../assets/person-circle-outline.svg";
-import SearchBar from "../components/SearchBar";
+import SearchBar from "./SearchBar";
 
 function Header() {
   const [showSearch, setShowSearch] = useState(false);
+  const [searchInput, setSearchInput] = useState("");
 
-  console.log(showSearch);
   const handleClick = () => {
     setShowSearch(!showSearch);
+    setSearchInput("");
   };
+
   return (
     <>
       <div className="bg-white w-full sticky top-0 z-50">
@@ -43,8 +45,13 @@ function Header() {
             />
           </div>
         </div>
+        <SearchBar
+          showSearch={showSearch}
+          setShowSearch={setShowSearch}
+          searchInput={searchInput}
+          setSearchInput={setSearchInput}
+        />
       </div>
-      <SearchBar showSearch={showSearch} />
     </>
   );
 }

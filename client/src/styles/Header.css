@@ -1,5 +1,5 @@
 .header {
-  @apply h-auto w-full justify-around flex align-middle m-auto relative;
+  @apply h-auto w-full justify-around flex align-middle m-auto relative bg-white z-30;
 }
 
 .header__compass {

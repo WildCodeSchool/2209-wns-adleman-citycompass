@@ -4,9 +4,16 @@ query GetSearchResult($searchInput: String!) {
       name
     }
     placesByName {
+      city {
+        name
+      }
       name
     }
     placesByAddress {
+      city {
+        name
+      }
+      name
       adress
     }
   }

@@ -170,7 +170,7 @@ export type GetSearchResultQueryVariables = Exact<{
 }>;
 
 
-export type GetSearchResultQuery = { __typename?: 'Query', Search: { __typename?: 'SearchResult', cities: Array<{ __typename?: 'City', name: string }>, placesByName: Array<{ __typename?: 'Place', name: string }>, placesByAddress: Array<{ __typename?: 'Place', adress: string }> } };
+export type GetSearchResultQuery = { __typename?: 'Query', Search: { __typename?: 'SearchResult', cities: Array<{ __typename?: 'City', name: string }>, placesByName: Array<{ __typename?: 'Place', name: string, city: { __typename?: 'City', name: string } }>, placesByAddress: Array<{ __typename?: 'Place', name: string, adress: string, city: { __typename?: 'City', name: string } }> } };
 
 
 export const GetOneCitybyIdDocument = gql`
@@ -235,9 +235,16 @@ export const GetSearchResultDocument = gql`
       name
     }
     placesByName {
+      city {
+        name
+      }
       name
     }
     placesByAddress {
+      city {
+        name
+      }
+      name
       adress
     }
   }

@@ -25,9 +25,11 @@ export class SearchResolver {
     });
     const placesByName = await datasource.getRepository(Place).find({
       where: { name: ILike(`%${searchInput}%`) },
+      relations: { city: true },
     });
     const placesByAddress = await datasource.getRepository(Place).find({
       where: { adress: ILike(`%${searchInput}%`) },
+      relations: { city: true },
     });
 
     return { cities, placesByName, placesByAddress };
