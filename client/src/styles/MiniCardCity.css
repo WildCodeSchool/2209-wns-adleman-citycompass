@@ -1,4 +1,5 @@
 .card_container {
-  @apply h-44 bg-black;
+  @apply mt-4;
   width: 22.5%;
+  min-width: 350px;
 }

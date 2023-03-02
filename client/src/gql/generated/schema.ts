@@ -170,6 +170,11 @@ export type SearchResult = {
   placesByName: Array<Place>;
 };
 
+export type GetCitiesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetCitiesQuery = { __typename?: 'Query', getCities: Array<{ __typename?: 'City', picture: string, name: string, id: number, description: string }> };
+
 export type GetOneCitybyNameQueryVariables = Exact<{
   name: Scalars['String'];
 }>;
@@ -192,6 +197,43 @@ export type GetSearchResultQueryVariables = Exact<{
 export type GetSearchResultQuery = { __typename?: 'Query', Search: { __typename?: 'SearchResult', cities: Array<{ __typename?: 'City', name: string }>, placesByName: Array<{ __typename?: 'Place', name: string, city: { __typename?: 'City', name: string } }>, placesByAddress: Array<{ __typename?: 'Place', name: string, adress: string, city: { __typename?: 'City', name: string } }> } };
 
 
+export const GetCitiesDocument = gql`
+    query GetCities {
+  getCities {
+    picture
+    name
+    id
+    description
+  }
+}
+    `;
+
+/**
+ * __useGetCitiesQuery__
+ *
+ * To run a query within a React component, call `useGetCitiesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCitiesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCitiesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetCitiesQuery(baseOptions?: Apollo.QueryHookOptions<GetCitiesQuery, GetCitiesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCitiesQuery, GetCitiesQueryVariables>(GetCitiesDocument, options);
+      }
+export function useGetCitiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCitiesQuery, GetCitiesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCitiesQuery, GetCitiesQueryVariables>(GetCitiesDocument, options);
+        }
+export type GetCitiesQueryHookResult = ReturnType<typeof useGetCitiesQuery>;
+export type GetCitiesLazyQueryHookResult = ReturnType<typeof useGetCitiesLazyQuery>;
+export type GetCitiesQueryResult = Apollo.QueryResult<GetCitiesQuery, GetCitiesQueryVariables>;
 export const GetOneCitybyNameDocument = gql`
     query GetOneCitybyName($name: String!) {
   getOneCitybyName(name: $name) {
