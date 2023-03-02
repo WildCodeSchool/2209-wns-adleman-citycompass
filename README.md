@@ -53,3 +53,14 @@ npm run codegen
 ```
 
 - [CodeGen-doc](https://the-guild.dev/graphql/codegen/docs/getting-started)
+
+### Database : categories :
+
+To insert data of category into category's table :
+
+```sh
+cd server
+npm run categorySeed
+```
+
+Warning : this command clean place's table too !!
