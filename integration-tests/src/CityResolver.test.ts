@@ -79,7 +79,6 @@ describe("City resolver", () => {
       });
 
       expect(res2.data?.createCity).toHaveProperty("id");
-      //
     });
 
     // a city should start with a capital letter
@@ -360,8 +359,22 @@ describe("City resolver", () => {
           },
         })
       ).rejects.toThrow();
+      //test with 7 decimal (should not be over 6) for a negative latitude
+      await expect(() =>
+        client.mutate({
+          mutation: createCityMutation,
+          variables: {
+            data: {
+              name: "Marseille",
+              description: "La description de Marseille",
+              picture: "https://picsum.photos/200/300",
+              latitude: "-47.4438547",
+              longitude: "1.489012",
+            },
+          },
+        })
+      ).rejects.toThrow();
     });
-    // unvalid longitude should not be accepted (ex : other caracters than 0 to 9)
     // city descriptions with less than 10 letters should not be accepted
   });
 
