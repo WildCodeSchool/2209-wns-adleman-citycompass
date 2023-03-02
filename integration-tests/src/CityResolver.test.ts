@@ -359,6 +359,21 @@ describe("City resolver", () => {
           },
         })
       ).rejects.toThrow();
+      //test if latitude lenght is < 3 characters
+      await expect(() =>
+        client.mutate({
+          mutation: createCityMutation,
+          variables: {
+            data: {
+              name: "Marseille",
+              description: "La description de Marseille",
+              picture: "https://picsum.photos/200/300",
+              latitude: "1.",
+              longitude: "1.489012",
+            },
+          },
+        })
+      ).rejects.toThrow();
     });
     // unvalid longitude should not be accepted (ex : other caracters than 0 to 9)
     it("unvalid longitude should not be accepted", async () => {
@@ -422,8 +437,24 @@ describe("City resolver", () => {
           },
         })
       ).rejects.toThrow();
+      //test longitude lenght is < 3 characters
+      await expect(() =>
+        client.mutate({
+          mutation: createCityMutation,
+          variables: {
+            data: {
+              name: "Lyon",
+              description: "La description de Lyon",
+              picture: "https://picsum.photos/200/300",
+              latitude: "45.764043",
+              longitude: "4.",
+            },
+          },
+        })
+      ).rejects.toThrow();
     });
     // city descriptions with less than 10 letters should not be accepted
+    
   });
 
   describe("read cities", () => {
