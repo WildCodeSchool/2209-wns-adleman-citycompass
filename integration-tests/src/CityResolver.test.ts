@@ -228,7 +228,7 @@ describe("City resolver", () => {
           longitude: "1.489012",
         },
       ]);
-      expect(() =>
+      await expect(() =>
         client.mutate({
           mutation: createCityMutation,
           variables: {
@@ -247,10 +247,10 @@ describe("City resolver", () => {
     it("a city with same latitude and longitude should not be created twice", async () => {
       await db.getRepository(City).insert([
         {
-          name: "Chartres",
-          description: "La description de Chartres",
+          name: "Bordeaux",
+          description: "La description de Bordeaux",
           picture: "https://picsum.photos/200/300",
-          latitude: "47.443854",
+          latitude: "50.443854",
           longitude: "1.489012",
         },
       ]);
@@ -262,7 +262,7 @@ describe("City resolver", () => {
               name: "Paris",
               description: "La description de Paris",
               picture: "https://picsum.photos/200/300",
-              latitude: "47.443854",
+              latitude: "50.443854",
               longitude: "1.489012",
             },
           },
@@ -359,7 +359,10 @@ describe("City resolver", () => {
           },
         })
       ).rejects.toThrow();
-      //test with 7 decimal (should not be over 6) for a negative latitude
+    });
+    // unvalid longitude should not be accepted (ex : other caracters than 0 to 9)
+    it("unvalid longitude should not be accepted", async () => {
+      //test with a text
       await expect(() =>
         client.mutate({
           mutation: createCityMutation,
@@ -368,13 +371,13 @@ describe("City resolver", () => {
               name: "Marseille",
               description: "La description de Marseille",
               picture: "https://picsum.photos/200/300",
-              latitude: "-47.4438547",
-              longitude: "1.489012",
+              latitude: "47.443854",
+              longitude: "not a longitude",
             },
           },
         })
       ).rejects.toThrow();
-      //test with 7 decimal (should not be over 6) for a positive latitude
+      //test with no dot
       await expect(() =>
         client.mutate({
           mutation: createCityMutation,
@@ -383,8 +386,38 @@ describe("City resolver", () => {
               name: "Marseille",
               description: "La description de Marseille",
               picture: "https://picsum.photos/200/300",
-              latitude: "47.4438547",
-              longitude: "1.489012",
+              latitude: "48443854",
+              longitude: "1489012",
+            },
+          },
+        })
+      ).rejects.toThrow();
+      //test with value over 180 before decimal point
+      await expect(() =>
+        client.mutate({
+          mutation: createCityMutation,
+          variables: {
+            data: {
+              name: "Marseille",
+              description: "La description de Marseille",
+              picture: "https://picsum.photos/200/300",
+              latitude: "84.443854",
+              longitude: "181.489012",
+            },
+          },
+        })
+      ).rejects.toThrow();
+      //test with value under -180 before decimal point
+      await expect(() =>
+        client.mutate({
+          mutation: createCityMutation,
+          variables: {
+            data: {
+              name: "Marseille",
+              description: "La description de Marseille",
+              picture: "https://picsum.photos/200/300",
+              latitude: "85.443854",
+              longitude: "-181.489012",
             },
           },
         })

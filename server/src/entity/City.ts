@@ -2,13 +2,14 @@ import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from "typeorm";
 import { Field, InputType, ObjectType } from "type-graphql";
 import {
   IsLatitude,
+  IsLongitude,
   IsUrl,
   MaxLength,
   MinLength,
   Validate,
 } from "class-validator";
 import Place from "./Place";
-import { HasSixDecimalMax, IsDotInString } from "../helpers/customValidators";
+import { IsDotInString } from "../helpers/customValidators";
 
 @Entity()
 @ObjectType()
@@ -33,12 +34,15 @@ class City {
   @Field()
   @Column({ length: 12, type: "varchar" })
   @IsLatitude()
-  // custom Validation
+  // custom Validations
   @Validate(IsDotInString)
   latitude: string;
 
   @Field()
   @Column({ length: 13, type: "varchar" })
+  @IsLongitude()
+  // custom validations
+  @Validate(IsDotInString)
   longitude: string;
 
   @Field(() => [Place])
@@ -68,12 +72,14 @@ export class CityInput {
   @IsLatitude()
   // custom Validation
   @Validate(IsDotInString)
-  @Validate(HasSixDecimalMax)
   latitude: string;
 
   @Field()
-  @MaxLength(13)
+  @MaxLength(11)
   @MinLength(1)
+  @IsLongitude()
+  // custom validations
+  @Validate(IsDotInString)
   longitude: string;
 }
 
@@ -99,12 +105,14 @@ export class CityUpdate {
   @IsLatitude()
   // custom Validation
   @Validate(IsDotInString)
-  @Validate(HasSixDecimalMax)
   latitude?: string;
 
   @Field({ nullable: true })
   @MaxLength(13)
   @MinLength(1)
+  @IsLongitude()
+  // custom validations
+  @Validate(IsDotInString)
   longitude?: string;
 }
 export default City;
