@@ -23,9 +23,13 @@ export default function Place() {
               picture: place.picture,
             }}
           />
-          <div className="container py-20 space-y-12">
-            <h2 className="text-center">Description</h2>
-            <div className="grid-col-6 mx-auto">{place.description}</div>
+          <div className="container">
+            <div className="py-20 space-y-20">
+              <h2 className="text-center">Description</h2>
+              <div className="grid-col-6 mx-auto">
+                <p>{place.description}</p>
+              </div>
+            </div>
           </div>
         </div>
       )}

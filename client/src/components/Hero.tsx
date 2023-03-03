@@ -1,4 +1,4 @@
-import React from "react";
+import React, { MutableRefObject } from "react";
 import Breadcrumbs from "./Breadcrumbs";
 import "../styles/button.css";
 import { Link, useLocation } from "react-router-dom";
@@ -9,6 +9,7 @@ export interface HeroProps {
   action?: {
     title: string;
   };
+  scrollToRef?: MutableRefObject<HTMLInputElement>;
 }
 
 export interface heroContent {
@@ -22,9 +23,9 @@ export interface heroContent {
   places?: PlaceProps[];
 }
 
-function Hero({ heroContent, action }: HeroProps) {
+function Hero({ heroContent, action, scrollToRef }: HeroProps) {
   const isHome = useLocation().pathname === "/" ? true : false;
-  const handleClick = () => console.log("clicked");
+  const handleClick = () => scrollToRef?.current.scrollIntoView();
 
   // Get the url and get each individual link for breadcrumbs /
   function GenerateBreadcrumbs() {
