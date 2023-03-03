@@ -1,0 +1,18 @@
+query GetOnePlacebyName($name: String!) {
+  getOnePlacebyName(name: $name) {
+    id
+    name
+    latitude
+    longitude
+    adress
+    website
+    picture
+    description
+    categoryId
+    category {
+      name
+      picto
+      id
+    }
+  }
+}
