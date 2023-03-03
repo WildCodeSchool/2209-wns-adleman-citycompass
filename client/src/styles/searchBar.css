@@ -15,7 +15,7 @@
 }
 
 .searchbar__input input {
-  @apply text-lg;
+  @apply text-lg pl-4;
   width: 100%;
   height: auto;
 }
