@@ -5,10 +5,10 @@
 
 ## Run the project
 
-### development environment (3 containers)
+### development environment (3 dockers containers)
 
 ```sh
-docker compose -f docker-compose.yml up --build
+npm run start
 ```
 
 ### test environment (3 others containers, including another DB)
@@ -17,7 +17,7 @@ docker compose -f docker-compose.yml up --build
 2. Run
 
 ```sh
-docker compose -f docker-compose.integration-tests.yml up --build
+npm run integration-test
 ```
 
 ### run tests locally (alternative to docker)
@@ -26,7 +26,7 @@ docker compose -f docker-compose.integration-tests.yml up --build
 2. in your terminal, in integration-tests file, run:
 
 ```sh
-docker compose -f docker-compose.yml up --build
+npm run start
 npm i
 npm run test
 ```
