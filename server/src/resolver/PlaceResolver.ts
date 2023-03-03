@@ -6,77 +6,90 @@ import { existingPlace, existingPlaceCoordinates } from "../helpers/dbCheckers";
 
 @Resolver(Place)
 export class PlaceResolver {
-	@Query(() => [Place])
-	async getPlaces(): Promise<Place[]> {
-		return await datasource
-			.getRepository(Place)
-			.find({ relations: { city: true, category: true } });
-	}
+  @Query(() => [Place])
+  async getPlaces(): Promise<Place[]> {
+    return await datasource
+      .getRepository(Place)
+      .find({ relations: { city: true, category: true } });
+  }
 
-	@Query(() => Place)
-	async getOnePlacebyId(@Arg("id") id: string): Promise<Place> {
-		const placeToFind = await datasource.getRepository(Place).findOne({
-			where: { id: parseInt(id, 10) },
-			relations: { city: true, category: true },
-		});
+  @Query(() => Place)
+  async getOnePlacebyId(@Arg("id") id: string): Promise<Place> {
+    const placeToFind = await datasource.getRepository(Place).findOne({
+      where: { id: parseInt(id, 10) },
+      relations: { city: true, category: true },
+    });
 
-		if (placeToFind === null)
-			throw new ApolloError("Place not found", "NOT_FOUND");
+    if (placeToFind === null)
+      throw new ApolloError("Place not found", "NOT_FOUND");
 
-		return placeToFind;
-	}
+    return placeToFind;
+  }
 
-	@Mutation(() => Place)
-	async createPlace(@Arg("data") data: PlaceInput): Promise<Place> {
-		if (data === null)
-			throw new ApolloError("No data in query", "BAD_USER_INPUT");
+  @Query(() => Place)
+  async getOnePlacebyName(@Arg("name") name: string): Promise<Place> {
+    const placeToFind = await datasource.getRepository(Place).findOne({
+      where: { name },
+      relations: { city: true, category: true },
+    });
 
-		// check if place name & coordinates are already in database
-		await existingPlace(data);
-		await existingPlaceCoordinates(data);
+    if (placeToFind === null)
+      throw new ApolloError("Place not found", "NOT_FOUND");
 
-		return await datasource.getRepository(Place).save(data);
-	}
+    return placeToFind;
+  }
 
-	@Mutation(() => Place)
-	async updatePlace(
-		@Arg("id") id: string,
-		@Arg("data") data: PlaceInput
-	): Promise<Place> {
-		const {
-			name,
-			description,
-			picture,
-			latitude,
-			longitude,
-			categoryId,
-			cityId,
-			adress,
-			website,
-		} = data;
-		const placeToUpdate = await datasource
-			.getRepository(Place)
-			.findOne({ where: { id: parseInt(id, 10) } });
+  @Mutation(() => Place)
+  async createPlace(@Arg("data") data: PlaceInput): Promise<Place> {
+    if (data === null)
+      throw new ApolloError("No data in query", "BAD_USER_INPUT");
 
-		if (placeToUpdate === null)
-			throw new ApolloError("Place not found", "NOT_FOUND");
+    // check if place name & coordinates are already in database
+    await existingPlace(data);
+    await existingPlaceCoordinates(data);
 
-		// check if city name & coordinates are already in database
-		await existingPlace(data, id);
-		await existingPlaceCoordinates(data);
+    return await datasource.getRepository(Place).save(data);
+  }
 
-		placeToUpdate.adress = adress;
-		placeToUpdate.categoryId = categoryId;
-		placeToUpdate.cityId = cityId;
-		placeToUpdate.description = description;
-		placeToUpdate.latitude = latitude;
-		placeToUpdate.longitude = longitude;
-		placeToUpdate.name = name;
-		placeToUpdate.picture = picture;
-		placeToUpdate.website = website;
+  @Mutation(() => Place)
+  async updatePlace(
+    @Arg("id") id: string,
+    @Arg("data") data: PlaceInput
+  ): Promise<Place> {
+    const {
+      name,
+      description,
+      picture,
+      latitude,
+      longitude,
+      categoryId,
+      cityId,
+      adress,
+      website,
+    } = data;
+    const placeToUpdate = await datasource
+      .getRepository(Place)
+      .findOne({ where: { id: parseInt(id, 10) } });
 
-		await datasource.getRepository(Place).save(placeToUpdate);
+    if (placeToUpdate === null)
+      throw new ApolloError("Place not found", "NOT_FOUND");
 
-		return placeToUpdate;
-	}
+    // check if city name & coordinates are already in database
+    await existingPlace(data, id);
+    await existingPlaceCoordinates(data);
+
+    placeToUpdate.adress = adress;
+    placeToUpdate.categoryId = categoryId;
+    placeToUpdate.cityId = cityId;
+    placeToUpdate.description = description;
+    placeToUpdate.latitude = latitude;
+    placeToUpdate.longitude = longitude;
+    placeToUpdate.name = name;
+    placeToUpdate.picture = picture;
+    placeToUpdate.website = website;
+
+    await datasource.getRepository(Place).save(placeToUpdate);
+
+    return placeToUpdate;
+  }
 }

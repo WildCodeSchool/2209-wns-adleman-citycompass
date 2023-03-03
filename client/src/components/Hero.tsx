@@ -17,7 +17,7 @@ export interface heroContent {
   longitude?: string;
   name?: string;
   picture?: string;
-  website?: string;
+  website?: string | null;
   grade?: string;
   places?: PlaceProps[];
 }
