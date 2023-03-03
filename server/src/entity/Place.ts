@@ -44,7 +44,7 @@ class Place {
   cityId: number;
 
   @Field(() => City)
-  @ManyToOne(() => City, (city) => city.places)
+  @ManyToOne(() => City, (city) => city.places,{onDelete: "CASCADE"})
   city: City;
 
   @Field()
@@ -52,7 +52,7 @@ class Place {
   categoryId: number;
 
   @Field(() => Category)
-  @ManyToOne(() => Category, (category) => category.places)
+  @ManyToOne(() => Category, (category) => category.places, {onDelete: "CASCADE"})
   category: Category;
 }
 
