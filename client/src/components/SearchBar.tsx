@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import loupe from "../assets/magnifying-glass.svg";
 import cross from "../assets/cross.svg";
 import { useNavigate } from "react-router-dom";
-// import { useGetSearchResultQuery } from "../gql/generated/schema";
+import { useGetSearchResultQuery } from "../gql/generated/schema";
 
 interface searchBarProps {
   showSearch: boolean;
@@ -29,12 +29,12 @@ function SearchBar({
     document.body.style.overflow = showSearch ? "hidden" : "initial";
   });
 
-  // const { data } = useGetSearchResultQuery({
-  //   variables: { searchInput: searchInput },
-  //   skip: !searchInput,
-  // });
+  const { data } = useGetSearchResultQuery({
+    variables: { searchInput: searchInput },
+    skip: !searchInput,
+  });
 
-  // const result = data?.Search;
+  const result = data?.Search;
 
   return (
     <div
@@ -66,7 +66,7 @@ function SearchBar({
           onClick={handleClick}
         />
       </div>
-      {/* <div className="searchbar__result container flex flex-col">
+      <div className="searchbar__result container flex flex-col">
         {result?.cities.length !== 0 && result?.cities && (
           <p className="pt-12">Les villes</p>
         )}
@@ -116,7 +116,7 @@ function SearchBar({
           </h4>
         ))}
       </div>
-      <div className="search__overlay"></div> */}
+      <div className="search__overlay"></div>
     </div>
   );
 }
