@@ -1,0 +1,25 @@
+query GetOneCitybyName($name: String!) {
+  getOneCitybyName(name: $name) {
+    id
+    name
+    picture
+    description
+    latitude
+    longitude
+    places {
+      id
+      name
+      latitude
+      longitude
+      adress
+      website
+      picture
+      description
+      category {
+        name
+        id
+        picto
+      }
+    }
+  }
+}

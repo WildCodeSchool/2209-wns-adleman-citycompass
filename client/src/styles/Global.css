@@ -1,5 +1,9 @@
 .container {
   margin: auto;
+  padding: 0 20px;
+  @screen sm {
+    padding: 0;
+  }
 }
 
 h1,
@@ -21,6 +25,15 @@ h3 {
   font-family: "Lato Regular";
   color: theme("colors.darkBlue");
   font-size: theme("fontSize.m");
+}
+
+h4 {
+  font-family: "Lato Regular";
+  color: theme("colors.darkBlue");
+  font-size: theme("fontSize.base");
+  @screen sm {
+    font-size: 1.5rem;
+  }
 }
 
 p {

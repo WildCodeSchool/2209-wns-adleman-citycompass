@@ -33,49 +33,54 @@ export default function MapCity({
   return (
     <>
       {cityName && cityLat && cityLong && (
-        <MapContainer
-          center={[parseFloat(cityLat), parseFloat(cityLong)]}
-          zoom={13}
-          scrollWheelZoom={true}
-        >
-          <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            url="https://wxs.ign.fr/pratique/wmts/?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=ORTHOIMAGERY.ORTHOPHOTOS&STYLE=normal&TILEMATRIXSET=PM&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&FORMAT=image%2Fjpeg"
-          />
-          {places &&
-            places.map((place: PlaceProps) => (
-              <Marker
-                position={[
-                  parseFloat(place.latitude),
-                  parseFloat(place.longitude),
-                ]}
-                icon={L.icon({
-                  iconUrl: place.category.picto,
-                  iconSize: [50, 50],
-                  iconAnchor: [12, 12],
-                  popupAnchor: [0, 0],
-                })}
-              >
-                <Popup>
-                  <div>
-                    <img
-                      src={place.picture}
-                      alt="Place"
-                      onClick={() =>
-                        navigate(
-                          `/cities/${cityName}/${place.name.replace(" ", "-")}`
-                        )
-                      }
-                    />
+        <>
+          <MapContainer
+            center={[parseFloat(cityLat), parseFloat(cityLong)]}
+            zoom={13}
+            scrollWheelZoom={true}
+            minZoom={6}
+          >
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.forte.tiles.quaidorsay.fr/fr{r}/{z}/{x}/{y}.png"
+            />
+            {places &&
+              places.map((place: PlaceProps) => (
+                <Marker
+                  position={[
+                    parseFloat(place.latitude),
+                    parseFloat(place.longitude),
+                  ]}
+                  icon={L.icon({
+                    iconUrl: place.category.picto,
+                    iconSize: [35, 35],
+                    iconAnchor: [12, 12],
+                    popupAnchor: [0, 0]
+                  })}
+                >
+                  <Popup maxWidth={200}>
                     <div>
-                      <p>{place.name}</p>
-                      <p>{place.adress}</p>
+                      <img
+                        src={place.picture}
+                        alt="Place"
+                        onClick={() =>
+                          navigate(
+                            `/cities/${cityName}/${place.name}`
+                          )
+                        }
+                      />
+                      <div>
+                        <p className="font-bold font-latoBlack text-center">
+                          {place.name}
+                        </p>
+                        <p>{place.adress}</p>
+                      </div>
                     </div>
-                  </div>
-                </Popup>
-              </Marker>
-            ))}
-        </MapContainer>
+                  </Popup>
+                </Marker>
+              ))}
+          </MapContainer>
+        </>
       )}
     </>
   );
