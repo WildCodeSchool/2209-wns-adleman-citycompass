@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import { useNavigate } from "react-router-dom";
 import "../styles/MiniCardCity.css";
 import { MiniCardProps } from "../services/interfaces";
@@ -30,20 +29,6 @@ export default function MiniCardCity({ city }: MiniCardProps) {
         >
           Voir
         </button>
-=======
-import "../styles/MiniCardCity.css";
-import alley from "../assets/alley-gc58ca832a_640.jpg";
-
-export default function MiniCardCity() {
-  return (
-    <>
-      <div className="card_container">
-        <img
-          src={alley}
-          alt="alley"
-          className="card_img object-cover rounded shadow"
-        ></img>
->>>>>>> 0cbdfb2 (started working on mini card)
       </div>
     </>
   );

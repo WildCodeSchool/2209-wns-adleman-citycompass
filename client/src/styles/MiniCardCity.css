@@ -3,3 +3,9 @@
   width: 22.5%;
   min-width: 350px;
 }
+
+.button--secondary:hover {
+  @apply transition;
+  background-color: theme("colors.darkBlue");
+  color: white;
+}
