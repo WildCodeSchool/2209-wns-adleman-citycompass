@@ -53,3 +53,14 @@ npm run codegen
 ```
 
 - [CodeGen-doc](https://the-guild.dev/graphql/codegen/docs/getting-started)
+
+### Database :
+
+To insert data into city's table, category's table and place's table :
+
+```sh
+cd server
+npm run generalSeed
+```
+
+Warning : this command clean all tables !!

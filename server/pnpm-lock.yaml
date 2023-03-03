@@ -2528,11 +2528,9 @@ packages:
       yallist: 4.0.0
     dev: false
 
-  /minipass/4.0.0:
-    resolution: {integrity: sha512-g2Uuh2jEKoht+zvO6vJqXmYpflPqzRBT+Th2h01DKh5z7wbY/AZ2gCQ78cP70YoHPyFdY30YBV5WxgLOEwOykw==}
+  /minipass/4.2.4:
+    resolution: {integrity: sha512-lwycX3cBMTvcejsHITUgYj6Gy6A7Nh4Q6h9NP4sTHY1ccJlC7yKzDmiShEHsJ16Jf1nKGDEaiHxiltsJEvk0nQ==}
     engines: {node: '>=8'}
-    dependencies:
-      yallist: 4.0.0
     dev: false
 
   /minizlib/2.1.2:
@@ -3275,7 +3273,7 @@ packages:
     dependencies:
       chownr: 2.0.0
       fs-minipass: 2.1.0
-      minipass: 4.0.0
+      minipass: 4.2.4
       minizlib: 2.1.2
       mkdirp: 1.0.4
       yallist: 4.0.0

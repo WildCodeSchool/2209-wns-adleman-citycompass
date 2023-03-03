@@ -23,7 +23,7 @@ const start = async (): Promise<void> => {
   });
 
   await server.listen().then(({ url }) => {
-    console.log(`🚀  Server ready at ${url}`);
+    console.log(`🚀  Server ready at ${url}`);    
   });
 };
 
