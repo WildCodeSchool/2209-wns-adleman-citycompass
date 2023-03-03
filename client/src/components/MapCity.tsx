@@ -65,10 +65,7 @@ export default function MapCity({
                         alt="Place"
                         onClick={() =>
                           navigate(
-                            `/cities/${cityName}/${place.name.replace(
-                              " ",
-                              "-"
-                            )}`
+                            `/cities/${cityName}/${place.name}`
                           )
                         }
                       />

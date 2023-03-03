@@ -38,12 +38,9 @@ export default function City() {
           {city.places?.map((place) => (
             <div
               onClick={() =>
-                navigate(
-                  `/cities/${city.name}/${place.name.replace(" ", "-")}`,
-                  {
-                    state: { place },
-                  }
-                )
+                navigate(`/cities/${city.name}/${place.name}`, {
+                  state: { place },
+                })
               }
             >
               <MiniCardPoi place={place} />
