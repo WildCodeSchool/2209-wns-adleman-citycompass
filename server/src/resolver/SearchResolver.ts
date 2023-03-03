@@ -4,6 +4,7 @@ import Place from "../entity/Place";
 import datasource from "../db";
 import { ILike } from "typeorm";
 
+// A class which is an object to contain the search result
 @ObjectType()
 class SearchResult {
   @Field(() => [City])
