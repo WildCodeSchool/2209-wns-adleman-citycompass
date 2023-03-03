@@ -1,19 +1,20 @@
 import MapCity from "../components/MapCity";
 import Hero, { heroContent } from "../components/Hero";
-import { useGetOneCitybyIdQuery } from "../gql/generated/schema";
+import { useGetOneCitybyNameQuery } from "../gql/generated/schema";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import MiniCardPoi from "../components/MiniCardPoi";
 
 export default function City() {
   const navigate = useNavigate();
-  const { cityId = "" } = useParams();
-  const { data } = useGetOneCitybyIdQuery({
-    variables: { getOneCitybyId: cityId },
+  const { cityName = "" } = useParams();
+  const { data } = useGetOneCitybyNameQuery({
+    variables: { name: cityName },
   });
+
   let city: heroContent = {};
   if (data !== undefined) {
-    city = data.getOneCitybyId;
+    city = data.getOneCitybyName;
   }
   return (
     <>
