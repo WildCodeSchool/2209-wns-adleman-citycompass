@@ -177,13 +177,6 @@ export type GetOneCitybyNameQueryVariables = Exact<{
 
 export type GetOneCitybyNameQuery = { __typename?: 'Query', getOneCitybyName: { __typename?: 'City', id: number, name: string, picture: string, description: string, latitude: string, longitude: string, places: Array<{ __typename?: 'Place', id: number, name: string, latitude: string, longitude: string, adress: string, website?: string | null, picture: string, description: string, category: { __typename?: 'Category', name: string, id: number, picto: string } }> } };
 
-export type GetOneCitybyIdQueryVariables = Exact<{
-  getOneCitybyId: Scalars['String'];
-}>;
-
-
-export type GetOneCitybyIdQuery = { __typename?: 'Query', getOneCitybyId: { __typename?: 'City', id: number, name: string, picture: string, description: string, latitude: string, longitude: string, places: Array<{ __typename?: 'Place', id: number, name: string, latitude: string, longitude: string, adress: string, website?: string | null, picture: string, description: string, category: { __typename?: 'Category', name: string, id: number, picto: string } }> } };
-
 export type GetOnePlacebyNameQueryVariables = Exact<{
   name: Scalars['String'];
 }>;
@@ -254,61 +247,6 @@ export function useGetOneCitybyNameLazyQuery(baseOptions?: Apollo.LazyQueryHookO
 export type GetOneCitybyNameQueryHookResult = ReturnType<typeof useGetOneCitybyNameQuery>;
 export type GetOneCitybyNameLazyQueryHookResult = ReturnType<typeof useGetOneCitybyNameLazyQuery>;
 export type GetOneCitybyNameQueryResult = Apollo.QueryResult<GetOneCitybyNameQuery, GetOneCitybyNameQueryVariables>;
-export const GetOneCitybyIdDocument = gql`
-    query GetOneCitybyId($getOneCitybyId: String!) {
-  getOneCitybyId(id: $getOneCitybyId) {
-    id
-    name
-    picture
-    description
-    latitude
-    longitude
-    places {
-      id
-      name
-      latitude
-      longitude
-      adress
-      website
-      picture
-      description
-      category {
-        name
-        id
-        picto
-      }
-    }
-  }
-}
-    `;
-
-/**
- * __useGetOneCitybyIdQuery__
- *
- * To run a query within a React component, call `useGetOneCitybyIdQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetOneCitybyIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetOneCitybyIdQuery({
- *   variables: {
- *      getOneCitybyId: // value for 'getOneCitybyId'
- *   },
- * });
- */
-export function useGetOneCitybyIdQuery(baseOptions: Apollo.QueryHookOptions<GetOneCitybyIdQuery, GetOneCitybyIdQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetOneCitybyIdQuery, GetOneCitybyIdQueryVariables>(GetOneCitybyIdDocument, options);
-      }
-export function useGetOneCitybyIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetOneCitybyIdQuery, GetOneCitybyIdQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetOneCitybyIdQuery, GetOneCitybyIdQueryVariables>(GetOneCitybyIdDocument, options);
-        }
-export type GetOneCitybyIdQueryHookResult = ReturnType<typeof useGetOneCitybyIdQuery>;
-export type GetOneCitybyIdLazyQueryHookResult = ReturnType<typeof useGetOneCitybyIdLazyQuery>;
-export type GetOneCitybyIdQueryResult = Apollo.QueryResult<GetOneCitybyIdQuery, GetOneCitybyIdQueryVariables>;
 export const GetOnePlacebyNameDocument = gql`
     query GetOnePlacebyName($name: String!) {
   getOnePlacebyName(name: $name) {
