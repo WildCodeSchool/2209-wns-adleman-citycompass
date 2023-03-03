@@ -1,0 +1,5 @@
+.card_container {
+  @apply mt-4;
+  width: 22.5%;
+  min-width: 350px;
+}
