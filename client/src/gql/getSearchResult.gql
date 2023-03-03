@@ -1,0 +1,20 @@
+query GetSearchResult($searchInput: String!) {
+  Search(searchInput: $searchInput) {
+    cities {
+      name
+    }
+    placesByName {
+      city {
+        name
+      }
+      name
+    }
+    placesByAddress {
+      city {
+        name
+      }
+      name
+      adress
+    }
+  }
+}

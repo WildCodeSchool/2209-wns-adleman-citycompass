@@ -1,6 +1,5 @@
 import Hero from "../components/Hero";
 import heroHomeImg from "../assets/images/homeHeroBG.png";
-
 export default function Home() {
   const heroHome = {
     name: "Partagez et découvrez des points d’intérêts",
