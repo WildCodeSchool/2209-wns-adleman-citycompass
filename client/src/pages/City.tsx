@@ -1,21 +1,21 @@
 import MapCity from "../components/MapCity";
 import Hero, { heroContent } from "../components/Hero";
-import { useGetOneCitybyIdQuery } from "../gql/generated/schema";
+import { useGetOneCitybyNameQuery } from "../gql/generated/schema";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import MiniCardPoi from "../components/MiniCardPoi";
 
 export default function City() {
-  const { cityId = "" } = useParams();
-
-  const { data } = useGetOneCitybyIdQuery({
-    variables: { getOneCitybyId: cityId },
+  const navigate = useNavigate();
+  const { cityName = "" } = useParams();
+  const { data } = useGetOneCitybyNameQuery({
+    variables: { name: cityName },
   });
 
   let city: heroContent = {};
   if (data !== undefined) {
-    city = data.getOneCitybyId;
+    city = data.getOneCitybyName;
   }
-
   return (
     <>
       <Hero heroContent={city} />
@@ -36,7 +36,18 @@ export default function City() {
         <div className="bg-cream px-8 pb-12 sm:bg-transparent w-full md:w-1/2 lg:w-1/3 absolute sm:relative min-h-[100px] bottom-0 z-10">
           <h3 className="text-center sm:text-left pb-12">À découvrir</h3>
           {city.places?.map((place) => (
-            <MiniCardPoi place={place} />
+            <div
+              onClick={() =>
+                navigate(
+                  `/cities/${city.name}/${place.name.replace(" ", "-")}`,
+                  {
+                    state: { place },
+                  }
+                )
+              }
+            >
+              <MiniCardPoi place={place} />
+            </div>
           ))}
         </div>
       </div>

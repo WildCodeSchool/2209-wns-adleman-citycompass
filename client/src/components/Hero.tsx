@@ -1,8 +1,7 @@
 import React from "react";
 import Breadcrumbs from "./Breadcrumbs";
 import "../styles/button.css";
-
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { PlaceProps } from "./MapCity";
 
 export interface HeroProps {
@@ -13,12 +12,14 @@ export interface HeroProps {
 }
 
 export interface heroContent {
-  description?: string | undefined;
-  latitude?: string | undefined;
-  longitude?: string | undefined;
-  name?: string | undefined;
-  picture?: string | undefined;
-  places?: PlaceProps[] | undefined;
+  description?: string;
+  latitude?: string;
+  longitude?: string;
+  name?: string;
+  picture?: string;
+  website?: string | null;
+  grade?: string;
+  places?: PlaceProps[];
 }
 
 function Hero({ heroContent, action }: HeroProps) {
@@ -58,17 +59,22 @@ function Hero({ heroContent, action }: HeroProps) {
           )}
           {isHome ? (
             <h1 className="type-h2 normal-case font-normal text-center sm:text-left">
-              {heroContent.name}
+              {heroContent?.name}
             </h1>
           ) : (
             <h1 className="drop-shadow-xl text-center sm:text-left">
-              {heroContent.name}
+              {heroContent?.name}
             </h1>
           )}
           <p className={isHome ? "" : "hidden sm:inline-block"}>
             {heroContent.description}
           </p>
 
+          {heroContent.website && (
+            <p>
+              <button className="button--primary">Site internet</button>
+            </p>
+          )}
           {action && (
             <button
               className="button--primary"
