@@ -1,3 +1,7 @@
+body {
+  scroll-behavior: smooth;
+}
+
 .container {
   margin: auto;
   padding: 0 20px;

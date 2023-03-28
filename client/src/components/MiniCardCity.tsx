@@ -10,11 +10,11 @@ export default function MiniCardCity({ city }: MiniCardProps) {
   return (
     <>
       <div className="card_container">
-        <div className="h-56">
+        <div className="h-56 rounded shadow overflow-hidden">
           <img
             src={city.picture}
             alt={city.name}
-            className="rounded shadow"
+            className="object-cover"
           ></img>
         </div>
         <h2 className="mt-12 font-bold font-karla text-m">{city.name}</h2>
