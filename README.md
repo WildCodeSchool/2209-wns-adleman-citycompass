@@ -64,3 +64,6 @@ npm run generalSeed
 ```
 
 Warning : this command clean all tables !!
+
+COMMENTAIRE POUR LE PACKAGE.JSON GLOBAL :
+Changer le nom d'username dans les script par scrip (essai local pour le moment).
