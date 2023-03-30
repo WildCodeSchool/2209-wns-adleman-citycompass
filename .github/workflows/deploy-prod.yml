@@ -54,7 +54,7 @@ jobs:
           push: true
           context: "{{defaultContext}}:server"
           file: "Dockerfile.production"
-          tags: ${{ vars.DOCKERHUB_USERNAME }}/2209-wns-adleman-citycompass:latest
+          tags: ${{ vars.DOCKERHUB_USERNAME }}/2209-wns-adleman-citycompass-server:latest
 
   build-and-push-client:
     needs:
@@ -76,7 +76,7 @@ jobs:
           push: true
           context: "{{defaultContext}}:client"
           file: "Dockerfile.production"
-          tags: ${{ vars.DOCKERHUB_USERNAME }}/2209-wns-adleman-citycompass:latest
+          tags: ${{ vars.DOCKERHUB_USERNAME }}/2209-wns-adleman-citycompass-client:latest
   notify:
     needs:
       - build-and-push-client
