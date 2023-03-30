@@ -38,7 +38,7 @@ services:
     image: nginx:1.21.3 
     depends_on:
       client:
-        condition: service_ready
+        condition: service_started
       server:
         condition: service_healthy
     restart: always
