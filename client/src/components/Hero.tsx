@@ -1,8 +1,8 @@
 import React, { MutableRefObject } from "react";
 import Breadcrumbs from "./Breadcrumbs";
-import "../styles/button.css";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { PlaceProps } from "./MapCity";
+import "../index.css";
 
 export interface HeroProps {
   heroContent: heroContent;

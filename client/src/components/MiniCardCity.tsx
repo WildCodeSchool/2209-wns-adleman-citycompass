@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import "../styles/MiniCardCity.css";
+import "../styles/miniCardCity.css";
 import { MiniCardProps } from "../services/interfaces";
-import "../styles/button.css";
+import "../index.css";
 
 export default function MiniCardCity({ city }: MiniCardProps) {
   const navigate = useNavigate();
