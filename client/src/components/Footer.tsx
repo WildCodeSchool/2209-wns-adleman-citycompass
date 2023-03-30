@@ -1,4 +1,3 @@
-import "../styles/Footer.css";
 import compasLogo from "../assets/compas_logo.svg";
 import claraContributor from "../assets/clara-contributor.jpg";
 import elodieContributor from "../assets/elodie-contributor.jpg";

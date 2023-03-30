@@ -2,47 +2,47 @@
 @tailwind components;
 @tailwind utilities;
 
-@font-face {
-  font-family:"Lato Regular";
-  src:url("./assets/fonts/Lato/Lato-Regular.woff2") format("woff2"),url("./assets/fonts/Lato/Lato-Regular.woff") format("woff"),url("./assets/fonts/Lato/Lato-Regular.ttf") format("ttf");
-  font-style:normal;font-weight:400;
+@import "./styles/global.css";
+@import "./styles/breadcrumbs.css";
+@import "./styles/button.css";
+@import "./styles/footer.css";
+@import "./styles/header.css";
+@import "./styles/mapCity.css";
+@import "./styles/miniCardCity.css";
+@import "./styles/searchBar.css";
+
+h1,
+.type-h1 {
+  font-family: "Lato Black";
+  color: theme("colors.darkBlue");
+  font-size: theme("fontSize.xl");
+  text-transform: uppercase;
 }
 
-@font-face {
-  font-family:"Lato Black";
-  src:url("./assets/fonts/Lato/Lato-Black.woff2") format("woff2"),url("./assets/fonts/Lato/Lato-Black.woff") format("woff"),url("./assets/fonts/Lato/Lato-Black.ttf") format("ttf");
-  font-style:normal;font-weight:400;
+h2,
+.type-h2 {
+  font-family: "Lato Black";
+  color: theme("colors.darkBlue");
+  font-size: theme("fontSize.l");
 }
 
-@font-face {
-  font-family:"Karla Medium";
-  src:url("./assets/fonts/Karla/Karla-Medium.woff2") format("woff2"),url("./assets/fonts/Karla/Karla-Medium.woff") format("woff"),url("./assets/fonts/Karla/Karla-Medium.ttf") format("ttf");
-  font-style:normal;font-weight:400;
-}
-      
-
-/* Fichier de css pour le body */ 
-html,
-body, #root {
-  height: 100%;
-  margin: 0;
-  font-family: 'Karla Medium', 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  display: flex;
-  flex-direction: column;
+h3 {
+  font-family: "Lato Regular";
+  color: theme("colors.darkBlue");
+  font-size: theme("fontSize.m");
 }
 
-main {
-  flex-grow: 1;
+h4 {
+  font-family: "Lato Regular";
+  color: theme("colors.darkBlue");
+  font-size: theme("fontSize.base");
+  @screen sm {
+    font-size: 1.5rem;
+  }
 }
 
-body {
-  font-family: 'Karla Medium';
-  color: theme('colors.darkBlue');
-  margin: 0;
+p {
+  font-family: "Karla Medium";
+  color: theme("colors.darkBlue");
+  font-size: theme("fontSize.base");
 }
-
-      
