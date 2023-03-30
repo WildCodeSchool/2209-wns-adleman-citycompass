@@ -2,8 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-@import "./styles/global.css";
 @import "./styles/breadcrumbs.css";
+@import "./styles/global.css";
 @import "./styles/button.css";
 @import "./styles/footer.css";
 @import "./styles/header.css";
