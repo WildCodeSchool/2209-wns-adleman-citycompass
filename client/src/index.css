@@ -9,6 +9,7 @@
 @import "./styles/header.css";
 @import "./styles/mapCity.css";
 @import "./styles/miniCardCity.css";
+@import "./styles/searchBar.css";
 
 h1,
 .type-h1 {

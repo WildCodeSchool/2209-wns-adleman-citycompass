@@ -1,4 +1,3 @@
-import "../styles/searchBar.css";
 import React, { useEffect } from "react";
 import loupe from "../assets/magnifying-glass.svg";
 import cross from "../assets/cross.svg";

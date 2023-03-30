@@ -1,6 +1,5 @@
 import L from "leaflet";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import "../styles/mapCity.css";
 import { useNavigate } from "react-router-dom";
 
 interface CityProps {
