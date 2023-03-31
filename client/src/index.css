@@ -46,3 +46,30 @@ p {
   color: theme("colors.darkBlue");
   font-size: theme("fontSize.base");
 }
+
+@font-face {
+  font-family: "Lato Regular";
+  src: url("./assets/fonts/Lato/Lato-Regular.woff2") format("woff2"),
+    url("./assets/fonts/Lato/Lato-Regular.woff") format("woff"),
+    url("./assets/fonts/Lato/Lato-Regular.ttf") format("ttf");
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Lato Black";
+  src: url("./assets/fonts/Lato/Lato-Black.woff2") format("woff2"),
+    url("./assets/fonts/Lato/Lato-Black.woff") format("woff"),
+    url("./assets/fonts/Lato/Lato-Black.ttf") format("ttf");
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Karla Medium";
+  src: url("./assets/fonts/Karla/Karla-Medium.woff2") format("woff2"),
+    url("./assets/fonts/Karla/Karla-Medium.woff") format("woff"),
+    url("./assets/fonts/Karla/Karla-Medium.ttf") format("ttf");
+  font-style: normal;
+  font-weight: 400;
+}

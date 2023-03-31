@@ -1,0 +1,29 @@
+/* Fichier de css pour le body */
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  font-family: "Karla Medium", "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
+    "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex-grow: 1;
+}
+
+body {
+  font-family: "Karla Medium";
+  color: theme("colors.darkBlue");
+  margin: 0;
+  scroll-behavior: smooth;
+}
+
+.container {
+  margin: auto;
+  padding: 0 20px;
+}
