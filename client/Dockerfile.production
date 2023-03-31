@@ -17,6 +17,9 @@ COPY public public
 COPY codegen.yml codegen.yml
 COPY src src
 
+ARG REACT_APP_GRAPHQL_API_URL
+ENV REACT_APP_GRAPHQL_API_URL ${REACT_APP_GRAPHQL_API_URL}
+
 RUN npm run build
 
 # Stage 1, based on Nginx, to have only the compiled app, ready for production with Nginx
