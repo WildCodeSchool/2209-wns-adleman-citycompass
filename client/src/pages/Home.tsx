@@ -17,7 +17,7 @@ export default function Home() {
     name: "Partagez et découvrez des points d’intérêts",
     picture: heroHomeImg,
     description:
-      "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Optio adipisci quae  axime error quaerat est incidunt voluptas officiis, quia sapiente ad molestiae pariatur saepe enim porro a deleniti, aperiam et.Lorem, ipsum dolor sit amet consectetur adipisicing elit. Optio adipisci quae  axime error quaerat est incidunt voluptas officiis, quia sapiente ad molestiae pariatur saepe enim porro a deleniti, aperiam et.",
+      "Trouvez rapidement des informations sur les points d’intérêts régulièrement partagés par nos contributeur·rice·s, en utilisant nos cartes interactives. Gagnez du temps en planifiant votre voyage à l'avance et découvrez des endroits que vous n'auriez peut-être pas trouvés autrement : attractions touristiques, musées, restaurants, bars et bien plus encore.",
   };
 
   const action = {

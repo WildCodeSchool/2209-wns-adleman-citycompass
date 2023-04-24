@@ -1,3 +1,5 @@
 .git
 node_modules
 .env*
+deploy_production.sh
+deploy_staging.sh
