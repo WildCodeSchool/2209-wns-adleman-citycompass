@@ -7,12 +7,19 @@ import { CityResolver } from "./resolver/CityResolver";
 import { CategoryResolver } from "./resolver/CategoryResolver";
 import { PlaceResolver } from "./resolver/PlaceResolver";
 import { SearchResolver } from "./resolver/SearchResolver";
+import { UserResolver } from "./resolver/UserResolver";
 
 const start = async (): Promise<void> => {
   await datasource.initialize();
 
   const schema = await buildSchema({
-    resolvers: [CategoryResolver, CityResolver, PlaceResolver, SearchResolver],
+    resolvers: [
+      CategoryResolver,
+      CityResolver,
+      PlaceResolver,
+      SearchResolver,
+      UserResolver,
+    ],
   });
 
   const server = new ApolloServer({
@@ -23,7 +30,7 @@ const start = async (): Promise<void> => {
   });
 
   await server.listen().then(({ url }) => {
-    console.log(`🚀  Server ready at ${url}`);    
+    console.log(`🚀  Server ready at ${url}`);
   });
 };
 
