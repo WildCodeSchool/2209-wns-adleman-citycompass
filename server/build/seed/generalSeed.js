@@ -1,14 +1,20 @@
-import Category from "../entity/Category";
-import datasource from "../db";
-import City from "../entity/City";
-import Place from "../entity/Place";
-
-async function reset(): Promise<void> {
-  await datasource.initialize();
-  await datasource.getRepository(City).delete({});
-  await datasource.getRepository(Place).delete({});
-  await datasource.getRepository(Category).delete({});
-  const marseille = await datasource.getRepository(City).save({
+"use strict";
+var __importDefault =
+  (this && this.__importDefault) ||
+  function (mod) {
+    return mod && mod.__esModule ? mod : { default: mod };
+  };
+Object.defineProperty(exports, "__esModule", { value: true });
+const Category_1 = __importDefault(require("../entity/Category"));
+const db_1 = __importDefault(require("../db"));
+const City_1 = __importDefault(require("../entity/City"));
+const Place_1 = __importDefault(require("../entity/Place"));
+async function reset() {
+  await db_1.default.initialize();
+  await db_1.default.getRepository(City_1.default).delete({});
+  await db_1.default.getRepository(Place_1.default).delete({});
+  await db_1.default.getRepository(Category_1.default).delete({});
+  const marseille = await db_1.default.getRepository(City_1.default).save({
     name: "Marseille",
     picture:
       "https://www.wonderbox.fr/blog/wp-content/uploads/sites/4/2020/02/Visiter-Marseille-en-10-lieux-marseille-scaled-1-1-2048x1367.jpeg",
@@ -17,7 +23,7 @@ async function reset(): Promise<void> {
     latitude: "43.296174",
     longitude: "5.3699525",
   });
-  const lyon = await datasource.getRepository(City).save({
+  const lyon = await db_1.default.getRepository(City_1.default).save({
     name: "Lyon",
     picture:
       "https://www.kayak.fr/news/wp-content/uploads/sites/7/2022/05/DEST_FRANCE_LYON_SAINT-GEORGES-GettyImages-982750890-768x525.jpg",
@@ -26,7 +32,7 @@ async function reset(): Promise<void> {
     latitude: "45.764043",
     longitude: "4.835659",
   });
-  const strasbourg = await datasource.getRepository(City).save({
+  const strasbourg = await db_1.default.getRepository(City_1.default).save({
     name: "Strasbourg",
     picture:
       "https://www.kayak.fr/news/wp-content/uploads/sites/7/2022/06/DEST_FRANCE_STRASBOURG_GettyImages-928351986-768x525.jpg",
@@ -35,7 +41,7 @@ async function reset(): Promise<void> {
     latitude: "48.573405",
     longitude: "7.752111",
   });
-  const bordeaux = await datasource.getRepository(City).save({
+  const bordeaux = await db_1.default.getRepository(City_1.default).save({
     name: "Bordeaux",
     picture:
       "https://www.kayak.fr/news/wp-content/uploads/sites/7/2022/06/dest_france_bordeaux_shutterstock-portfolio_1389527012_universal_within-usage-period_64159-820x656.jpg",
@@ -44,43 +50,43 @@ async function reset(): Promise<void> {
     latitude: "44.837789",
     longitude: "-0.579180",
   });
-  const bar = await datasource.getRepository(Category).save({
+  const bar = await db_1.default.getRepository(Category_1.default).save({
     name: "Bar",
     picto: "https://zupimages.net/up/23/09/cyg3.png",
   });
-  const cinema = await datasource.getRepository(Category).save({
+  const cinema = await db_1.default.getRepository(Category_1.default).save({
     name: "Cinema",
     picto: "https://zupimages.net/up/23/09/r5oc.png",
   });
-  const hotel = await datasource.getRepository(Category).save({
+  const hotel = await db_1.default.getRepository(Category_1.default).save({
     name: "Hotel",
-    picto: "https://zupimages.net/up/23/09/r4mz.png",
+    picto: "https://zupimages.net/up/23/09/r4mz.pngows",
   });
-  const library = await datasource.getRepository(Category).save({
+  const library = await db_1.default.getRepository(Category_1.default).save({
     name: "Library",
     picto: "https://zupimages.net/up/23/09/mhso.png",
   });
-  const monument = await datasource.getRepository(Category).save({
+  const monument = await db_1.default.getRepository(Category_1.default).save({
     name: "Monument",
     picto: "https://zupimages.net/up/23/09/hp6v.png",
   });
-  const park = await datasource.getRepository(Category).save({
+  const park = await db_1.default.getRepository(Category_1.default).save({
     name: "Park",
     picto: "https://zupimages.net/up/23/09/nhcc.png",
   });
-  const restaurant = await datasource.getRepository(Category).save({
+  const restaurant = await db_1.default.getRepository(Category_1.default).save({
     name: "Restaurant",
     picto: "https://zupimages.net/up/23/09/9k1h.png",
   });
-  const sport = await datasource.getRepository(Category).save({
+  const sport = await db_1.default.getRepository(Category_1.default).save({
     name: "Sport",
     picto: "https://zupimages.net/up/23/09/rhv6.png",
   });
-  const travel = await datasource.getRepository(Category).save({
+  const travel = await db_1.default.getRepository(Category_1.default).save({
     name: "Travel",
     picto: "https://zupimages.net/up/23/09/6vet.png",
   });
-  await datasource.getRepository(Place).save([
+  await db_1.default.getRepository(Place_1.default).save([
     {
       name: "Orange Vélodrome",
       latitude: "43.269835",
@@ -277,8 +283,7 @@ async function reset(): Promise<void> {
       categoryId: monument.id,
     },
   ]);
-  await datasource.destroy();
+  await db_1.default.destroy();
   console.log("done !");
 }
-
 reset().catch(console.error);

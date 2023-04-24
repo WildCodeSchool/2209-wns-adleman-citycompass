@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import "../styles/Header.css";
 import compasHeader from "../assets/compass_header.svg";
 import loupe from "../assets/magnifying-glass.svg";
 import person from "../assets/person-circle-outline.svg";

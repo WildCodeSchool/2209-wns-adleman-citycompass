@@ -7,7 +7,7 @@ import Place from "./pages/Place";
 import Account from "./pages/Account";
 import Dashboard from "./pages/Dashboard";
 
-import "./styles/Global.css";
+import "./index.css";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 

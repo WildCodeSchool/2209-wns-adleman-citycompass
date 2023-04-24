@@ -13,8 +13,11 @@
   opacity: 0.8;
 }
 
-.button--secondary:hover {
+.button--secondary {
   @apply transition;
+}
+
+.button--secondary:hover {
   background-color: theme("colors.darkBlue");
   color: white;
 }
