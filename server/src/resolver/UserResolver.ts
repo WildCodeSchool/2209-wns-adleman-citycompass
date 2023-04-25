@@ -2,6 +2,7 @@ import { Arg, Mutation, Resolver, Query } from "type-graphql";
 import User, { UserInput, UserUpdate } from "../entity/User";
 import datasource from "../db";
 import { existingUser } from "../helpers/dbCheckers";
+import { hashPassword } from "../helpers/hashing";
 
 @Resolver(User)
 export class UserResolver {
@@ -12,7 +13,10 @@ export class UserResolver {
     // check if user email is already in database
     await existingUser(data);
 
-    return await datasource.getRepository(User).save(data);
+    const hashedPassword = await hashPassword(data.password);
+    return await datasource
+      .getRepository(User)
+      .save({ ...data, password: hashedPassword });
   }
 
   @Mutation(() => User)
