@@ -10,6 +10,7 @@
 @import "./styles/mapCity.css";
 @import "./styles/miniCardCity.css";
 @import "./styles/searchBar.css";
+@import "./styles/modal.css";
 
 h1,
 .type-h1 {

@@ -3,6 +3,7 @@ import compasHeader from "../assets/compass_header.svg";
 import loupe from "../assets/magnifying-glass.svg";
 import person from "../assets/person-circle-outline.svg";
 import SearchBar from "./SearchBar";
+import Modal from "./Modal";
 
 function Header() {
   const [showSearch, setShowSearch] = useState(false);
@@ -12,6 +13,12 @@ function Header() {
     setShowSearch(!showSearch);
     setSearchInput("");
   };
+
+  const handleModal = () => {
+    setShowModal(!showModal);
+  };
+
+  const [showModal, setShowModal] = useState(false);
 
   return (
     <>
@@ -41,6 +48,7 @@ function Header() {
               src={person}
               alt="person icon to profile"
               className="header__profile--search"
+              onClick={handleModal}
             />
           </div>
         </div>
@@ -51,6 +59,7 @@ function Header() {
           setSearchInput={setSearchInput}
         />
       </div>
+      <Modal showModal={showModal} setShowModal={setShowModal} />
     </>
   );
 }
