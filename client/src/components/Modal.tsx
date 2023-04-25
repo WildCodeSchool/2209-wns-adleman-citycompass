@@ -40,12 +40,12 @@ function Modal({ showModal, setShowModal }: modalProps) {
           <div className="flex flex-col w-full p-8">
             <h4 className="text-center">{modalContentLogin.title}</h4>
 
-            <div className="flex flex-col space-y-4">
+            <div className="flex flex-col">
               <div className="modal__input--label">
                 {modalContentLogin.input_1.prenom}
               </div>
               <input
-                className="modal__input shadow shadow-green"
+                className="modal__input shadow shadow-green mb-4"
                 placeholder={modalContentLogin.input_1.prenom}
               />
               <input type="submit" className="button--primary mt-6" />

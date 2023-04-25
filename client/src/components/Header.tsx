@@ -12,11 +12,13 @@ function Header() {
 
   const handleClick = () => {
     setShowSearch(!showSearch);
+    setShowModal(false);
     setSearchInput("");
   };
 
   const handleModal = () => {
     setShowModal(!showModal);
+    setShowSearch(false);
   };
 
   return (
