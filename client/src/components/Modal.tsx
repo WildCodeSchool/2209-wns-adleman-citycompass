@@ -22,7 +22,6 @@ function Modal({ showModal, setShowModal }: modalProps) {
     firstname: "",
     lastname: "",
     picture: "",
-    role: "user",
   });
 
   const [createUser] = useCreateUserMutation();
