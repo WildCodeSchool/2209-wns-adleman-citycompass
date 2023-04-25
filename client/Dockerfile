@@ -14,6 +14,7 @@ COPY postcss.config.js postcss.config.js
 COPY tsconfig.json tsconfig.json
 COPY tailwind.config.js tailwind.config.js
 COPY public public
+COPY .env .env
 COPY codegen.yml codegen.yml
 COPY .env .env
 COPY src src
