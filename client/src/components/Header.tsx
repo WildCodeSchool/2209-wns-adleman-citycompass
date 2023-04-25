@@ -18,9 +18,16 @@ function Header() {
 
   const handleModal = () => {
     setShowModal(!showModal);
+<<<<<<< HEAD
     setShowSearch(false);
   };
 
+=======
+  };
+
+  const [showModal, setShowModal] = useState(false);
+
+>>>>>>> 45a31c3 (✨ added Clara modal)
   return (
     <>
       <div className="bg-white w-full sticky top-0 z-50">

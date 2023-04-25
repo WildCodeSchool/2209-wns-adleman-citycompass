@@ -1,10 +1,16 @@
-import { gql } from '@apollo/client';
-import * as Apollo from '@apollo/client';
+import { gql } from "@apollo/client";
+import * as Apollo from "@apollo/client";
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
-export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type Exact<T extends { [key: string]: unknown }> = {
+  [K in keyof T]: T[K];
+};
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
+  [SubKey in K]?: Maybe<T[SubKey]>;
+};
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
+  [SubKey in K]: Maybe<T[SubKey]>;
+};
 const defaultOptions = {} as const;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -16,118 +22,123 @@ export type Scalars = {
 };
 
 export type Category = {
-  __typename?: 'Category';
-  id: Scalars['Float'];
-  name: Scalars['String'];
-  picto: Scalars['String'];
+  __typename?: "Category";
+  id: Scalars["Float"];
+  name: Scalars["String"];
+  picto: Scalars["String"];
   places: Array<Place>;
 };
 
 export type CategoryInput = {
-  name: Scalars['String'];
-  picto: Scalars['String'];
+  name: Scalars["String"];
+  picto: Scalars["String"];
 };
 
 export type City = {
-  __typename?: 'City';
-  description: Scalars['String'];
-  id: Scalars['Float'];
-  latitude: Scalars['String'];
-  longitude: Scalars['String'];
-  name: Scalars['String'];
-  picture: Scalars['String'];
+  __typename?: "City";
+  description: Scalars["String"];
+  id: Scalars["Float"];
+  latitude: Scalars["String"];
+  longitude: Scalars["String"];
+  name: Scalars["String"];
+  picture: Scalars["String"];
   places: Array<Place>;
 };
 
 export type CityInput = {
-  description: Scalars['String'];
-  latitude: Scalars['String'];
-  longitude: Scalars['String'];
-  name: Scalars['String'];
-  picture: Scalars['String'];
+  description: Scalars["String"];
+  latitude: Scalars["String"];
+  longitude: Scalars["String"];
+  name: Scalars["String"];
+  picture: Scalars["String"];
 };
 
 export type CityUpdate = {
-  description?: InputMaybe<Scalars['String']>;
-  latitude?: InputMaybe<Scalars['String']>;
-  longitude?: InputMaybe<Scalars['String']>;
-  name?: InputMaybe<Scalars['String']>;
-  picture?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars["String"]>;
+  latitude?: InputMaybe<Scalars["String"]>;
+  longitude?: InputMaybe<Scalars["String"]>;
+  name?: InputMaybe<Scalars["String"]>;
+  picture?: InputMaybe<Scalars["String"]>;
 };
 
 export type Mutation = {
-  __typename?: 'Mutation';
+  __typename?: "Mutation";
   createCategory: Category;
   createCity: City;
   createPlace: Place;
+  createUser: User;
   updateCategory: Category;
   updateCity: City;
   updatePlace: Place;
+  updateUser: User;
 };
-
 
 export type MutationCreateCategoryArgs = {
   data: CategoryInput;
 };
 
-
 export type MutationCreateCityArgs = {
   data: CityInput;
 };
-
 
 export type MutationCreatePlaceArgs = {
   data: PlaceInput;
 };
 
+export type MutationCreateUserArgs = {
+  data: UserInput;
+};
 
 export type MutationUpdateCategoryArgs = {
   data: CategoryInput;
-  id: Scalars['Int'];
+  id: Scalars["Int"];
 };
-
 
 export type MutationUpdateCityArgs = {
   data: CityUpdate;
-  id: Scalars['String'];
+  id: Scalars["String"];
 };
-
 
 export type MutationUpdatePlaceArgs = {
   data: PlaceInput;
-  id: Scalars['String'];
+  id: Scalars["String"];
+};
+
+export type MutationUpdateUserArgs = {
+  data: UserUpdate;
+  email: Scalars["String"];
 };
 
 export type Place = {
-  __typename?: 'Place';
-  adress: Scalars['String'];
+  __typename?: "Place";
+  adress: Scalars["String"];
   category: Category;
-  categoryId: Scalars['Float'];
+  categoryId: Scalars["Float"];
   city: City;
-  cityId: Scalars['Float'];
-  description: Scalars['String'];
-  id: Scalars['Float'];
-  latitude: Scalars['String'];
-  longitude: Scalars['String'];
-  name: Scalars['String'];
-  picture: Scalars['String'];
-  website?: Maybe<Scalars['String']>;
+  cityId: Scalars["Float"];
+  description: Scalars["String"];
+  id: Scalars["Float"];
+  latitude: Scalars["String"];
+  longitude: Scalars["String"];
+  name: Scalars["String"];
+  picture: Scalars["String"];
+  website?: Maybe<Scalars["String"]>;
 };
 
 export type PlaceInput = {
-  adress: Scalars['String'];
-  categoryId: Scalars['Float'];
-  cityId: Scalars['Float'];
-  description: Scalars['String'];
-  latitude: Scalars['String'];
-  longitude: Scalars['String'];
-  name: Scalars['String'];
-  picture: Scalars['String'];
-  website?: InputMaybe<Scalars['String']>;
+  adress: Scalars["String"];
+  categoryId: Scalars["Float"];
+  cityId: Scalars["Float"];
+  description: Scalars["String"];
+  latitude: Scalars["String"];
+  longitude: Scalars["String"];
+  name: Scalars["String"];
+  picture: Scalars["String"];
+  website?: InputMaybe<Scalars["String"]>;
 };
 
 export type Query = {
-  __typename?: 'Query';
+  __typename?: "Query";
   Search: SearchResult;
   getCategories: Array<Category>;
   getCities: Array<City>;
@@ -135,78 +146,236 @@ export type Query = {
   getOneCitybyName: City;
   getOnePlacebyId: Place;
   getOnePlacebyName: Place;
+  getOneUserbyMail: User;
   getPlaces: Array<Place>;
+  getUsers: Array<User>;
 };
-
 
 export type QuerySearchArgs = {
-  searchInput: Scalars['String'];
+  searchInput: Scalars["String"];
 };
-
 
 export type QueryGetOneCitybyIdArgs = {
-  id: Scalars['String'];
+  id: Scalars["String"];
 };
-
 
 export type QueryGetOneCitybyNameArgs = {
-  name: Scalars['String'];
+  name: Scalars["String"];
 };
-
 
 export type QueryGetOnePlacebyIdArgs = {
-  id: Scalars['String'];
+  id: Scalars["String"];
 };
 
-
 export type QueryGetOnePlacebyNameArgs = {
-  name: Scalars['String'];
+  name: Scalars["String"];
+};
+
+export type QueryGetOneUserbyMailArgs = {
+  email: Scalars["String"];
 };
 
 export type SearchResult = {
-  __typename?: 'SearchResult';
+  __typename?: "SearchResult";
   cities: Array<City>;
   placesByAddress: Array<Place>;
   placesByName: Array<Place>;
 };
 
-export type GetCitiesQueryVariables = Exact<{ [key: string]: never; }>;
+export type User = {
+  __typename?: "User";
+  cities?: Maybe<Array<City>>;
+  email: Scalars["String"];
+  firstname: Scalars["String"];
+  id: Scalars["Float"];
+  lastname: Scalars["String"];
+  password: Scalars["String"];
+  picture: Scalars["String"];
+  role: Scalars["String"];
+};
 
+export type UserInput = {
+  email: Scalars["String"];
+  firstname: Scalars["String"];
+  lastname: Scalars["String"];
+  password: Scalars["String"];
+  picture: Scalars["String"];
+};
 
-export type GetCitiesQuery = { __typename?: 'Query', getCities: Array<{ __typename?: 'City', picture: string, name: string, id: number, description: string }> };
+export type UserUpdate = {
+  email?: InputMaybe<Scalars["String"]>;
+  firstname?: InputMaybe<Scalars["String"]>;
+  lastname?: InputMaybe<Scalars["String"]>;
+  password?: InputMaybe<Scalars["String"]>;
+  picture?: InputMaybe<Scalars["String"]>;
+  role?: InputMaybe<Scalars["String"]>;
+};
+
+export type CreateUserMutationVariables = Exact<{
+  data: UserInput;
+}>;
+
+export type CreateUserMutation = {
+  __typename?: "Mutation";
+  createUser: { __typename?: "User"; id: number };
+};
+
+export type GetCitiesQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetCitiesQuery = {
+  __typename?: "Query";
+  getCities: Array<{
+    __typename?: "City";
+    picture: string;
+    name: string;
+    id: number;
+    description: string;
+  }>;
+};
 
 export type GetOneCitybyNameQueryVariables = Exact<{
-  name: Scalars['String'];
+  name: Scalars["String"];
 }>;
 
-
-export type GetOneCitybyNameQuery = { __typename?: 'Query', getOneCitybyName: { __typename?: 'City', id: number, name: string, picture: string, description: string, latitude: string, longitude: string, places: Array<{ __typename?: 'Place', id: number, name: string, latitude: string, longitude: string, adress: string, website?: string | null, picture: string, description: string, category: { __typename?: 'Category', name: string, id: number, picto: string } }> } };
+export type GetOneCitybyNameQuery = {
+  __typename?: "Query";
+  getOneCitybyName: {
+    __typename?: "City";
+    id: number;
+    name: string;
+    picture: string;
+    description: string;
+    latitude: string;
+    longitude: string;
+    places: Array<{
+      __typename?: "Place";
+      id: number;
+      name: string;
+      latitude: string;
+      longitude: string;
+      adress: string;
+      website?: string | null;
+      picture: string;
+      description: string;
+      category: {
+        __typename?: "Category";
+        name: string;
+        id: number;
+        picto: string;
+      };
+    }>;
+  };
+};
 
 export type GetOnePlacebyNameQueryVariables = Exact<{
-  name: Scalars['String'];
+  name: Scalars["String"];
 }>;
 
-
-export type GetOnePlacebyNameQuery = { __typename?: 'Query', getOnePlacebyName: { __typename?: 'Place', id: number, name: string, latitude: string, longitude: string, adress: string, website?: string | null, picture: string, description: string, categoryId: number, category: { __typename?: 'Category', name: string, picto: string, id: number } } };
+export type GetOnePlacebyNameQuery = {
+  __typename?: "Query";
+  getOnePlacebyName: {
+    __typename?: "Place";
+    id: number;
+    name: string;
+    latitude: string;
+    longitude: string;
+    adress: string;
+    website?: string | null;
+    picture: string;
+    description: string;
+    categoryId: number;
+    category: {
+      __typename?: "Category";
+      name: string;
+      picto: string;
+      id: number;
+    };
+  };
+};
 
 export type GetSearchResultQueryVariables = Exact<{
-  searchInput: Scalars['String'];
+  searchInput: Scalars["String"];
 }>;
 
+export type GetSearchResultQuery = {
+  __typename?: "Query";
+  Search: {
+    __typename?: "SearchResult";
+    cities: Array<{ __typename?: "City"; name: string }>;
+    placesByName: Array<{
+      __typename?: "Place";
+      name: string;
+      city: { __typename?: "City"; name: string };
+    }>;
+    placesByAddress: Array<{
+      __typename?: "Place";
+      name: string;
+      adress: string;
+      city: { __typename?: "City"; name: string };
+    }>;
+  };
+};
 
-export type GetSearchResultQuery = { __typename?: 'Query', Search: { __typename?: 'SearchResult', cities: Array<{ __typename?: 'City', name: string }>, placesByName: Array<{ __typename?: 'Place', name: string, city: { __typename?: 'City', name: string } }>, placesByAddress: Array<{ __typename?: 'Place', name: string, adress: string, city: { __typename?: 'City', name: string } }> } };
-
-
-export const GetCitiesDocument = gql`
-    query GetCities {
-  getCities {
-    picture
-    name
-    id
-    description
+export const CreateUserDocument = gql`
+  mutation createUser($data: UserInput!) {
+    createUser(data: $data) {
+      id
+    }
   }
+`;
+export type CreateUserMutationFn = Apollo.MutationFunction<
+  CreateUserMutation,
+  CreateUserMutationVariables
+>;
+
+/**
+ * __useCreateUserMutation__
+ *
+ * To run a mutation, you first call `useCreateUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createUserMutation, { data, loading, error }] = useCreateUserMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateUserMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateUserMutation,
+    CreateUserMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<CreateUserMutation, CreateUserMutationVariables>(
+    CreateUserDocument,
+    options
+  );
 }
-    `;
+export type CreateUserMutationHookResult = ReturnType<
+  typeof useCreateUserMutation
+>;
+export type CreateUserMutationResult =
+  Apollo.MutationResult<CreateUserMutation>;
+export type CreateUserMutationOptions = Apollo.BaseMutationOptions<
+  CreateUserMutation,
+  CreateUserMutationVariables
+>;
+export const GetCitiesDocument = gql`
+  query GetCities {
+    getCities {
+      picture
+      name
+      id
+      description
+    }
+  }
+`;
 
 /**
  * __useGetCitiesQuery__
@@ -223,44 +392,62 @@ export const GetCitiesDocument = gql`
  *   },
  * });
  */
-export function useGetCitiesQuery(baseOptions?: Apollo.QueryHookOptions<GetCitiesQuery, GetCitiesQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetCitiesQuery, GetCitiesQueryVariables>(GetCitiesDocument, options);
-      }
-export function useGetCitiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCitiesQuery, GetCitiesQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetCitiesQuery, GetCitiesQueryVariables>(GetCitiesDocument, options);
-        }
+export function useGetCitiesQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetCitiesQuery, GetCitiesQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetCitiesQuery, GetCitiesQueryVariables>(
+    GetCitiesDocument,
+    options
+  );
+}
+export function useGetCitiesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetCitiesQuery,
+    GetCitiesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetCitiesQuery, GetCitiesQueryVariables>(
+    GetCitiesDocument,
+    options
+  );
+}
 export type GetCitiesQueryHookResult = ReturnType<typeof useGetCitiesQuery>;
-export type GetCitiesLazyQueryHookResult = ReturnType<typeof useGetCitiesLazyQuery>;
-export type GetCitiesQueryResult = Apollo.QueryResult<GetCitiesQuery, GetCitiesQueryVariables>;
+export type GetCitiesLazyQueryHookResult = ReturnType<
+  typeof useGetCitiesLazyQuery
+>;
+export type GetCitiesQueryResult = Apollo.QueryResult<
+  GetCitiesQuery,
+  GetCitiesQueryVariables
+>;
 export const GetOneCitybyNameDocument = gql`
-    query GetOneCitybyName($name: String!) {
-  getOneCitybyName(name: $name) {
-    id
-    name
-    picture
-    description
-    latitude
-    longitude
-    places {
+  query GetOneCitybyName($name: String!) {
+    getOneCitybyName(name: $name) {
       id
       name
-      latitude
-      longitude
-      adress
-      website
       picture
       description
-      category {
-        name
+      latitude
+      longitude
+      places {
         id
-        picto
+        name
+        latitude
+        longitude
+        adress
+        website
+        picture
+        description
+        category {
+          name
+          id
+          picto
+        }
       }
     }
   }
-}
-    `;
+`;
 
 /**
  * __useGetOneCitybyNameQuery__
@@ -278,37 +465,60 @@ export const GetOneCitybyNameDocument = gql`
  *   },
  * });
  */
-export function useGetOneCitybyNameQuery(baseOptions: Apollo.QueryHookOptions<GetOneCitybyNameQuery, GetOneCitybyNameQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetOneCitybyNameQuery, GetOneCitybyNameQueryVariables>(GetOneCitybyNameDocument, options);
-      }
-export function useGetOneCitybyNameLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetOneCitybyNameQuery, GetOneCitybyNameQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetOneCitybyNameQuery, GetOneCitybyNameQueryVariables>(GetOneCitybyNameDocument, options);
-        }
-export type GetOneCitybyNameQueryHookResult = ReturnType<typeof useGetOneCitybyNameQuery>;
-export type GetOneCitybyNameLazyQueryHookResult = ReturnType<typeof useGetOneCitybyNameLazyQuery>;
-export type GetOneCitybyNameQueryResult = Apollo.QueryResult<GetOneCitybyNameQuery, GetOneCitybyNameQueryVariables>;
+export function useGetOneCitybyNameQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetOneCitybyNameQuery,
+    GetOneCitybyNameQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetOneCitybyNameQuery, GetOneCitybyNameQueryVariables>(
+    GetOneCitybyNameDocument,
+    options
+  );
+}
+export function useGetOneCitybyNameLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetOneCitybyNameQuery,
+    GetOneCitybyNameQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetOneCitybyNameQuery,
+    GetOneCitybyNameQueryVariables
+  >(GetOneCitybyNameDocument, options);
+}
+export type GetOneCitybyNameQueryHookResult = ReturnType<
+  typeof useGetOneCitybyNameQuery
+>;
+export type GetOneCitybyNameLazyQueryHookResult = ReturnType<
+  typeof useGetOneCitybyNameLazyQuery
+>;
+export type GetOneCitybyNameQueryResult = Apollo.QueryResult<
+  GetOneCitybyNameQuery,
+  GetOneCitybyNameQueryVariables
+>;
 export const GetOnePlacebyNameDocument = gql`
-    query GetOnePlacebyName($name: String!) {
-  getOnePlacebyName(name: $name) {
-    id
-    name
-    latitude
-    longitude
-    adress
-    website
-    picture
-    description
-    categoryId
-    category {
-      name
-      picto
+  query GetOnePlacebyName($name: String!) {
+    getOnePlacebyName(name: $name) {
       id
+      name
+      latitude
+      longitude
+      adress
+      website
+      picture
+      description
+      categoryId
+      category {
+        name
+        picto
+        id
+      }
     }
   }
-}
-    `;
+`;
 
 /**
  * __useGetOnePlacebyNameQuery__
@@ -326,39 +536,62 @@ export const GetOnePlacebyNameDocument = gql`
  *   },
  * });
  */
-export function useGetOnePlacebyNameQuery(baseOptions: Apollo.QueryHookOptions<GetOnePlacebyNameQuery, GetOnePlacebyNameQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetOnePlacebyNameQuery, GetOnePlacebyNameQueryVariables>(GetOnePlacebyNameDocument, options);
-      }
-export function useGetOnePlacebyNameLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetOnePlacebyNameQuery, GetOnePlacebyNameQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetOnePlacebyNameQuery, GetOnePlacebyNameQueryVariables>(GetOnePlacebyNameDocument, options);
-        }
-export type GetOnePlacebyNameQueryHookResult = ReturnType<typeof useGetOnePlacebyNameQuery>;
-export type GetOnePlacebyNameLazyQueryHookResult = ReturnType<typeof useGetOnePlacebyNameLazyQuery>;
-export type GetOnePlacebyNameQueryResult = Apollo.QueryResult<GetOnePlacebyNameQuery, GetOnePlacebyNameQueryVariables>;
+export function useGetOnePlacebyNameQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetOnePlacebyNameQuery,
+    GetOnePlacebyNameQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetOnePlacebyNameQuery,
+    GetOnePlacebyNameQueryVariables
+  >(GetOnePlacebyNameDocument, options);
+}
+export function useGetOnePlacebyNameLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetOnePlacebyNameQuery,
+    GetOnePlacebyNameQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetOnePlacebyNameQuery,
+    GetOnePlacebyNameQueryVariables
+  >(GetOnePlacebyNameDocument, options);
+}
+export type GetOnePlacebyNameQueryHookResult = ReturnType<
+  typeof useGetOnePlacebyNameQuery
+>;
+export type GetOnePlacebyNameLazyQueryHookResult = ReturnType<
+  typeof useGetOnePlacebyNameLazyQuery
+>;
+export type GetOnePlacebyNameQueryResult = Apollo.QueryResult<
+  GetOnePlacebyNameQuery,
+  GetOnePlacebyNameQueryVariables
+>;
 export const GetSearchResultDocument = gql`
-    query GetSearchResult($searchInput: String!) {
-  Search(searchInput: $searchInput) {
-    cities {
-      name
-    }
-    placesByName {
-      city {
+  query GetSearchResult($searchInput: String!) {
+    Search(searchInput: $searchInput) {
+      cities {
         name
       }
-      name
-    }
-    placesByAddress {
-      city {
+      placesByName {
+        city {
+          name
+        }
         name
       }
-      name
-      adress
+      placesByAddress {
+        city {
+          name
+        }
+        name
+        adress
+      }
     }
   }
-}
-    `;
+`;
 
 /**
  * __useGetSearchResultQuery__
@@ -376,14 +609,37 @@ export const GetSearchResultDocument = gql`
  *   },
  * });
  */
-export function useGetSearchResultQuery(baseOptions: Apollo.QueryHookOptions<GetSearchResultQuery, GetSearchResultQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetSearchResultQuery, GetSearchResultQueryVariables>(GetSearchResultDocument, options);
-      }
-export function useGetSearchResultLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetSearchResultQuery, GetSearchResultQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetSearchResultQuery, GetSearchResultQueryVariables>(GetSearchResultDocument, options);
-        }
-export type GetSearchResultQueryHookResult = ReturnType<typeof useGetSearchResultQuery>;
-export type GetSearchResultLazyQueryHookResult = ReturnType<typeof useGetSearchResultLazyQuery>;
-export type GetSearchResultQueryResult = Apollo.QueryResult<GetSearchResultQuery, GetSearchResultQueryVariables>;
+export function useGetSearchResultQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetSearchResultQuery,
+    GetSearchResultQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetSearchResultQuery, GetSearchResultQueryVariables>(
+    GetSearchResultDocument,
+    options
+  );
+}
+export function useGetSearchResultLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetSearchResultQuery,
+    GetSearchResultQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetSearchResultQuery,
+    GetSearchResultQueryVariables
+  >(GetSearchResultDocument, options);
+}
+export type GetSearchResultQueryHookResult = ReturnType<
+  typeof useGetSearchResultQuery
+>;
+export type GetSearchResultLazyQueryHookResult = ReturnType<
+  typeof useGetSearchResultLazyQuery
+>;
+export type GetSearchResultQueryResult = Apollo.QueryResult<
+  GetSearchResultQuery,
+  GetSearchResultQueryVariables
+>;
