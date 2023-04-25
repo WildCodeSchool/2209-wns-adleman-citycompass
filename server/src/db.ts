@@ -1,4 +1,5 @@
 import { DataSource } from "typeorm";
+import { env } from './env';
 import City from "./entity/City";
 import Category from "./entity/Category";
 import Place from "./entity/Place";
@@ -7,22 +8,22 @@ import User from "./entity/User";
 export default new DataSource({
   type: "postgres",
   host:
-    typeof process.env.DB_HOST === "undefined"
+    typeof env.DB_HOST === "undefined"
       ? "localhost"
-      : process.env.DB_HOST,
-  port: process.env.DB_PORT === null ? process.env.DB_PORT : 5432,
+      : env.DB_HOST,
+  port: env.DB_PORT === null ? 5432 : env.DB_PORT,
   username:
-    typeof process.env.DB_USER === "undefined"
+    typeof env.DB_USER === "undefined"
       ? "postgres"
-      : process.env.DB_USER,
+      : env.DB_USER,
   password:
-    typeof process.env.DB_PASS === "undefined"
+    typeof env.DB_PASS === "undefined"
       ? "postgres"
-      : process.env.DB_PASS,
+      : env.DB_PASS,
   database:
-    typeof process.env.DB_NAME === "undefined"
+    typeof env.DB_NAME === "undefined"
       ? "postgres"
-      : process.env.DB_NAME,
+      : env.DB_NAME,
   synchronize: true,
   entities: [City, Category, Place, User],
   logging: ["query", "error"],
