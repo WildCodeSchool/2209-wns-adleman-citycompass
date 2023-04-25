@@ -12,6 +12,7 @@ RUN npm i -g pnpm
 RUN pnpm i
 
 COPY src src
+COPY .env .env
 COPY tsconfig.json tsconfig.json
 
 CMD npm start
