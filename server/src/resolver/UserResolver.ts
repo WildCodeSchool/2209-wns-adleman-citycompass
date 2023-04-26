@@ -1,9 +1,10 @@
 import { Arg, Mutation, Resolver, Query } from "type-graphql";
-import User, { UserInput, UserUpdate } from "../entity/User";
+import User, { UserInput, UserUpdate, UserLogin } from "../entity/User";
 import datasource from "../db";
 import { ApolloError } from "apollo-server-errors";
 import { existingUser } from "../helpers/dbCheckers";
 import { hashPassword, verifyPassword } from "../helpers/hashing";
+import jwt from "jsonwebtoken";
 
 @Resolver(User)
 export class UserResolver {
@@ -28,7 +29,10 @@ export class UserResolver {
     if (user === null || !(await verifyPassword(data.password, user.password)))
       throw new ApolloError("Invalid credentials", "NOT_FOUND");
 
-    return "Valid credentials";
+    // Changer la clé secrète avec la variable d'environnement
+    const token = jwt.sign({ userID: user.id }, "mysupersecretkey");
+
+    return token;
   }
 
   @Mutation(() => User)
