@@ -31,6 +31,7 @@ export class UserResolver {
 
     // Changer la clé secrète avec la variable d'environnement
     const token = jwt.sign({ userID: user.id }, "mysupersecretkey");
+    // Reste à faire -> voir son histoire de contexte pour vérifier le jwt (vidéo 2, 0:50)
 
     return token;
   }
