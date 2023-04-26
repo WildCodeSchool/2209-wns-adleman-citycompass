@@ -1,5 +1,4 @@
 import datasource from "../db";
-import { ApolloError } from "apollo-server-errors";
 import City, { CityInput, CityUpdate } from "../entity/City";
 import Place, { PlaceInput } from "../entity/Place";
 import User, { UserInput, UserUpdate } from "../entity/User";
@@ -19,16 +18,14 @@ export const existingCity = async (
   if (id !== undefined) {
     // test for modification
     if (nameExists !== null && nameExists.id !== parseInt(id, 10))
-      throw new ApolloError(
-        "City name already found in database (modification)",
-        "BAD_USER_INPUT"
+      throw new Error(
+        "City name already found in database (modification)"
       );
   } else {
     // test for creation
     if (nameExists !== null)
-      throw new ApolloError(
-        "City name already found in database (creation)",
-        "BAD_USER_INPUT"
+      throw new Error(
+        "City name already found in database (creation)"
       );
   }
 };
@@ -42,9 +39,8 @@ export const existingUser = async (
 
   // test for creation
   if (emailExist !== null)
-    throw new ApolloError(
-      "User email already found in database",
-      "BAD_USER_INPUT"
+    throw new Error(
+      "User email already found in database"
     );
 };
 
@@ -56,9 +52,8 @@ export const existingCoordinates = async (
   });
 
   if (coordo !== null)
-    throw new ApolloError(
-      "City coordinates found in database",
-      "BAD_USER_INPUT"
+    throw new Error(
+      "City coordinates found in database"
     );
 };
 
@@ -73,16 +68,14 @@ export const existingPlace = async (
   if (id !== undefined) {
     // test for modification
     if (nameExists !== null && nameExists.id !== parseInt(id, 10))
-      throw new ApolloError(
-        "Place name already found in database (modification)",
-        "BAD_USER_INPUT"
+      throw new Error(
+        "Place name already found in database (modification)"
       );
   } else {
     // test for creation
     if (nameExists !== null)
-      throw new ApolloError(
-        "Place name already found in database (creation)",
-        "BAD_USER_INPUT"
+      throw new Error(
+        "Place name already found in database (creation)"
       );
   }
 };
@@ -95,8 +88,7 @@ export const existingPlaceCoordinates = async (
   });
 
   if (coordo !== null)
-    throw new ApolloError(
-      "Place coordinates found in database",
-      "BAD_USER_INPUT"
+    throw new Error(
+      "Place coordinates found in database"
     );
 };

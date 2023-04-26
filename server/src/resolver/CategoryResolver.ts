@@ -1,4 +1,3 @@
-import { ApolloError } from "apollo-server-core";
 import { Resolver, Mutation, Query, Arg, Int } from "type-graphql";
 import datasource from "../db";
 import Category, { CategoryInput } from "../entity/Category";
@@ -16,7 +15,7 @@ export class CategoryResolver {
       .getRepository(Category)
       .findOne({ where: { name: data.name } });
     if (categoryToCreate !== null)
-      throw new ApolloError("Category already existe", "NOT_FOUND");
+      throw new Error("Category already exOUND");
 
     return await datasource.getRepository(Category).save(data);
   }
@@ -31,7 +30,7 @@ export class CategoryResolver {
       .getRepository(Category)
       .findOne({ where: { id } });
     if (categoryToUpdate === null)
-      throw new ApolloError("Category not found", "NOT_FOUND");
+      throw new Error("Category not found");
 
     categoryToUpdate.name = name;
     categoryToUpdate.picto = picto;
