@@ -108,4 +108,15 @@ export class UserUpdate {
   role?: string;
 }
 
+@InputType()
+export class UserLogin {
+  @Field()
+  @Column({ length: 65, type: "varchar" })
+  email: string;
+
+  @Field()
+  @Column({ length: 255, type: "varchar" })
+  password: string;
+}
+
 export default User;

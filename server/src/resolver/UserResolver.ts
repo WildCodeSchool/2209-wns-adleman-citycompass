@@ -1,15 +1,15 @@
 import { Arg, Mutation, Resolver, Query } from "type-graphql";
 import User, { UserInput, UserUpdate } from "../entity/User";
 import datasource from "../db";
+import { ApolloError } from "apollo-server-errors";
 import { existingUser } from "../helpers/dbCheckers";
-import { hashPassword } from "../helpers/hashing";
+import { hashPassword, verifyPassword } from "../helpers/hashing";
 
 @Resolver(User)
 export class UserResolver {
   @Mutation(() => User)
   async createUser(@Arg("data") data: UserInput): Promise<User> {
-    if (data === null)
-      throw new Error("No data in query");
+    if (data === null) throw new Error("No data in query");
     // check if user email is already in database
     await existingUser(data);
 
@@ -17,6 +17,18 @@ export class UserResolver {
     return await datasource
       .getRepository(User)
       .save({ ...data, password: hashedPassword });
+  }
+
+  @Mutation(() => String)
+  async login(@Arg("data") data: UserLogin): Promise<String> {
+    const user = await datasource
+      .getRepository(User)
+      .findOne({ where: { email: data.email } });
+
+    if (user === null || !(await verifyPassword(data.password, user.password)))
+      throw new ApolloError("Invalid credentials", "NOT_FOUND");
+
+    return "Valid credentials";
   }
 
   @Mutation(() => User)
@@ -29,8 +41,7 @@ export class UserResolver {
     const userToUpdate = await datasource.getRepository(User).findOne({
       where: { email: emailFind },
     });
-    if (userToUpdate === null)
-      throw new Error("User not found");
+    if (userToUpdate === null) throw new Error("User not found");
 
     if (lastname !== undefined) {
       userToUpdate.lastname = lastname;
@@ -65,8 +76,7 @@ export class UserResolver {
     const userToFind = await datasource.getRepository(User).findOne({
       where: { email },
     });
-    if (userToFind === null)
-      throw new Error("user not found");
+    if (userToFind === null) throw new Error("user not found");
 
     return userToFind;
   }
