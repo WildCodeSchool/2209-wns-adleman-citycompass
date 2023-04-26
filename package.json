@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "cors": "^2.8.5",
     "pnpm": "^7.16.0"
   },
   "scripts": {
