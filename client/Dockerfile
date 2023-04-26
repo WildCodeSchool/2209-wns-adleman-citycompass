@@ -14,7 +14,11 @@ COPY postcss.config.js postcss.config.js
 COPY tsconfig.json tsconfig.json
 COPY tailwind.config.js tailwind.config.js
 COPY public public
+COPY .env .env
 COPY codegen.yml codegen.yml
 COPY src src
+
+ARG REACT_APP_GRAPHQL_API_URL
+ENV REACT_APP_GRAPHQL_API_URL ${REACT_APP_GRAPHQL_API_URL}
 
 CMD npm start

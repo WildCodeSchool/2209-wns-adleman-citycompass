@@ -29,6 +29,6 @@ COPY integration-tests/setupTests.ts ./
 
 COPY integration-tests/tsconfig.json ./
 COPY integration-tests/src ./src
-COPY integration-tests/.env .env
+COPY ./server/.env ./.env
 
 CMD npm run test

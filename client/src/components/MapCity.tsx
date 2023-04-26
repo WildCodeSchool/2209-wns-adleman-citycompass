@@ -1,6 +1,5 @@
 import L from "leaflet";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import "../styles/MapCity.css";
 import { useNavigate } from "react-router-dom";
 
 interface CityProps {
@@ -55,7 +54,7 @@ export default function MapCity({
                     iconUrl: place.category.picto,
                     iconSize: [35, 35],
                     iconAnchor: [12, 12],
-                    popupAnchor: [0, 0]
+                    popupAnchor: [0, 0],
                   })}
                 >
                   <Popup maxWidth={200}>
@@ -64,9 +63,7 @@ export default function MapCity({
                         src={place.picture}
                         alt="Place"
                         onClick={() =>
-                          navigate(
-                            `/cities/${cityName}/${place.name}`
-                          )
+                          navigate(`/cities/${cityName}/${place.name}`)
                         }
                       />
                       <div>

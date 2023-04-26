@@ -1,4 +1,3 @@
-import { ApolloError } from "apollo-server-errors";
 import { Arg, Mutation, Query, Resolver } from "type-graphql";
 import datasource from "../db";
 import Place, { PlaceInput } from "../entity/Place";
@@ -21,7 +20,7 @@ export class PlaceResolver {
     });
 
     if (placeToFind === null)
-      throw new ApolloError("Place not found", "NOT_FOUND");
+      throw new Error("Place not found");
 
     return placeToFind;
   }
@@ -34,7 +33,7 @@ export class PlaceResolver {
     });
 
     if (placeToFind === null)
-      throw new ApolloError("Place not found", "NOT_FOUND");
+      throw new Error("Place not found");
 
     return placeToFind;
   }
@@ -42,7 +41,7 @@ export class PlaceResolver {
   @Mutation(() => Place)
   async createPlace(@Arg("data") data: PlaceInput): Promise<Place> {
     if (data === null)
-      throw new ApolloError("No data in query", "BAD_USER_INPUT");
+      throw new Error("No data in query");
 
     // check if place name & coordinates are already in database
     await existingPlace(data);
@@ -72,7 +71,7 @@ export class PlaceResolver {
       .findOne({ where: { id: parseInt(id, 10) } });
 
     if (placeToUpdate === null)
-      throw new ApolloError("Place not found", "NOT_FOUND");
+      throw new Error("Place not found");
 
     // check if city name & coordinates are already in database
     await existingPlace(data, id);

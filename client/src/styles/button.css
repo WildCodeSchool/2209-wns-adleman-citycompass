@@ -3,7 +3,7 @@
   padding: 1rem 1.75rem;
   line-height: 1;
   text-align: center;
-  background-color: theme("colors.darkBlue");
+  background-color: theme("colors.darkBlue") !important;
   border-radius: 50px;
   color: white;
   @apply transition;
@@ -13,8 +13,11 @@
   opacity: 0.8;
 }
 
-.button--secondary:hover {
+.button--secondary {
   @apply transition;
+}
+
+.button--secondary:hover {
   background-color: theme("colors.darkBlue");
   color: white;
 }
