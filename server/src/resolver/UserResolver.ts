@@ -1,5 +1,4 @@
 import { Arg, Mutation, Resolver, Query } from "type-graphql";
-import { ApolloError } from "apollo-server-errors";
 import User, { UserInput, UserUpdate } from "../entity/User";
 import datasource from "../db";
 import { existingUser } from "../helpers/dbCheckers";
@@ -9,7 +8,7 @@ export class UserResolver {
   @Mutation(() => User)
   async createUser(@Arg("data") data: UserInput): Promise<User> {
     if (data === null)
-      throw new ApolloError("No data in query", "BAD_USER_INPUT");
+      throw new Error("No data in query");
     // check if user email is already in database
     await existingUser(data);
 
@@ -27,7 +26,7 @@ export class UserResolver {
       where: { email: emailFind },
     });
     if (userToUpdate === null)
-      throw new ApolloError("User not found", "NOT_FOUND");
+      throw new Error("User not found");
 
     if (lastname !== undefined) {
       userToUpdate.lastname = lastname;
@@ -63,7 +62,7 @@ export class UserResolver {
       where: { email },
     });
     if (userToFind === null)
-      throw new ApolloError("user not found", "NOT_FOUND");
+      throw new Error("user not found");
 
     return userToFind;
   }
