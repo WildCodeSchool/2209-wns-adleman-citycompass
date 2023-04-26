@@ -1,9 +1,9 @@
 import { Arg, Mutation, Resolver, Query } from "type-graphql";
 import { ApolloError } from "apollo-server-errors";
-import User, { UserInput, UserUpdate } from "../entity/User";
+import User, { UserInput, UserUpdate, UserLogin } from "../entity/User";
 import datasource from "../db";
 import { existingUser } from "../helpers/dbCheckers";
-import { hashPassword } from "../helpers/hashing";
+import { hashPassword, verifyPassword } from "../helpers/hashing";
 
 @Resolver(User)
 export class UserResolver {
@@ -18,6 +18,18 @@ export class UserResolver {
     return await datasource
       .getRepository(User)
       .save({ ...data, password: hashedPassword });
+  }
+
+  @Mutation(() => String)
+  async login(@Arg("data") data: UserLogin): Promise<String> {
+    const user = await datasource
+      .getRepository(User)
+      .findOne({ where: { email: data.email } });
+
+    if (user === null || !(await verifyPassword(data.password, user.password)))
+      throw new ApolloError("Invalid credentials", "NOT_FOUND");
+
+    return "Valid credentials";
   }
 
   @Mutation(() => User)
