@@ -1,7 +1,6 @@
 import { Arg, Mutation, Resolver, Query, Authorized, Ctx } from "type-graphql";
 import User, { UserInput, UserUpdate, UserLogin } from "../entity/User";
 import datasource from "../db";
-import { ApolloError } from "apollo-server-errors";
 import { existingUser } from "../helpers/dbCheckers";
 import {
   hashPassword,
@@ -33,7 +32,7 @@ export class UserResolver {
       .findOne({ where: { email: data.email } });
 
     if (user === null || !(await verifyPassword(data.password, user.password)))
-      throw new ApolloError("Invalid credentials", "NOT_FOUND");
+      throw new Error("Invalid credentials");
 
     // Changer la clé secrète avec la variable d'environnement
     const token = jwt.sign({ userID: user.id }, env.JWT_PRIVATE_KEY);
