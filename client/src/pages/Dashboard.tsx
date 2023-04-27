@@ -1,3 +1,11 @@
+import Sidebar from "../components/Sidebar";
+
 export default function Dashboard() {
-  return <div>Dashboard</div>;
+
+  return (
+  <div className="flex h-full">
+  <Sidebar />
+  <div>Test</div>
+  </div>
+  );
 }
