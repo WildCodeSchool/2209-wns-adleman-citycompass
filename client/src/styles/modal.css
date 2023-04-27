@@ -1,0 +1,42 @@
+.modal {
+  display: flex;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+}
+
+.modal--hidden {
+  display: none;
+}
+
+.modal__container {
+  display: flex;
+  position: relative;
+  @apply bg-cream z-20 relative;
+  border-radius: theme("borderRadius.DEFAULT");
+  width: 500px;
+  height: auto;
+}
+
+.modal--show .modal__overlay {
+  opacity: 0.4;
+  transition: opacity 0.2s ease;
+}
+
+.modal__overlay {
+  @apply w-screen h-screen bg-green-dark z-10 absolute;
+  transition: opacity 0.2s ease;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.modal__input {
+  background: #fff;
+  border-radius: 60px;
+  height: 35px;
+  border: 2px solid #000000;
+  padding-left: 8px;
+}

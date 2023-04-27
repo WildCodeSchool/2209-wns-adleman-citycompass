@@ -1,5 +1,4 @@
 import { Arg, Mutation, Resolver, Query } from "type-graphql";
-import { ApolloError } from "apollo-server-errors";
 import City, { CityInput, CityUpdate } from "../entity/City";
 import datasource from "../db";
 import { existingCity, existingCoordinates } from "../helpers/dbCheckers";
@@ -9,7 +8,7 @@ export class CityResolver {
   @Mutation(() => City)
   async createCity(@Arg("data") data: CityInput): Promise<City> {
     if (data === null)
-      throw new ApolloError("No data in query", "BAD_USER_INPUT");
+      throw new Error("No data in query");
 
     // delete blank spaces before and after city name
     data.name = data.name.trim();
@@ -40,7 +39,7 @@ export class CityResolver {
     });
 
     if (cityToUpdate === null)
-      throw new ApolloError("City not found", "NOT_FOUND");
+      throw new Error("City not found");
 
     // check if city name & coordinates are already in database
     if (name !== undefined) {
@@ -79,7 +78,7 @@ export class CityResolver {
     });
 
     if (cityToFind === null)
-      throw new ApolloError("City not found", "NOT_FOUND");
+      throw new Error("City not found");
 
     return cityToFind;
   }
@@ -92,7 +91,7 @@ export class CityResolver {
     });
 
     if (cityToFind === null)
-      throw new ApolloError("city not found", "NOT_FOUND");
+      throw new Error("city not found");
 
     return cityToFind;
   }

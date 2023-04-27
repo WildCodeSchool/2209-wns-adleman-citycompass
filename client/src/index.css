@@ -3,12 +3,13 @@
 @tailwind utilities;
 
 @import "./styles/breadcrumbs.css";
-@import "./styles/global.css";
 @import "./styles/button.css";
 @import "./styles/footer.css";
+@import "./styles/global.css";
 @import "./styles/header.css";
 @import "./styles/mapCity.css";
 @import "./styles/miniCardCity.css";
+@import "./styles/modal.css";
 @import "./styles/searchBar.css";
 
 h1,
