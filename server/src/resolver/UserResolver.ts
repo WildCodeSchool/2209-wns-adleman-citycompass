@@ -1,10 +1,16 @@
-import { Arg, Mutation, Resolver, Query } from "type-graphql";
+import { Arg, Mutation, Resolver, Query, Authorized, Ctx } from "type-graphql";
 import User, { UserInput, UserUpdate, UserLogin } from "../entity/User";
 import datasource from "../db";
 import { ApolloError } from "apollo-server-errors";
 import { existingUser } from "../helpers/dbCheckers";
-import { hashPassword, verifyPassword } from "../helpers/hashing";
+import {
+  hashPassword,
+  verifyPassword,
+  getSafeAttributes,
+} from "../helpers/hashing";
 import jwt from "jsonwebtoken";
+import { env } from "../env";
+import { ContextType } from "../index";
 
 @Resolver(User)
 export class UserResolver {
@@ -30,7 +36,7 @@ export class UserResolver {
       throw new ApolloError("Invalid credentials", "NOT_FOUND");
 
     // Changer la clé secrète avec la variable d'environnement
-    const token = jwt.sign({ userID: user.id }, "mysupersecretkey");
+    const token = jwt.sign({ userID: user.id }, env.JWT_PRIVATE_KEY);
     // Reste à faire -> voir son histoire de contexte pour vérifier le jwt (vidéo 2, 0:50)
 
     return token;
@@ -84,5 +90,11 @@ export class UserResolver {
     if (userToFind === null) throw new Error("user not found");
 
     return userToFind;
+  }
+
+  @Authorized()
+  @Query(() => User)
+  async profile(@Ctx() ctx: ContextType): Promise<User> {
+    return getSafeAttributes(ctx.currentUser as User);
   }
 }

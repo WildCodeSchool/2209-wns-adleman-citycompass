@@ -1,5 +1,5 @@
 import { argon2id, hash, verify } from "argon2";
-// import User from "../entity/User";
+import User from "../entity/User";
 
 const hashingOptions = {
   memoryCost: 2 ** 16,
@@ -18,7 +18,7 @@ export const verifyPassword = async (
   // eslint-disable-next-line @typescript-eslint/return-await
   await verify(hashedPassword, plainPassword, hashingOptions);
 
-// export const getSafeAttributes = (user: User): User => ({
-//   ...user,
-//   password: undefined,
-// });
+export const getSafeAttributes = (user: User): User => ({
+  ...user,
+  password: "",
+});
