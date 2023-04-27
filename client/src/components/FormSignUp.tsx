@@ -13,7 +13,6 @@ function FormSignUp({ isLogin, setIsLogin }: FormSignUpProps) {
     firstname: "",
     lastname: "",
     picture: "",
-    role: "user",
   });
 
   const [createUser] = useCreateUserMutation();
