@@ -9,6 +9,8 @@ import { IsEmail, IsUrl, MaxLength, MinLength } from "class-validator";
 import { Field, ObjectType, InputType } from "type-graphql";
 import City from "./City";
 
+export type Role = "superadmin" | "admin" | "contributor" | "visitor";
+
 @ObjectType()
 @Entity()
 class User {
@@ -40,7 +42,8 @@ class User {
   @Column({
     length: 20,
     type: "varchar",
-    default: "user",
+    enum: ["superadmin", "admin", "contributor", "visitor"],
+    default: "visitor",
   })
   role: string;
 
