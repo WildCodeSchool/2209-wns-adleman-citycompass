@@ -6,6 +6,7 @@ import city_icon from "../assets/city_icon.svg";
 import poi_icon from "../assets/poi_icon.svg";
 import { useState } from "react";
 import AccueilDashboard from "../components/AccueilDashbord";
+import CategoriesDashboard from "../components/CategoriesDashboard";
 
 export default function Dashboard() {
   const [accueilClicked, setAccueilClicked] = useState(true);
@@ -101,7 +102,7 @@ export default function Dashboard() {
       </div>
       <div className="bg-white h-full w-full flex flex-col">
         {accueilClicked && <AccueilDashboard />}
-        {categoryClicked && <div>Test</div>}
+        {categoryClicked && <CategoriesDashboard />}
         {cityClicked && <div>Test</div>}
         {poiClicked && <div>Test</div>}
       </div>
