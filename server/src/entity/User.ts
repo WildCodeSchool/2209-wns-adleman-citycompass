@@ -78,10 +78,6 @@ export class UserInput {
   @MaxLength(2083)
   @IsUrl()
   picture: string;
-
-  @Field()
-  @MaxLength(20)
-  role: string;
 }
 
 @InputType()
