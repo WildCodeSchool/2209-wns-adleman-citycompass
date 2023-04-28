@@ -16,6 +16,7 @@ import { UserResolver } from "./resolver/UserResolver";
 import cors from "cors";
 import User from "./entity/User";
 import jwt from "jsonwebtoken";
+import cookie from "cookie";
 
 export interface ContextType {
   req: any;
@@ -37,12 +38,14 @@ async function start(): Promise<void> {
       SearchResolver,
       UserResolver,
     ],
-    authChecker: async ({ context }: { context: ContextType }, roles) => {
+    authChecker: async ({ context }: { context: ContextType }, roles = []) => {
+      const { req } = context;
       const tokenInHeaders = context.req.headers.authorization?.split(" ")[1];
+      const tokenInCookie = cookie.parse(req.headers.cookie ?? "").token;
+      const token = tokenInHeaders ?? tokenInCookie;
       let decoded;
       try {
-        if (tokenInHeaders !== null)
-          decoded = jwt.verify(tokenInHeaders, env.JWT_PRIVATE_KEY);
+        if (token !== null) decoded = jwt.verify(token, env.JWT_PRIVATE_KEY);
         if (typeof decoded === "object") context.jwtPayload = decoded;
       } catch (err) {}
 
@@ -87,7 +90,6 @@ async function start(): Promise<void> {
 
   const port = env.SERVER_PORT ?? 4000;
   httpServer.listen({ port }, () =>
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     console.log(`🚀 Server ready at http://localhost:${port}`)
   );
 }
