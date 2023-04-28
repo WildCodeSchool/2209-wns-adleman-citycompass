@@ -30,7 +30,7 @@ class User {
 
   @Field()
   @Column({ length: 255, type: "varchar" })
-  hashedPassword: string;
+  password: string;
 
   @Field()
   @Column({ length: 2083, type: "varchar" })
