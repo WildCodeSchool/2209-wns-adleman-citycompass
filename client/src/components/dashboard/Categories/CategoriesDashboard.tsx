@@ -27,8 +27,7 @@ function CategoriesDashboard() {
               <div className="p-4 w-16 self-end">
                 <button
                   onClick={() => (
-                    setAddCategories(!addCategories),
-                    setListCategories(!listCategories)
+                    setAddCategories(true), setListCategories(false)
                   )}
                 >
                   <img src={add_icon} alt="" />
@@ -42,8 +41,7 @@ function CategoriesDashboard() {
                   <p>{category.name}</p>
                   <button
                     onClick={() => (
-                      setModifyCategories(!modifyCategories),
-                      setListCategories(!listCategories)
+                      setModifyCategories(true), setListCategories(false)
                     )}
                   >
                     <img src={modify_icon} alt="" className="w-6" />
@@ -57,8 +55,7 @@ function CategoriesDashboard() {
               <p>FORMULAIRE AJOUT CATEGORIE</p>
               <button
                 onClick={() => (
-                  setAddCategories(!addCategories),
-                  setListCategories(!listCategories)
+                  setAddCategories(false), setListCategories(true)
                 )}
               >
                 Enregistrer
@@ -70,8 +67,7 @@ function CategoriesDashboard() {
               <p>FORMULAIRE MODIFICATION CATEGORIE</p>
               <button
                 onClick={() => (
-                  setAddCategories(!addCategories),
-                  setListCategories(!listCategories)
+                  setModifyCategories(false), setListCategories(true)
                 )}
               >
                 Enregistrer
