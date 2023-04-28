@@ -13,7 +13,6 @@ import Header from "./components/Header";
 
 function App() {
   const currentLocation = useLocation();
-  console.log(currentLocation.pathname);
 
   return (
     <>
@@ -21,10 +20,6 @@ function App() {
       <main>
         {currentLocation.pathname.includes("dashboard") ? (
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/cities/:cityName" element={<City />} />
-            <Route path="/cities/:cityName/:placeName" element={<Place />} />
-            <Route path="/account/:userId" element={<Account />} />
             <Route path="/dashboard/:userId" element={<Dashboard />} />
           </Routes>
         ) : (
@@ -35,7 +30,6 @@ function App() {
               <Route path="/cities/:cityName" element={<City />} />
               <Route path="/cities/:cityName/:placeName" element={<Place />} />
               <Route path="/account/:userId" element={<Account />} />
-              <Route path="/dashboard/:userId" element={<Dashboard />} />
             </Routes>
             <Footer />
           </>

@@ -8,7 +8,7 @@ import { useState } from "react";
 import AccueilDashboard from "../components/AccueilDashbord";
 
 export default function Dashboard() {
-  const [accueilClicked, setAccueilClicked] = useState(false);
+  const [accueilClicked, setAccueilClicked] = useState(true);
   const [categoryClicked, setCategoryClicked] = useState(false);
   const [cityClicked, setCityClicked] = useState(false);
   const [poiClicked, setPoiClicked] = useState(false);

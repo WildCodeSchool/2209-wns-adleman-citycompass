@@ -36,7 +36,7 @@ function Header() {
           </div>
 
           <a href="/" title="Accueil" className="type-h1 header__title">
-            CITY COMPASS X
+            CITY COMPASS
           </a>
           <div className="header__profile">
             <img
