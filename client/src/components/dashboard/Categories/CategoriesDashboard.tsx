@@ -1,3 +1,4 @@
+/* eslint-disable no-sequences */
 import { useState } from "react";
 import add_icon from "../../../assets/add_icon.svg";
 import modify_icon from "../../../assets/modify_icon.svg";
