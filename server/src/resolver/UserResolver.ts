@@ -26,7 +26,10 @@ export class UserResolver {
   }
 
   @Mutation(() => String)
-  async login(@Arg("data") data: UserLogin): Promise<String> {
+  async login(
+    @Arg("data") data: UserLogin,
+    @Ctx() ctx: ContextType
+  ): Promise<String> {
     const user = await datasource
       .getRepository(User)
       .findOne({ where: { email: data.email } });
@@ -37,9 +40,13 @@ export class UserResolver {
     )
       throw new Error("Invalid credentials");
 
-    // Changer la clé secrète avec la variable d'environnement
     const token = jwt.sign({ userID: user.id }, env.JWT_PRIVATE_KEY);
-    // Reste à faire -> voir son histoire de contexte pour vérifier le jwt (vidéo 2, 0:50)
+
+    ctx.res.cookie("token", token, {
+      secure: env.NODE_ENV === "production",
+      domain: env.SERVER_HOST,
+      httpOnly: true,
+    });
 
     return token;
   }
