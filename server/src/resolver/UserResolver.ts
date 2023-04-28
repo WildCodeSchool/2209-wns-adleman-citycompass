@@ -51,12 +51,14 @@ export class UserResolver {
     return token;
   }
 
+  @Authorized()
   @Mutation(() => String)
   async logout(@Ctx() ctx: ContextType): Promise<string> {
     ctx.res.clearCookie("token");
     return "OK";
   }
 
+  @Authorized()
   @Mutation(() => User)
   async updateUser(
     @Arg("email") emailFind: string,
