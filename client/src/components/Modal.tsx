@@ -1,5 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import cross from "../assets/cross.svg";
+import FormSignUp from "./FormSignUp";
+import FormSignIn from "./FormSignIn";
 
 interface modalProps {
   showModal: boolean;
@@ -15,16 +17,7 @@ function Modal({ showModal, setShowModal }: modalProps) {
     setShowModal(!showModal);
   };
 
-  const modalContentLogin = {
-    title: "Me connecter",
-    input_1: {
-      prenom: "prénom ",
-      nom: "prénom ",
-    },
-    action: {
-      label: "se connecter",
-    },
-  };
+  const [isLogin, setIsLogin] = useState(true);
 
   return (
     <div className={`modal ${showModal ? "modal--show" : "modal--hidden"}`}>
@@ -38,18 +31,11 @@ function Modal({ showModal, setShowModal }: modalProps) {
             onClick={showClick}
           />
           <div className="flex flex-col w-full p-8">
-            <h4 className="text-center">{modalContentLogin.title}</h4>
-
-            <div className="flex flex-col">
-              <div className="modal__input--label">
-                {modalContentLogin.input_1.prenom}
-              </div>
-              <input
-                className="modal__input shadow shadow-green mb-4"
-                placeholder={modalContentLogin.input_1.prenom}
-              />
-              <input type="submit" className="button--primary mt-6" />
-            </div>
+            {isLogin ? (
+              <FormSignUp isLogin={isLogin} setIsLogin={setIsLogin} />
+            ) : (
+              <FormSignIn isLogin={isLogin} setIsLogin={setIsLogin} />
+            )}
           </div>
         </div>
         <div className="modal__overlay"></div>
