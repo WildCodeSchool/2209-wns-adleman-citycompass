@@ -22,7 +22,7 @@ export class UserResolver {
     const hashedPassword = await hashPassword(data.password);
     return await datasource
       .getRepository(User)
-      .save({ ...data, password: hashedPassword });
+      .save({ ...data, hashedPassword });
   }
 
   @Mutation(() => String)
@@ -31,7 +31,10 @@ export class UserResolver {
       .getRepository(User)
       .findOne({ where: { email: data.email } });
 
-    if (user === null || !(await verifyPassword(data.password, user.password)))
+    if (
+      user === null ||
+      !(await verifyPassword(data.password, user.hashedPassword))
+    )
       throw new Error("Invalid credentials");
 
     // Changer la clé secrète avec la variable d'environnement
@@ -60,7 +63,7 @@ export class UserResolver {
       userToUpdate.firstname = firstname;
     }
     if (password !== undefined) {
-      userToUpdate.password = password;
+      userToUpdate.hashedPassword = password;
     }
     if (picture !== undefined) {
       userToUpdate.picture = picture;

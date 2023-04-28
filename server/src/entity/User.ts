@@ -30,14 +30,18 @@ class User {
 
   @Field()
   @Column({ length: 255, type: "varchar" })
-  password: string;
+  hashedPassword: string;
 
   @Field()
   @Column({ length: 2083, type: "varchar" })
   picture: string;
 
   @Field()
-  @Column({ length: 20, type: "varchar", default: "user" })
+  @Column({
+    length: 20,
+    type: "varchar",
+    default: "user",
+  })
   role: string;
 
   @Field(() => [City], { nullable: true })
@@ -72,9 +76,9 @@ export class UserInput {
   @IsUrl()
   picture: string;
 
-  // @Field()
-  // @MaxLength(20)
-  // role: string;
+  @Field()
+  @MaxLength(20)
+  role: string;
 }
 
 @InputType()

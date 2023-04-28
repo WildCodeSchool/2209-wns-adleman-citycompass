@@ -20,5 +20,5 @@ export const verifyPassword = async (
 
 export const getSafeAttributes = (user: User): User => ({
   ...user,
-  password: "",
+  hashedPassword: "",
 });
