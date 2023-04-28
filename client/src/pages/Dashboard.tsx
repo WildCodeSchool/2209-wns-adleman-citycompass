@@ -5,8 +5,8 @@ import category_icon from "../assets/category_icon.svg";
 import city_icon from "../assets/city_icon.svg";
 import poi_icon from "../assets/poi_icon.svg";
 import { useState } from "react";
-import AccueilDashboard from "../components/AccueilDashbord";
-import CategoriesDashboard from "../components/CategoriesDashboard";
+import AccueilDashboard from "../components/dashboard/Accueil/AccueilDashbord";
+import CategoriesDashboard from "../components/dashboard/Categories/CategoriesDashboard";
 
 export default function Dashboard() {
   const [accueilClicked, setAccueilClicked] = useState(true);
