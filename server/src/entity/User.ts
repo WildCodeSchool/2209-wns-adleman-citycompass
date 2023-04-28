@@ -47,10 +47,11 @@ class User {
   })
   role: string;
 
+  // this relation allow an user to manage a city or places in a city, depending on user role
   @Field(() => [City], { nullable: true })
   @ManyToMany(() => City)
   @JoinTable()
-  cities?: City[];
+  managedCities?: City[];
 }
 
 @InputType()

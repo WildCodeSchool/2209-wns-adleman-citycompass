@@ -94,7 +94,7 @@ export class UserResolver {
   async getUsers(): Promise<User[]> {
     return await datasource
       .getRepository(User)
-      .find({ relations: { cities: true } });
+      .find({ relations: { managedCities: true } });
   }
 
   @Query(() => User)
