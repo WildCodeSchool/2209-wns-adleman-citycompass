@@ -4,17 +4,20 @@ import accueil_icon from "../assets/accueil_icon.svg";
 import category_icon from "../assets/category_icon.svg";
 import city_icon from "../assets/city_icon.svg";
 import poi_icon from "../assets/poi_icon.svg";
+import user_icon from "../assets/user_icon.svg";
 import { useState } from "react";
 import AccueilDashboard from "../components/dashboard/Accueil/AccueilDashbord";
 import CategoriesDashboard from "../components/dashboard/Categories/CategoriesDashboard";
 import CitiesDashboard from "../components/dashboard/Cities/CitiesDashboard";
 import PlacesDashboard from "../components/dashboard/Places/PlacesDashboard";
+import UsersDashboard from "../components/dashboard/Users/UsersDashboard";
 
 export default function Dashboard() {
   const [accueilClicked, setAccueilClicked] = useState(true);
   const [categoryClicked, setCategoryClicked] = useState(false);
   const [cityClicked, setCityClicked] = useState(false);
   const [poiClicked, setPoiClicked] = useState(false);
+  const [userClicked, setUserClicked] = useState(false);
 
   return (
     <div className="flex h-full">
@@ -40,7 +43,8 @@ export default function Dashboard() {
                 setAccueilClicked(!accueilClicked),
                 setCategoryClicked(false),
                 setCityClicked(false),
-                setPoiClicked(false)
+                setPoiClicked(false),
+                setUserClicked(false)
               )}
             >
               <img className="w-6 h-6" src={accueil_icon} alt="" />
@@ -59,7 +63,8 @@ export default function Dashboard() {
                 setCategoryClicked(!categoryClicked),
                 setAccueilClicked(false),
                 setCityClicked(false),
-                setPoiClicked(false)
+                setPoiClicked(false),
+                setUserClicked(false)
               )}
             >
               <img className="w-6 h-6" src={category_icon} alt="" />
@@ -76,7 +81,8 @@ export default function Dashboard() {
                 setCityClicked(!cityClicked),
                 setAccueilClicked(false),
                 setCategoryClicked(false),
-                setPoiClicked(false)
+                setPoiClicked(false),
+                setUserClicked(false)
               )}
             >
               <img className="w-6 h-6" src={city_icon} alt="" />
@@ -93,11 +99,30 @@ export default function Dashboard() {
                 setPoiClicked(!poiClicked),
                 setAccueilClicked(false),
                 setCategoryClicked(false),
-                setCityClicked(false)
+                setCityClicked(false),
+                setUserClicked(false)
               )}
             >
               <img className="w-6 h-6" src={poi_icon} alt="" />
               <p>Points d'intérêts</p>
+            </button>
+          </div>
+          <div
+            className={poiClicked ? "sidebar__menu-active" : "sidebar__menu"}
+          >
+            <button
+              className="sidebar__button"
+              disabled={poiClicked === true}
+              onClick={() => (
+                setUserClicked(!userClicked),
+                setPoiClicked(false),
+                setAccueilClicked(false),
+                setCategoryClicked(false),
+                setCityClicked(false)
+              )}
+            >
+              <img className="w-6 h-6" src={user_icon} alt="" />
+              <p>Utilisateurs</p>
             </button>
           </div>
         </div>
@@ -107,6 +132,7 @@ export default function Dashboard() {
         {categoryClicked && <CategoriesDashboard />}
         {cityClicked && <CitiesDashboard />}
         {poiClicked && <PlacesDashboard />}
+        {userClicked && <UsersDashboard />}
       </div>
     </div>
   );

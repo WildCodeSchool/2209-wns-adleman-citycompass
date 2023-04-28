@@ -2,44 +2,44 @@
 import { useState } from "react";
 import add_icon from "../../../assets/add_icon.svg";
 import modify_icon from "../../../assets/modify_icon.svg";
-import { useGetPlacesQuery } from "../../../gql/generated/schema";
+import { useGetUsersQuery } from "../../../gql/generated/schema";
 
-function PlacesDashboard() {
-  const [listPlaces, setListPlaces] = useState(true);
-  const [addPlaces, setAddPlaces] = useState(false);
-  const [modifyPlaces, setModifyPlaces] = useState(false);
+function UsersDashboard() {
+  const [listUsers, setListUsers] = useState(true);
+  const [addUsers, setAddUsers] = useState(false);
+  const [modifyUsers, setModifyUsers] = useState(false);
 
-  const { data } = useGetPlacesQuery();
+  const { data } = useGetUsersQuery();
 
-  const places = data?.getPlaces;
+  const users = data?.getUsers;
 
   return (
     <>
       <div className="my-28 mx-auto h-full flex flex-col w-4/5 max-w-4xl">
         <div className="flex w-fit gap-8">
           <h1 className="type-h1 header__title text-left ">
-            GESTION DES POINTS D'INTERETS
+            GESTION DES UTILISATEURS
           </h1>
         </div>
         <div className="bg-cream w-full h-fit min-h-[75%] mt-10">
-          {listPlaces && (
+          {listUsers && (
             <div className="flex flex-col w-full h-full gap-4 pb-8">
               <div className="p-4 w-16 self-end">
                 <button
-                  onClick={() => (setAddPlaces(true), setListPlaces(false))}
+                  onClick={() => (setAddUsers(true), setListUsers(false))}
                 >
                   <img src={add_icon} alt="" />
                 </button>
               </div>
-              {places?.map((place) => (
+              {users?.map((user) => (
                 <div
                   className="h-12 w-96 px-6 self-center rounded bg-orange flex justify-between items-center"
-                  key={place.id}
+                  key={user.id}
                 >
-                  <p className="w-4/5">{place.name}</p>
+                  <p className="w-4/5">{user.firstname}</p>
                   <button
                     onClick={() => (
-                      setModifyPlaces(true), setListPlaces(false)
+                      setModifyUsers(true), setListUsers(false)
                     )}
                   >
                     <img src={modify_icon} alt="" className="w-6" />
@@ -48,21 +48,21 @@ function PlacesDashboard() {
               ))}
             </div>
           )}
-          {addPlaces && (
+          {addUsers && (
             <div>
-              <p>FORMULAIRE AJOUT PLACE</p>
+              <p>FORMULAIRE AJOUT UTILISATEUR</p>
               <button
-                onClick={() => (setAddPlaces(false), setListPlaces(true))}
+                onClick={() => (setAddUsers(false), setListUsers(true))}
               >
                 Enregistrer
               </button>
             </div>
           )}
-          {modifyPlaces && (
+          {modifyUsers && (
             <div>
-              <p>FORMULAIRE MODIFICATION PLACE</p>
+              <p>FORMULAIRE MODIFICATION UTILISATEUR</p>
               <button
-                onClick={() => (setModifyPlaces(false), setListPlaces(true))}
+                onClick={() => (setModifyUsers(false), setListUsers(true))}
               >
                 Enregistrer
               </button>
@@ -74,4 +74,4 @@ function PlacesDashboard() {
   );
 }
 
-export default PlacesDashboard;
+export default UsersDashboard;

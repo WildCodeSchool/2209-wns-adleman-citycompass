@@ -18,7 +18,7 @@ function CitiesDashboard() {
       <div className="my-28 mx-auto h-full flex flex-col w-4/5 max-w-4xl">
         <div className="flex w-fit gap-8">
           <h1 className="type-h1 header__title text-left ">
-            GESTION DES CITIES
+            GESTION DES VILLES
           </h1>
         </div>
         <div className="bg-cream w-full h-fit min-h-[75%] mt-10">
