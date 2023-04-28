@@ -38,12 +38,14 @@ async function start(): Promise<void> {
       SearchResolver,
       UserResolver,
     ],
-    authChecker: async ({ context }: { context: ContextType }, roles) => {
+    authChecker: async ({ context }: { context: ContextType }, roles = []) => {
       const { req } = context;
       const tokenInHeaders = context.req.headers.authorization?.split(" ")[1];
+      console.log("token header", tokenInHeaders);
       const tokenInCookie = cookie.parse(req.headers.cookie ?? "").token;
-      console.log(tokenInCookie);
+      console.log("token cookies", tokenInCookie);
       const token = tokenInHeaders ?? tokenInCookie;
+      console.log("token final", token);
       let decoded;
       try {
         if (token !== null) decoded = jwt.verify(token, env.JWT_PRIVATE_KEY);
