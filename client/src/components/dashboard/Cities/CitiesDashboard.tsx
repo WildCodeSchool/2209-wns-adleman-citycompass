@@ -36,7 +36,7 @@ function CitiesDashboard() {
                   className="h-12 w-72 px-6 self-center rounded bg-orange flex justify-between items-center"
                   key={city.id}
                 >
-                  <p>{city.name}</p>
+                  <p className="w-4/5">{city.name}</p>
                   <button
                     onClick={() => (
                       setModifyCities(true), setListCities(false)

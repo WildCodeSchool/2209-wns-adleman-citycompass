@@ -33,10 +33,10 @@ function PlacesDashboard() {
               </div>
               {places?.map((place) => (
                 <div
-                  className="h-12 w-72 px-6 self-center rounded bg-orange flex justify-between items-center"
+                  className="h-12 w-96 px-6 self-center rounded bg-orange flex justify-between items-center"
                   key={place.id}
                 >
-                  <p>{place.name}</p>
+                  <p className="w-4/5">{place.name}</p>
                   <button
                     onClick={() => (
                       setModifyPlaces(true), setListPlaces(false)

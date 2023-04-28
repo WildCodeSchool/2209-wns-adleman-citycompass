@@ -38,7 +38,7 @@ function CategoriesDashboard() {
                   className="h-12 w-72 px-6 self-center rounded bg-orange flex justify-between items-center"
                   key={category.id}
                 >
-                  <p>{category.name}</p>
+                  <p className="w-4/5">{category.name}</p>
                   <button
                     onClick={() => (
                       setModifyCategories(true), setListCategories(false)
