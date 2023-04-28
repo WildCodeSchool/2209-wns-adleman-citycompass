@@ -8,6 +8,7 @@ import { useState } from "react";
 import AccueilDashboard from "../components/dashboard/Accueil/AccueilDashbord";
 import CategoriesDashboard from "../components/dashboard/Categories/CategoriesDashboard";
 import CitiesDashboard from "../components/dashboard/Cities/CitiesDashboard";
+import PlacesDashboard from "../components/dashboard/Places/PlacesDashboard";
 
 export default function Dashboard() {
   const [accueilClicked, setAccueilClicked] = useState(true);
@@ -105,7 +106,7 @@ export default function Dashboard() {
         {accueilClicked && <AccueilDashboard />}
         {categoryClicked && <CategoriesDashboard />}
         {cityClicked && <CitiesDashboard />}
-        {poiClicked && <div>Test</div>}
+        {poiClicked && <PlacesDashboard />}
       </div>
     </div>
   );
