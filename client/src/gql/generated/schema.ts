@@ -265,7 +265,7 @@ export type GetOnePlacebyNameQuery = { __typename?: 'Query', getOnePlacebyName: 
 export type GetPlacesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetPlacesQuery = { __typename?: 'Query', getPlaces: Array<{ __typename?: 'Place', id: number, name: string, latitude: string, longitude: string, adress: string, website?: string | null, picture: string, description: string, cityId: number, categoryId: number }> };
+export type GetPlacesQuery = { __typename?: 'Query', getPlaces: Array<{ __typename?: 'Place', id: number, name: string, latitude: string, longitude: string, adress: string, website?: string | null, picture: string, description: string, cityId: number, categoryId: number, city: { __typename?: 'City', id: number, name: string } }> };
 
 export type GetSearchResultQueryVariables = Exact<{
   searchInput: Scalars['String'];
@@ -509,6 +509,10 @@ export const GetPlacesDocument = gql`
     description
     cityId
     categoryId
+    city {
+      id
+      name
+    }
   }
 }
     `;

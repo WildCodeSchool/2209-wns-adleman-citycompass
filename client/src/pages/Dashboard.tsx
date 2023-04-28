@@ -108,11 +108,11 @@ export default function Dashboard() {
             </button>
           </div>
           <div
-            className={poiClicked ? "sidebar__menu-active" : "sidebar__menu"}
+            className={userClicked ? "sidebar__menu-active" : "sidebar__menu"}
           >
             <button
               className="sidebar__button"
-              disabled={poiClicked === true}
+              disabled={userClicked === true}
               onClick={() => (
                 setUserClicked(!userClicked),
                 setPoiClicked(false),
