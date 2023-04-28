@@ -289,34 +289,52 @@ async function reset(): Promise<void> {
     },
   ]);
   // create fakes user (one by role)
+
   await datasource.getRepository(User).save([
     {
       firstname: "Jane",
       lastname: "visitor",
       email: "visitor@mail.com",
-      password: await hashPassword("visitorPassword1!"),
+      hashedPassword: await hashPassword("visitorPassword1!"),
       picture: "https://i.pravatar.cc/300",
     },
     {
       firstname: "John",
       lastname: "contributor",
       email: "contributor@mail.com",
-      password: await hashPassword("contributorPassword1!"),
+      hashedPassword: await hashPassword("contributorPassword1!"),
       picture: "https://i.pravatar.cc/300",
+      role: "contributor",
+      managedCities: [
+        (await datasource
+          .getRepository(City)
+          .findOneBy({ name: "Marseille" })) as City,
+      ],
     },
     {
       firstname: "Tim",
       lastname: "admin",
       email: "admin@mail.com",
-      password: await hashPassword("adminPassword1!"),
+      hashedPassword: await hashPassword("adminPassword1!"),
       picture: "https://i.pravatar.cc/300",
+      role: "admin",
+      managedCities: [
+        (await datasource
+          .getRepository(City)
+          .findOneBy({ name: "Marseille" })) as City,
+        (await datasource
+          .getRepository(City)
+          .findOneBy({ name: "Lyon" })) as City,
+      ],
     },
     {
       firstname: "Tam",
       lastname: "superadmin",
       email: "superadmin@mail.com",
-      password: await hashPassword("superadminPassword1!"),
+      hashedPassword: await hashPassword("superadminPassword1!"),
       picture: "https://i.pravatar.cc/300",
+      role: "superadmin",
+      managedCities: await datasource.getRepository(City).find(),
     },
   ]);
   await datasource.destroy();
