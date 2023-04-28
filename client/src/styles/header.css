@@ -15,7 +15,7 @@
 }
 
 .header__profile {
-  @apply lg:basis-1/4 flex-initial flex justify-end;
+  @apply lg:basis-1/4 flex-initial flex justify-end items-center;
 }
 
 .header__profile--loupe {
