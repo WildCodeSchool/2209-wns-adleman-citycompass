@@ -40,14 +40,17 @@ async function start(): Promise<void> {
     ],
     authChecker: async ({ context }: { context: ContextType }, roles = []) => {
       const { req } = context;
-      const tokenInHeaders = context.req.headers.authorization?.split(" ")[1];
+      const tokenInHeaders = req.headers.authorization?.split(" ")[1];
       const tokenInCookie = cookie.parse(req.headers.cookie ?? "").token;
       const token = tokenInHeaders ?? tokenInCookie;
       let decoded;
       try {
         if (token !== null) decoded = jwt.verify(token, env.JWT_PRIVATE_KEY);
         if (typeof decoded === "object") context.jwtPayload = decoded;
-      } catch (err) {}
+      } catch (err) {
+        // have to return a bool to get the "Access denied" error message
+        return false;
+      }
 
       let user;
       if (context.jwtPayload !== null) {
