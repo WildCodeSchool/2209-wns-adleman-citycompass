@@ -68,7 +68,7 @@ export class UserResolver {
     @Arg("data") data: UserUpdate,
     @Ctx() ctx: ContextType
   ): Promise<User> {
-    const { firstname, lastname, picture, password, role } = data;
+    const { firstname, lastname, picture, password } = data;
     // get id of connected user from context, using JWT token
     const currentUserId = ctx.jwtPayload.userID;
 
@@ -92,9 +92,6 @@ export class UserResolver {
     }
     if (picture !== undefined) {
       userToUpdate.picture = picture;
-    }
-    if (role !== undefined) {
-      userToUpdate.role = role;
     }
 
     await datasource.getRepository(User).save(userToUpdate);
