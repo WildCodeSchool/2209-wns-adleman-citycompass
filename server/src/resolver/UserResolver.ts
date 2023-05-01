@@ -1,4 +1,12 @@
-import { Arg, Mutation, Resolver, Query, Authorized, Ctx } from "type-graphql";
+import {
+  Arg,
+  Mutation,
+  Resolver,
+  Query,
+  Authorized,
+  Ctx,
+  Int,
+} from "type-graphql";
 import User, { UserInput, UserUpdate, UserLogin } from "../entity/User";
 import datasource from "../db";
 import { existingUser } from "../helpers/dbCheckers";
@@ -56,13 +64,20 @@ export class UserResolver {
   @Authorized()
   @Mutation(() => User)
   async updateUser(
-    @Arg("email") emailFind: string,
-    @Arg("data") data: UserUpdate
+    @Arg("id", () => Int) id: number,
+    @Arg("data") data: UserUpdate,
+    @Ctx() ctx: ContextType
   ): Promise<User> {
     const { firstname, lastname, picture, password, role } = data;
+    // get id of connected user from context, using JWT token
+    const currentUserId = ctx.jwtPayload.userID;
+
+    if (currentUserId !== id) {
+      throw new Error("Update another user is not allowed");
+    }
 
     const userToUpdate = await datasource.getRepository(User).findOne({
-      where: { email: emailFind },
+      where: { id },
     });
     if (userToUpdate === null) throw new Error("User not found");
 
