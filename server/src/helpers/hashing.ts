@@ -13,12 +13,12 @@ export const hashPassword = async (plainPassword: string): Promise<string> =>
 
 export const verifyPassword = async (
   plainPassword: string,
-  hashedPassword: string
+  password: string
 ): Promise<boolean> =>
   // eslint-disable-next-line @typescript-eslint/return-await
-  await verify(hashedPassword, plainPassword, hashingOptions);
+  await verify(password, plainPassword, hashingOptions);
 
 export const getSafeAttributes = (user: User): User => ({
   ...user,
-  hashedPassword: "",
+  password: "",
 });

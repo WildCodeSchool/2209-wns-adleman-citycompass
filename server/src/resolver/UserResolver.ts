@@ -19,10 +19,8 @@ export class UserResolver {
     // check if user email is already in database
     await existingUser(data);
 
-    const hashedPassword = await hashPassword(data.password);
-    return await datasource
-      .getRepository(User)
-      .save({ ...data, hashedPassword });
+    const password = await hashPassword(data.password);
+    return await datasource.getRepository(User).save({ ...data, password });
   }
 
   @Mutation(() => String)
@@ -34,10 +32,7 @@ export class UserResolver {
       .getRepository(User)
       .findOne({ where: { email: data.email } });
 
-    if (
-      user === null ||
-      !(await verifyPassword(data.password, user.hashedPassword))
-    )
+    if (user === null || !(await verifyPassword(data.password, user.password)))
       throw new Error("Invalid credentials");
 
     const token = jwt.sign({ userID: user.id }, env.JWT_PRIVATE_KEY);
@@ -78,7 +73,7 @@ export class UserResolver {
       userToUpdate.firstname = firstname;
     }
     if (password !== undefined) {
-      userToUpdate.hashedPassword = password;
+      userToUpdate.password = password;
     }
     if (picture !== undefined) {
       userToUpdate.picture = picture;

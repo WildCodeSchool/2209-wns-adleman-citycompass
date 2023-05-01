@@ -203,9 +203,9 @@ export type User = {
   cities?: Maybe<Array<City>>;
   email: Scalars['String'];
   firstname: Scalars['String'];
-  hashedPassword: Scalars['String'];
   id: Scalars['Float'];
   lastname: Scalars['String'];
+  password: Scalars['String'];
   picture: Scalars['String'];
   role: Scalars['String'];
 };
