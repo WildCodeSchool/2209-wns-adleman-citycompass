@@ -39,7 +39,15 @@ describe("User Resolver", () => {
       expect(res.data?.createUser).toHaveProperty("firstname");
       expect(res.data?.createUser).toHaveProperty("lastname");
       expect(res.data?.createUser).toHaveProperty("password");
+      // password must be hashed
+      expect(res.data?.createUser.password).toContain("$argon2");
       expect(res.data?.createUser).toHaveProperty("picture");
     });
+
+    // try if firstname is empty
+    // try if lastname is empty
+    // try if email is empty
+    // try if email is not an email
+    // try if picture is not an url
   });
 });
