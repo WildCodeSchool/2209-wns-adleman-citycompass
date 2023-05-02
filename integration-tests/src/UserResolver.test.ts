@@ -113,6 +113,39 @@ describe("User Resolver", () => {
       ).rejects.toThrow();
     });
     // try if email is not an email
+    it("should reject if data send in email is not an email", async () => {
+      await expect(() =>
+        client.mutate({
+          mutation: createUserMutation,
+          variables: {
+            data: {
+              firstname: "John",
+              lastname: "Test",
+              email: "testmonmail.com",
+              password: "",
+              picture: "https://i.pravatar.cc/300",
+            },
+          },
+        })
+      ).rejects.toThrow();
+    });
+    // try if email is not an email
+    it("should reject if data send in email is not an email", async () => {
+      await expect(() =>
+        client.mutate({
+          mutation: createUserMutation,
+          variables: {
+            data: {
+              firstname: "John",
+              lastname: "Test",
+              email: "test@monmail",
+              password: "",
+              picture: "https://i.pravatar.cc/300",
+            },
+          },
+        })
+      ).rejects.toThrow();
+    });
 
     // try if picture is not an url
   });
