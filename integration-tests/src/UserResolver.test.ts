@@ -148,5 +148,21 @@ describe("User Resolver", () => {
     });
 
     // try if picture is not an url
+    it("should reject if picture send in is not an url", async () => {
+      await expect(() =>
+        client.mutate({
+          mutation: createUserMutation,
+          variables: {
+            data: {
+              firstname: "John",
+              lastname: "Test",
+              email: "test@monmail",
+              password: "",
+              picture: "i.pravatar.cc/300",
+            },
+          },
+        })
+      ).rejects.toThrow();
+    });
   });
 });
