@@ -72,6 +72,7 @@ export class UserInput {
   email: string;
 
   @Field()
+  @MinLength(8)
   @MaxLength(255)
   password: string;
 

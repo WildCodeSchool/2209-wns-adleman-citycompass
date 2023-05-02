@@ -45,9 +45,75 @@ describe("User Resolver", () => {
     });
 
     // try if firstname is empty
+    it("should reject the query if firstname is empty", async () => {
+      await expect(() =>
+        client.mutate({
+          mutation: createUserMutation,
+          variables: {
+            data: {
+              firstname: "",
+              lastname: "Test",
+              email: "john@example.com",
+              password: "monMotsdepasse1!",
+              picture: "https://i.pravatar.cc/300",
+            },
+          },
+        })
+      ).rejects.toThrow();
+    });
     // try if lastname is empty
+    it("should reject the query if lastname is empty", async () => {
+      await expect(() =>
+        client.mutate({
+          mutation: createUserMutation,
+          variables: {
+            data: {
+              firstname: "John",
+              lastname: "",
+              email: "john@example.com",
+              password: "monMotsdepasse1!",
+              picture: "https://i.pravatar.cc/300",
+            },
+          },
+        })
+      ).rejects.toThrow();
+    });
     // try if email is empty
+    it("should reject the query if email is empty", async () => {
+      await expect(() =>
+        client.mutate({
+          mutation: createUserMutation,
+          variables: {
+            data: {
+              firstname: "John",
+              lastname: "Test",
+              email: "",
+              password: "monMotsdepasse1!",
+              picture: "https://i.pravatar.cc/300",
+            },
+          },
+        })
+      ).rejects.toThrow();
+    });
+    // try if password is empty
+    it("should reject the query if password is empty", async () => {
+      await expect(() =>
+        client.mutate({
+          mutation: createUserMutation,
+          variables: {
+            data: {
+              firstname: "John",
+              lastname: "Test",
+              email: "test@monmail.com",
+              password: "",
+              picture: "https://i.pravatar.cc/300",
+            },
+          },
+        })
+      ).rejects.toThrow();
+    });
     // try if email is not an email
+
     // try if picture is not an url
   });
 });
