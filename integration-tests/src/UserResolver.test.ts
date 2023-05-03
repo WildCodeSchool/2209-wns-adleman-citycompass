@@ -1,5 +1,6 @@
 import { gql } from "@apollo/client/core";
 import client from "./apolloClient";
+import jwt from "jsonwebtoken";
 
 /**
  * Mutations for testing
@@ -8,12 +9,22 @@ import client from "./apolloClient";
 export const createUserMutation = gql`
   mutation CreateUser($data: UserInput!) {
     createUser(data: $data) {
+      id
       firstname
       lastname
       email
       password
       picture
       role
+    }
+  }
+`;
+
+export const login = gql`
+  mutation Login($data: UserLogin!) {
+    login(data: $data) {
+      email
+      password
     }
   }
 `;
@@ -37,6 +48,7 @@ describe("User Resolver", () => {
           },
         },
       });
+      expect(res.data?.createUser).toHaveProperty("id");
       expect(res.data?.createUser).toHaveProperty("firstname");
       expect(res.data?.createUser).toHaveProperty("lastname");
       expect(res.data?.createUser).toHaveProperty("password");
@@ -184,6 +196,61 @@ describe("User Resolver", () => {
           },
         })
       ).rejects.toThrow();
+    });
+  });
+  describe("login user", () => {
+    let userId: Number;
+    let token: String;
+
+    beforeAll(async () => {
+      const res = await client.mutate({
+        mutation: createUserMutation,
+        variables: {
+          data: {
+            firstname: "John",
+            lastname: "Test",
+            email: "john@example.com",
+            password: "monMotsdepasse1!",
+            picture: "https://i.pravatar.cc/300",
+          },
+        },
+      });
+      userId = await res.data?.createUser.id;
+      console.log("🐛", userId);
+    });
+
+    beforeAll(async () => {
+      token = jwt.sign({ userId }, "zeyfgzeigfyzegfyuzegf");
+    });
+
+    it("should not log in", async () => {
+      expect(() =>
+        client.mutate({
+          mutation: login,
+          context: { headers: { authorization: `Bearer ${token}` } },
+          variables: {
+            data: {
+              email: "john@example.com",
+              password: "testmotdepasse",
+            },
+          },
+        })
+      ).rejects.toThrow();
+    });
+
+    it("should log in", async () => {
+      await expect(() =>
+        client.mutate({
+          mutation: login,
+          context: { headers: { authorization: `Bearer ${token}` } },
+          variables: {
+            data: {
+              email: "john@example.com",
+              password: "monMotsdepasse1!",
+            },
+          },
+        })
+      ).resolves;
     });
   });
 });
