@@ -5,7 +5,7 @@ import client from "./apolloClient";
  * Mutations for testing
  */
 
-const createUserMutation = gql`
+export const createUserMutation = gql`
   mutation CreateUser($data: UserInput!) {
     createUser(data: $data) {
       firstname
@@ -13,6 +13,7 @@ const createUserMutation = gql`
       email
       password
       picture
+      role
     }
   }
 `;
@@ -42,6 +43,8 @@ describe("User Resolver", () => {
       // password must be hashed
       expect(res.data?.createUser.password).toContain("$argon2");
       expect(res.data?.createUser).toHaveProperty("picture");
+      expect(res.data?.createUser).toHaveProperty("role");
+      expect(res.data?.createUser.role).toBe("visitor");
     });
 
     // try if firstname is empty
