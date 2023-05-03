@@ -167,5 +167,23 @@ describe("User Resolver", () => {
         })
       ).rejects.toThrow();
     });
+
+    it("should reject if role is not visitor", async () => {
+      await expect(() =>
+        client.mutate({
+          mutation: createUserMutation,
+          variables: {
+            data: {
+              firstname: "John",
+              lastname: "Test",
+              email: "test@monmail",
+              password: "monMotsdepasse1!",
+              picture: "i.pravatar.cc/300",
+              role: "superadmin",
+            },
+          },
+        })
+      ).rejects.toThrow();
+    });
   });
 });
