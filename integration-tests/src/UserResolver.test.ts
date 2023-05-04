@@ -216,7 +216,6 @@ describe("User Resolver", () => {
         },
       });
       userId = await res.data?.createUser.id;
-      console.log("🐛", userId);
     });
 
     beforeAll(async () => {
