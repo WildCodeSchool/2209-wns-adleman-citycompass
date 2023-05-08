@@ -1,16 +1,6 @@
 import React from "react";
-import { useFormik, ErrorMessage, Formik, Field, Form } from "formik";
+import { Formik, Field, Form } from "formik";
 import { useCreateCategoryMutation } from "../gql/generated/schema";
-
-interface FormAddCategoryType {
-  name: string;
-  picto: string;
-}
-
-interface FormAddCategoryErrorsType {
-  name?: string;
-  picto?: string;
-}
 
 // validations
 
