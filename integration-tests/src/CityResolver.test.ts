@@ -6,19 +6,6 @@ import db from "../../server/src/db";
  * Mutations for testing
  */
 
-const createCityMutation = gql`
-  mutation CreateCity($data: CityInput!) {
-    createCity(data: $data) {
-      id
-      name
-      description
-      picture
-      longitude
-      latitude
-    }
-  }
-`;
-
 const getCityQuery = gql`
   query GetCities {
     getCities {
