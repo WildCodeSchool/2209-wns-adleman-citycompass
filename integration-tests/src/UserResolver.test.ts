@@ -1,6 +1,5 @@
 import { gql } from "@apollo/client/core";
 import client from "./apolloClient";
-import jwt from "jsonwebtoken";
 
 /**
  * Mutations for testing
@@ -196,60 +195,6 @@ describe("User Resolver", () => {
           },
         })
       ).rejects.toThrow();
-    });
-  });
-  describe("login user", () => {
-    let userId: Number;
-    let token: String;
-
-    beforeAll(async () => {
-      const res = await client.mutate({
-        mutation: createUserMutation,
-        variables: {
-          data: {
-            firstname: "John",
-            lastname: "Test",
-            email: "john@example.com",
-            password: "monMotsdepasse1!",
-            picture: "https://i.pravatar.cc/300",
-          },
-        },
-      });
-      userId = await res.data?.createUser.id;
-    });
-
-    beforeAll(async () => {
-      token = jwt.sign({ userId }, "zeyfgzeigfyzegfyuzegf");
-    });
-
-    it("should not log in", async () => {
-      expect(() =>
-        client.mutate({
-          mutation: login,
-          context: { headers: { authorization: `Bearer ${token}` } },
-          variables: {
-            data: {
-              email: "john@example.com",
-              password: "testmotdepasse",
-            },
-          },
-        })
-      ).rejects.toThrow();
-    });
-
-    it("should log in", async () => {
-      await expect(() =>
-        client.mutate({
-          mutation: login,
-          context: { headers: { authorization: `Bearer ${token}` } },
-          variables: {
-            data: {
-              email: "john@example.com",
-              password: "monMotsdepasse1!",
-            },
-          },
-        })
-      ).resolves;
     });
   });
 });
