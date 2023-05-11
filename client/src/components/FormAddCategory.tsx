@@ -48,22 +48,26 @@ export default function FormAddCategory() {
           alert(JSON.stringify(values, null, 2));
         }}
       >
-        {({ errors, touched, isValidating }) => (
+        {({ errors, touched }) => (
           <Form className="container flex flex-col w-1/2">
+            <p className="modal__input--label">Nom</p>
             <Field
               name="name"
+              label="test"
               validate={validateName}
               placeholder="nom"
-              className="modal__input shadow shadow-green mb-4"
-            />
+              className="modal__input shadow shadow-green"
+            ></Field>
             {errors.name && touched.name && (
               <div className="text-red">{errors.name}</div>
             )}
+
+            <p className="modal__input--label">Pictogramme</p>
             <Field
               name="picto"
               validate={validatePicto}
               placeholder="https://mon-pictogramme.net"
-              className="modal__input shadow shadow-green mb-4"
+              className="modal__input shadow shadow-green"
             />
             {errors.picto && touched.picto && (
               <div className="text-red">{errors.picto}</div>
