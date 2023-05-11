@@ -23,5 +23,5 @@
     "baseUrl": "."
   },
   "exclude": ["node_modules"],
-  "include": ["./**/*.ts", "../client/UserResolver.test.ts"]
+  "include": ["./**/*.ts"]
 }
