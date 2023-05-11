@@ -15,7 +15,7 @@ export class CategoryResolver {
     const categoryToCreate = await datasource
       .getRepository(Category)
       .findOne({ where: { name: data.name } });
-    if (categoryToCreate !== null) throw new Error("Category already exOUND");
+    if (categoryToCreate !== null) throw new Error("Category already exists");
 
     return await datasource.getRepository(Category).save(data);
   }
