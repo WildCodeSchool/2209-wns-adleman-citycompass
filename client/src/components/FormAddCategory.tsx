@@ -32,8 +32,8 @@ export default function FormAddCategory() {
   const [createCategory] = useCreateCategoryMutation();
 
   return (
-    <div>
-      <h1>Ajouter une catégorie</h1>
+    <div className="container mx-auto p-6 bg-cream flex flex-col">
+      <h1 className="type-h2 text-center">Ajouter une catégorie</h1>
       <Formik
         initialValues={{
           name: "",
@@ -49,7 +49,7 @@ export default function FormAddCategory() {
         }}
       >
         {({ errors, touched }) => (
-          <Form className="container flex flex-col w-1/2">
+          <Form className="container flex flex-col gap-2 w-3/4 md:w-2/5">
             <label htmlFor="name" className="modal__input--label">
               Nom
             </label>
@@ -57,7 +57,9 @@ export default function FormAddCategory() {
               name="name"
               validate={validateName}
               placeholder="nom"
-              className="modal__input shadow shadow-green"
+              className={`modal__input ${
+                errors.name && touched.name ? "border-red" : "border-current"
+              }`}
             ></Field>
             {errors.name && touched.name && (
               <div className="text-red">{errors.name}</div>
@@ -69,7 +71,9 @@ export default function FormAddCategory() {
               name="picto"
               validate={validatePicto}
               placeholder="https://mon-pictogramme.net"
-              className="modal__input shadow shadow-green"
+              className={`modal__input ${
+                errors.name && touched.name ? "border-red" : "border-current"
+              }`}
               label="Pictogramme"
             />
             {errors.picto && touched.picto && (
