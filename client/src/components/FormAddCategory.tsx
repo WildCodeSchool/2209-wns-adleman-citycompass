@@ -50,10 +50,11 @@ export default function FormAddCategory() {
       >
         {({ errors, touched }) => (
           <Form className="container flex flex-col w-1/2">
-            <p className="modal__input--label">Nom</p>
+            <label htmlFor="name" className="modal__input--label">
+              Nom
+            </label>
             <Field
               name="name"
-              label="test"
               validate={validateName}
               placeholder="nom"
               className="modal__input shadow shadow-green"
@@ -61,13 +62,15 @@ export default function FormAddCategory() {
             {errors.name && touched.name && (
               <div className="text-red">{errors.name}</div>
             )}
-
-            <p className="modal__input--label">Pictogramme</p>
+            <label htmlFor="name" className="modal__input--label">
+              Pictogramme
+            </label>
             <Field
               name="picto"
               validate={validatePicto}
               placeholder="https://mon-pictogramme.net"
               className="modal__input shadow shadow-green"
+              label="Pictogramme"
             />
             {errors.picto && touched.picto && (
               <div className="text-red">{errors.picto}</div>
