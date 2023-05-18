@@ -1,4 +1,12 @@
-import { Arg, Mutation, Resolver, Query, Authorized, Ctx } from "type-graphql";
+import {
+  Arg,
+  Mutation,
+  Resolver,
+  Query,
+  Authorized,
+  Ctx,
+  Int,
+} from "type-graphql";
 import User, { UserInput, UserUpdate, UserLogin } from "../entity/User";
 import datasource from "../db";
 import { existingUser } from "../helpers/dbCheckers";
@@ -46,21 +54,30 @@ export class UserResolver {
     return token;
   }
 
+  @Authorized()
   @Mutation(() => String)
   async logout(@Ctx() ctx: ContextType): Promise<string> {
     ctx.res.clearCookie("token");
     return "OK";
   }
 
+  @Authorized()
   @Mutation(() => User)
   async updateUser(
-    @Arg("email") emailFind: string,
-    @Arg("data") data: UserUpdate
+    @Arg("id", () => Int) id: number,
+    @Arg("data") data: UserUpdate,
+    @Ctx() ctx: ContextType
   ): Promise<User> {
-    const { firstname, lastname, picture, password, role } = data;
+    const { firstname, lastname, picture, password } = data;
+    // get id of connected user from context, using JWT token
+    const currentUserId = ctx.jwtPayload.userID;
+
+    if (currentUserId !== id) {
+      throw new Error("Update another user is not allowed");
+    }
 
     const userToUpdate = await datasource.getRepository(User).findOne({
-      where: { email: emailFind },
+      where: { id },
     });
     if (userToUpdate === null) throw new Error("User not found");
 
@@ -76,9 +93,6 @@ export class UserResolver {
     if (picture !== undefined) {
       userToUpdate.picture = picture;
     }
-    if (role !== undefined) {
-      userToUpdate.role = role;
-    }
 
     await datasource.getRepository(User).save(userToUpdate);
 
@@ -89,7 +103,7 @@ export class UserResolver {
   async getUsers(): Promise<User[]> {
     return await datasource
       .getRepository(User)
-      .find({ relations: { cities: true } });
+      .find({ relations: { managedCities: true } });
   }
 
   @Query(() => User)
