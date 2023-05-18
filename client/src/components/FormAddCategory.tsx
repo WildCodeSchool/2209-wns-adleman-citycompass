@@ -1,6 +1,8 @@
 import React from "react";
 import { Formik, Field, Form } from "formik";
 import { useCreateCategoryMutation } from "../gql/generated/schema";
+import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 // validations
 
@@ -30,6 +32,7 @@ function validatePicto(picto: string) {
 
 export default function FormAddCategory() {
   const [createCategory] = useCreateCategoryMutation();
+  const navigate = useNavigate();
 
   return (
     <div className="container mx-auto p-6 bg-cream flex flex-col">
@@ -45,7 +48,8 @@ export default function FormAddCategory() {
               data: { name: values.name, picto: values.picto },
             },
           });
-          alert(JSON.stringify(values, null, 2));
+          toast.success("La catégorie a bien été enregistrée");
+          navigate("/dashboard");
         }}
       >
         {({ errors, touched }) => (
