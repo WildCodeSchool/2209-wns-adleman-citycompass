@@ -1,4 +1,12 @@
-import { Arg, Mutation, Resolver, Query, Authorized, Ctx } from "type-graphql";
+import {
+  Arg,
+  Mutation,
+  Resolver,
+  Query,
+  Authorized,
+  Ctx,
+  Int,
+} from "type-graphql";
 import User, { UserInput, UserUpdate, UserLogin } from "../entity/User";
 import datasource from "../db";
 import { existingUser } from "../helpers/dbCheckers";
@@ -19,40 +27,57 @@ export class UserResolver {
     // check if user email is already in database
     await existingUser(data);
 
-    const hashedPassword = await hashPassword(data.password);
-    return await datasource
-      .getRepository(User)
-      .save({ ...data, hashedPassword });
+    const password = await hashPassword(data.password);
+    return await datasource.getRepository(User).save({ ...data, password });
   }
 
   @Mutation(() => String)
-  async login(@Arg("data") data: UserLogin): Promise<String> {
+  async login(
+    @Arg("data") data: UserLogin,
+    @Ctx() ctx: ContextType
+  ): Promise<String> {
     const user = await datasource
       .getRepository(User)
       .findOne({ where: { email: data.email } });
 
-    if (
-      user === null ||
-      !(await verifyPassword(data.password, user.hashedPassword))
-    )
+    if (user === null || !(await verifyPassword(data.password, user.password)))
       throw new Error("Invalid credentials");
 
-    // Changer la clé secrète avec la variable d'environnement
     const token = jwt.sign({ userID: user.id }, env.JWT_PRIVATE_KEY);
-    // Reste à faire -> voir son histoire de contexte pour vérifier le jwt (vidéo 2, 0:50)
+
+    ctx.res.cookie("token", token, {
+      secure: env.NODE_ENV === "production",
+      domain: env.SERVER_HOST,
+      httpOnly: true,
+    });
 
     return token;
   }
 
+  @Authorized()
+  @Mutation(() => String)
+  async logout(@Ctx() ctx: ContextType): Promise<string> {
+    ctx.res.clearCookie("token");
+    return "OK";
+  }
+
+  @Authorized()
   @Mutation(() => User)
   async updateUser(
-    @Arg("email") emailFind: string,
-    @Arg("data") data: UserUpdate
+    @Arg("id", () => Int) id: number,
+    @Arg("data") data: UserUpdate,
+    @Ctx() ctx: ContextType
   ): Promise<User> {
-    const { firstname, lastname, picture, password, role } = data;
+    const { firstname, lastname, picture, password } = data;
+    // get id of connected user from context, using JWT token
+    const currentUserId = ctx.jwtPayload.userID;
+
+    if (currentUserId !== id) {
+      throw new Error("Update another user is not allowed");
+    }
 
     const userToUpdate = await datasource.getRepository(User).findOne({
-      where: { email: emailFind },
+      where: { id },
     });
     if (userToUpdate === null) throw new Error("User not found");
 
@@ -63,13 +88,10 @@ export class UserResolver {
       userToUpdate.firstname = firstname;
     }
     if (password !== undefined) {
-      userToUpdate.hashedPassword = password;
+      userToUpdate.password = password;
     }
     if (picture !== undefined) {
       userToUpdate.picture = picture;
-    }
-    if (role !== undefined) {
-      userToUpdate.role = role;
     }
 
     await datasource.getRepository(User).save(userToUpdate);
@@ -81,7 +103,7 @@ export class UserResolver {
   async getUsers(): Promise<User[]> {
     return await datasource
       .getRepository(User)
-      .find({ relations: { cities: true } });
+      .find({ relations: { managedCities: true } });
   }
 
   @Query(() => User)

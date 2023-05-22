@@ -2,12 +2,19 @@ import Category from "../entity/Category";
 import datasource from "../db";
 import City from "../entity/City";
 import Place from "../entity/Place";
+import User from "../entity/User";
+import { hashPassword } from "../helpers/hashing";
 
 async function reset(): Promise<void> {
   await datasource.initialize();
+
+  // delete all datas in DB
   await datasource.getRepository(City).delete({});
   await datasource.getRepository(Place).delete({});
   await datasource.getRepository(Category).delete({});
+  await datasource.getRepository(User).delete({});
+
+  // create fake cities in DB
   const marseille = await datasource.getRepository(City).save({
     name: "Marseille",
     picture:
@@ -44,6 +51,8 @@ async function reset(): Promise<void> {
     latitude: "44.837789",
     longitude: "-0.579180",
   });
+
+  // create fake categories in DB
   const bar = await datasource.getRepository(Category).save({
     name: "Bar",
     picto: "https://zupimages.net/up/23/09/cyg3.png",
@@ -80,6 +89,8 @@ async function reset(): Promise<void> {
     name: "Travel",
     picto: "https://zupimages.net/up/23/09/6vet.png",
   });
+
+  // create fake places in DB
   await datasource.getRepository(Place).save([
     {
       name: "Orange Vélodrome",
@@ -275,6 +286,55 @@ async function reset(): Promise<void> {
         "La basilique Saint-Michel de Bordeaux est la deuxième plus grande église catholique de la ville de Bordeaux, dans le sud-ouest de la France. Bâtie du xive au xvie siècle, elle est caractéristique du style gothique flamboyant. L'église a donné son nom au quartier dans lequel elle se situe. La basilique partage avec la cathédrale Saint-André la particularité d'être dotée d'un clocher indépendant du sanctuaire, un campanile. S'élevant à une hauteur de 114 mètres, il est le plus haut du Midi de la France et le troisième plus haut de l'hexagone, derrière la flèche des cathédrales de Rouen (151 mètres) et de Strasbourg (142 mètres). Sa base conserve une crypte qui servit longtemps d'ossuaire, puis de lieu d'exposition pour des « momies » exhumées au xixe siècle lors de l'aménagement de la « place Meynard », ancien cimetière paroissial. Classée monument historique dès 1846, l'église Saint-Michel — devenue basilique mineure en 1903 — est inscrite sur la liste du patrimoine mondial de l'UNESCO depuis 1998 au titre des chemins de Saint-Jacques-de-Compostelle en France.",
       cityId: bordeaux.id,
       categoryId: monument.id,
+    },
+  ]);
+  // create fakes user (one by role)
+
+  await datasource.getRepository(User).save([
+    {
+      firstname: "Jane",
+      lastname: "visitor",
+      email: "visitor@mail.com",
+      password: await hashPassword("visitorPassword1!"),
+      picture: "https://i.pravatar.cc/300",
+    },
+    {
+      firstname: "John",
+      lastname: "contributor",
+      email: "contributor@mail.com",
+      password: await hashPassword("contributorPassword1!"),
+      picture: "https://i.pravatar.cc/300",
+      role: "contributor",
+      managedCities: [
+        (await datasource
+          .getRepository(City)
+          .findOneBy({ name: "Marseille" })) as City,
+      ],
+    },
+    {
+      firstname: "Tim",
+      lastname: "admin",
+      email: "admin@mail.com",
+      password: await hashPassword("adminPassword1!"),
+      picture: "https://i.pravatar.cc/300",
+      role: "admin",
+      managedCities: [
+        (await datasource
+          .getRepository(City)
+          .findOneBy({ name: "Marseille" })) as City,
+        (await datasource
+          .getRepository(City)
+          .findOneBy({ name: "Lyon" })) as City,
+      ],
+    },
+    {
+      firstname: "Tam",
+      lastname: "superadmin",
+      email: "superadmin@mail.com",
+      password: await hashPassword("superadminPassword1!"),
+      picture: "https://i.pravatar.cc/300",
+      role: "superadmin",
+      managedCities: await datasource.getRepository(City).find(),
     },
   ]);
   await datasource.destroy();
