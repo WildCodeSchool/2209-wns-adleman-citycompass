@@ -6,6 +6,8 @@ import city_icon from "../assets/city_icon.svg";
 import poi_icon from "../assets/poi_icon.svg";
 import user_icon from "../assets/user_icon.svg";
 import { useState } from "react";
+import { useGetProfileQuery } from "../gql/generated/schema";
+
 import AccueilDashboard from "../components/dashboard/Accueil/AccueilDashboard";
 import CategoriesDashboard from "../components/dashboard/Categories/CategoriesDashboard";
 import CitiesDashboard from "../components/dashboard/Cities/CitiesDashboard";
@@ -18,6 +20,15 @@ export default function Dashboard() {
   const [cityClicked, setCityClicked] = useState(false);
   const [poiClicked, setPoiClicked] = useState(false);
   const [userClicked, setUserClicked] = useState(false);
+
+  const { data: currentUser } = useGetProfileQuery({
+    errorPolicy: "ignore",
+  });
+
+  const allowedRoles = ["admin", "superadmin"];
+  const isAuthorized = currentUser
+    ? allowedRoles.includes(currentUser.profile.role)
+    : "";
 
   return (
     <div className="flex h-full">
@@ -51,26 +62,28 @@ export default function Dashboard() {
               <p>Accueil</p>
             </button>
           </div>
-          <div
-            className={
-              categoryClicked ? "sidebar__menu-active" : "sidebar__menu"
-            }
-          >
-            <button
-              className="sidebar__button"
-              disabled={categoryClicked === true}
-              onClick={() => (
-                setCategoryClicked(!categoryClicked),
-                setAccueilClicked(false),
-                setCityClicked(false),
-                setPoiClicked(false),
-                setUserClicked(false)
-              )}
+          {isAuthorized && (
+            <div
+              className={
+                categoryClicked ? "sidebar__menu-active" : "sidebar__menu"
+              }
             >
-              <img className="w-6 h-6" src={category_icon} alt="" />
-              <p>Catégories</p>
-            </button>
-          </div>
+              <button
+                className="sidebar__button"
+                disabled={categoryClicked === true}
+                onClick={() => (
+                  setCategoryClicked(!categoryClicked),
+                  setAccueilClicked(false),
+                  setCityClicked(false),
+                  setPoiClicked(false),
+                  setUserClicked(false)
+                )}
+              >
+                <img className="w-6 h-6" src={category_icon} alt="" />
+                <p>Catégories</p>
+              </button>
+            </div>
+          )}
           <div
             className={cityClicked ? "sidebar__menu-active" : "sidebar__menu"}
           >
