@@ -248,6 +248,11 @@ export type GetCitiesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetCitiesQuery = { __typename?: 'Query', getCities: Array<{ __typename?: 'City', picture: string, name: string, id: number, description: string }> };
 
+export type GetCitiesWithPlacesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetCitiesWithPlacesQuery = { __typename?: 'Query', getCities: Array<{ __typename?: 'City', name: string, places: Array<{ __typename?: 'Place', id: number, name: string, latitude: string, longitude: string, adress: string, website?: string | null, picture: string, description: string, categoryId: number }> }> };
+
 export type GetOneCitybyNameQueryVariables = Exact<{
   name: Scalars['String'];
 }>;
@@ -393,6 +398,51 @@ export function useGetCitiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type GetCitiesQueryHookResult = ReturnType<typeof useGetCitiesQuery>;
 export type GetCitiesLazyQueryHookResult = ReturnType<typeof useGetCitiesLazyQuery>;
 export type GetCitiesQueryResult = Apollo.QueryResult<GetCitiesQuery, GetCitiesQueryVariables>;
+export const GetCitiesWithPlacesDocument = gql`
+    query GetCitiesWithPlaces {
+  getCities {
+    name
+    places {
+      id
+      name
+      latitude
+      longitude
+      adress
+      website
+      picture
+      description
+      categoryId
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetCitiesWithPlacesQuery__
+ *
+ * To run a query within a React component, call `useGetCitiesWithPlacesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCitiesWithPlacesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCitiesWithPlacesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetCitiesWithPlacesQuery(baseOptions?: Apollo.QueryHookOptions<GetCitiesWithPlacesQuery, GetCitiesWithPlacesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCitiesWithPlacesQuery, GetCitiesWithPlacesQueryVariables>(GetCitiesWithPlacesDocument, options);
+      }
+export function useGetCitiesWithPlacesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCitiesWithPlacesQuery, GetCitiesWithPlacesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCitiesWithPlacesQuery, GetCitiesWithPlacesQueryVariables>(GetCitiesWithPlacesDocument, options);
+        }
+export type GetCitiesWithPlacesQueryHookResult = ReturnType<typeof useGetCitiesWithPlacesQuery>;
+export type GetCitiesWithPlacesLazyQueryHookResult = ReturnType<typeof useGetCitiesWithPlacesLazyQuery>;
+export type GetCitiesWithPlacesQueryResult = Apollo.QueryResult<GetCitiesWithPlacesQuery, GetCitiesWithPlacesQueryVariables>;
 export const GetOneCitybyNameDocument = gql`
     query GetOneCitybyName($name: String!) {
   getOneCitybyName(name: $name) {
