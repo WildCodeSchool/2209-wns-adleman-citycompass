@@ -6,7 +6,7 @@ import city_icon from "../assets/city_icon.svg";
 import poi_icon from "../assets/poi_icon.svg";
 import user_icon from "../assets/user_icon.svg";
 import { useState } from "react";
-import AccueilDashboard from "../components/dashboard/Accueil/AccueilDashbord";
+import AccueilDashboard from "../components/dashboard/Accueil/AccueilDashboard";
 import CategoriesDashboard from "../components/dashboard/Categories/CategoriesDashboard";
 import CitiesDashboard from "../components/dashboard/Cities/CitiesDashboard";
 import PlacesDashboard from "../components/dashboard/Places/PlacesDashboard";
