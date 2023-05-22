@@ -1,4 +1,4 @@
-import { Arg, Mutation, Query, Resolver } from "type-graphql";
+import { Arg, Authorized, Mutation, Query, Resolver } from "type-graphql";
 import datasource from "../db";
 import Place, { PlaceInput } from "../entity/Place";
 import { existingPlace, existingPlaceCoordinates } from "../helpers/dbCheckers";
@@ -19,8 +19,7 @@ export class PlaceResolver {
       relations: { city: true, category: true },
     });
 
-    if (placeToFind === null)
-      throw new Error("Place not found");
+    if (placeToFind === null) throw new Error("Place not found");
 
     return placeToFind;
   }
@@ -32,16 +31,15 @@ export class PlaceResolver {
       relations: { city: true, category: true },
     });
 
-    if (placeToFind === null)
-      throw new Error("Place not found");
+    if (placeToFind === null) throw new Error("Place not found");
 
     return placeToFind;
   }
 
+  @Authorized(["superadmin", "admin", "contributor"])
   @Mutation(() => Place)
   async createPlace(@Arg("data") data: PlaceInput): Promise<Place> {
-    if (data === null)
-      throw new Error("No data in query");
+    if (data === null) throw new Error("No data in query");
 
     // check if place name & coordinates are already in database
     await existingPlace(data);
@@ -50,6 +48,7 @@ export class PlaceResolver {
     return await datasource.getRepository(Place).save(data);
   }
 
+  @Authorized(["superadmin", "admin", "contributor"])
   @Mutation(() => Place)
   async updatePlace(
     @Arg("id") id: string,
@@ -70,8 +69,7 @@ export class PlaceResolver {
       .getRepository(Place)
       .findOne({ where: { id: parseInt(id, 10) } });
 
-    if (placeToUpdate === null)
-      throw new Error("Place not found");
+    if (placeToUpdate === null) throw new Error("Place not found");
 
     // check if city name & coordinates are already in database
     await existingPlace(data, id);

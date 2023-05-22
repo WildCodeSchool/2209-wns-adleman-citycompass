@@ -62,6 +62,7 @@ export type Mutation = {
   createPlace: Place;
   createUser: User;
   login: Scalars['String'];
+  logout: Scalars['String'];
   updateCategory: Category;
   updateCity: City;
   updatePlace: Place;
@@ -114,7 +115,7 @@ export type MutationUpdatePlaceArgs = {
 
 export type MutationUpdateUserArgs = {
   data: UserUpdate;
-  email: Scalars['String'];
+  id: Scalars['Int'];
 };
 
 export type Place = {
@@ -199,12 +200,12 @@ export type SearchResult = {
 
 export type User = {
   __typename?: 'User';
-  cities?: Maybe<Array<City>>;
   email: Scalars['String'];
   firstname: Scalars['String'];
-  hashedPassword: Scalars['String'];
   id: Scalars['Float'];
   lastname: Scalars['String'];
+  managedCities?: Maybe<Array<City>>;
+  password: Scalars['String'];
   picture: Scalars['String'];
   role: Scalars['String'];
 };
@@ -215,6 +216,7 @@ export type UserInput = {
   lastname: Scalars['String'];
   password: Scalars['String'];
   picture: Scalars['String'];
+  role?: Scalars['String'];
 };
 
 export type UserLogin = {
@@ -272,6 +274,11 @@ export type GetPlacesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetPlacesQuery = { __typename?: 'Query', getPlaces: Array<{ __typename?: 'Place', id: number, name: string, latitude: string, longitude: string, adress: string, website?: string | null, picture: string, description: string, cityId: number, categoryId: number, city: { __typename?: 'City', id: number, name: string } }> };
 
+export type GetProfileQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetProfileQuery = { __typename?: 'Query', profile: { __typename?: 'User', id: number, email: string, role: string } };
+
 export type GetSearchResultQueryVariables = Exact<{
   searchInput: Scalars['String'];
 }>;
@@ -282,7 +289,7 @@ export type GetSearchResultQuery = { __typename?: 'Query', Search: { __typename?
 export type GetUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetUsersQuery = { __typename?: 'Query', getUsers: Array<{ __typename?: 'User', id: number, firstname: string, lastname: string, email: string, hashedPassword: string, picture: string, role: string }> };
+export type GetUsersQuery = { __typename?: 'Query', getUsers: Array<{ __typename?: 'User', id: number, firstname: string, lastname: string, email: string, password: string, picture: string, role: string }> };
 
 export type LoginMutationVariables = Exact<{
   data: UserLogin;
@@ -290,6 +297,11 @@ export type LoginMutationVariables = Exact<{
 
 
 export type LoginMutation = { __typename?: 'Mutation', login: string };
+
+export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type LogoutMutation = { __typename?: 'Mutation', logout: string };
 
 
 export const CreateUserDocument = gql`
@@ -593,6 +605,42 @@ export function useGetPlacesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type GetPlacesQueryHookResult = ReturnType<typeof useGetPlacesQuery>;
 export type GetPlacesLazyQueryHookResult = ReturnType<typeof useGetPlacesLazyQuery>;
 export type GetPlacesQueryResult = Apollo.QueryResult<GetPlacesQuery, GetPlacesQueryVariables>;
+export const GetProfileDocument = gql`
+    query GetProfile {
+  profile {
+    id
+    email
+    role
+  }
+}
+    `;
+
+/**
+ * __useGetProfileQuery__
+ *
+ * To run a query within a React component, call `useGetProfileQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProfileQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProfileQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetProfileQuery(baseOptions?: Apollo.QueryHookOptions<GetProfileQuery, GetProfileQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetProfileQuery, GetProfileQueryVariables>(GetProfileDocument, options);
+      }
+export function useGetProfileLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProfileQuery, GetProfileQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetProfileQuery, GetProfileQueryVariables>(GetProfileDocument, options);
+        }
+export type GetProfileQueryHookResult = ReturnType<typeof useGetProfileQuery>;
+export type GetProfileLazyQueryHookResult = ReturnType<typeof useGetProfileLazyQuery>;
+export type GetProfileQueryResult = Apollo.QueryResult<GetProfileQuery, GetProfileQueryVariables>;
 export const GetSearchResultDocument = gql`
     query GetSearchResult($searchInput: String!) {
   Search(searchInput: $searchInput) {
@@ -650,7 +698,7 @@ export const GetUsersDocument = gql`
     firstname
     lastname
     email
-    hashedPassword
+    password
     picture
     role
   }
@@ -714,3 +762,33 @@ export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginM
 export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
 export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
 export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
+export const LogoutDocument = gql`
+    mutation Logout {
+  logout
+}
+    `;
+export type LogoutMutationFn = Apollo.MutationFunction<LogoutMutation, LogoutMutationVariables>;
+
+/**
+ * __useLogoutMutation__
+ *
+ * To run a mutation, you first call `useLogoutMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLogoutMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [logoutMutation, { data, loading, error }] = useLogoutMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useLogoutMutation(baseOptions?: Apollo.MutationHookOptions<LogoutMutation, LogoutMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LogoutMutation, LogoutMutationVariables>(LogoutDocument, options);
+      }
+export type LogoutMutationHookResult = ReturnType<typeof useLogoutMutation>;
+export type LogoutMutationResult = Apollo.MutationResult<LogoutMutation>;
+export type LogoutMutationOptions = Apollo.BaseMutationOptions<LogoutMutation, LogoutMutationVariables>;

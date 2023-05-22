@@ -4,6 +4,7 @@ import loupe from "../assets/magnifying-glass.svg";
 import person from "../assets/person-circle-outline.svg";
 import SearchBar from "./SearchBar";
 import Modal from "./Modal";
+import { useGetProfileQuery, useLogoutMutation } from "../gql/generated/schema";
 
 function Header() {
   const [showSearch, setShowSearch] = useState(false);
@@ -20,6 +21,12 @@ function Header() {
     setShowModal(!showModal);
     setShowSearch(false);
   };
+
+  const { data: currentUser, client } = useGetProfileQuery({
+    errorPolicy: "ignore",
+  });
+
+  const [logout] = useLogoutMutation();
 
   return (
     <>
@@ -52,6 +59,18 @@ function Header() {
                 className="header__profile--search"
               />
             </button>
+            {currentUser ? (
+              <div
+                onClick={async () => {
+                  await logout();
+                  await client.resetStore();
+                }}
+              >
+                <p className="type-h4 ml-2">Me déconnecter</p>
+              </div>
+            ) : (
+              <></>
+            )}
           </div>
         </div>
         <SearchBar

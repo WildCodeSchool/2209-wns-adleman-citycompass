@@ -1,14 +1,14 @@
-import { Arg, Mutation, Resolver, Query } from "type-graphql";
+import { Arg, Mutation, Resolver, Query, Authorized } from "type-graphql";
 import City, { CityInput, CityUpdate } from "../entity/City";
 import datasource from "../db";
 import { existingCity, existingCoordinates } from "../helpers/dbCheckers";
 
 @Resolver(City)
 export class CityResolver {
+  @Authorized(["superadmin"])
   @Mutation(() => City)
   async createCity(@Arg("data") data: CityInput): Promise<City> {
-    if (data === null)
-      throw new Error("No data in query");
+    if (data === null) throw new Error("No data in query");
 
     // delete blank spaces before and after city name
     data.name = data.name.trim();
@@ -29,6 +29,7 @@ export class CityResolver {
     });
   }
 
+  @Authorized(["superadmin"])
   @Mutation(() => City)
   async updateCity(
     @Arg("id") id: string,
@@ -40,8 +41,7 @@ export class CityResolver {
       where: { id: parseInt(id, 10) },
     });
 
-    if (cityToUpdate === null)
-      throw new Error("City not found");
+    if (cityToUpdate === null) throw new Error("City not found");
 
     // check if city name & coordinates are already in database
     if (name !== undefined) {
@@ -79,8 +79,7 @@ export class CityResolver {
       relations: { places: { category: true } },
     });
 
-    if (cityToFind === null)
-      throw new Error("City not found");
+    if (cityToFind === null) throw new Error("City not found");
 
     return cityToFind;
   }
@@ -92,8 +91,7 @@ export class CityResolver {
       relations: { places: { category: true } },
     });
 
-    if (cityToFind === null)
-      throw new Error("city not found");
+    if (cityToFind === null) throw new Error("city not found");
 
     return cityToFind;
   }

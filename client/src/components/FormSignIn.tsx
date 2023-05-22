@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useLoginMutation } from "../gql/generated/schema";
+import { useGetProfileQuery, useLoginMutation } from "../gql/generated/schema";
 
 interface FormSignInProps {
   isLogin: boolean;
@@ -12,6 +12,12 @@ function FormSignUp({ isLogin, setIsLogin }: FormSignInProps) {
     password: "",
   });
 
+  const { data: currentUser, client } = useGetProfileQuery({
+    errorPolicy: "ignore",
+  });
+
+  console.log(currentUser);
+
   const [logInUser] = useLoginMutation();
 
   return (
@@ -21,9 +27,7 @@ function FormSignUp({ isLogin, setIsLogin }: FormSignInProps) {
         onSubmit={(e) => {
           e.preventDefault();
           logInUser({ variables: { data: userInfos } })
-            .then(() => {
-              console.log("ok");
-            })
+            .then(() => client.resetStore)
             .catch(console.error);
         }}
       >

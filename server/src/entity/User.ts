@@ -9,6 +9,8 @@ import { IsEmail, IsUrl, MaxLength, MinLength } from "class-validator";
 import { Field, ObjectType, InputType } from "type-graphql";
 import City from "./City";
 
+export type Role = "superadmin" | "admin" | "contributor" | "visitor";
+
 @ObjectType()
 @Entity()
 class User {
@@ -30,7 +32,7 @@ class User {
 
   @Field()
   @Column({ length: 255, type: "varchar" })
-  hashedPassword: string;
+  password: string;
 
   @Field()
   @Column({ length: 2083, type: "varchar" })
@@ -40,14 +42,16 @@ class User {
   @Column({
     length: 20,
     type: "varchar",
-    default: "user",
+    enum: ["superadmin", "admin", "contributor", "visitor"],
+    default: "visitor",
   })
   role: string;
 
+  // this relation allow an user to manage a city or places in a city, depending on user role
   @Field(() => [City], { nullable: true })
   @ManyToMany(() => City)
   @JoinTable()
-  cities?: City[];
+  managedCities?: City[];
 }
 
 @InputType()
@@ -68,6 +72,7 @@ export class UserInput {
   email: string;
 
   @Field()
+  @MinLength(8)
   @MaxLength(255)
   password: string;
 
@@ -75,6 +80,10 @@ export class UserInput {
   @MaxLength(2083)
   @IsUrl()
   picture: string;
+
+  @Field({ defaultValue: "visitor" })
+  @MaxLength(20)
+  role: string;
 }
 
 @InputType()
