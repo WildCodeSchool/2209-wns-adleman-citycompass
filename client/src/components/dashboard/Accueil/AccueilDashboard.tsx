@@ -1,10 +1,16 @@
+import { useGetProfileQuery } from "../../../gql/generated/schema";
+
 function AccueilDashboard() {
+  const { data: currentUser } = useGetProfileQuery({
+    errorPolicy: "ignore",
+  });
+
   return (
     <>
       <div className="my-28 mx-auto h-full flex flex-col gap-10 w-4/5 max-w-4xl">
         <div className="flex w-fit gap-8">
           <h1 className="type-h1 header__title text-left ">BIENVENUE</h1>
-          <h1 className="text-orange">PIERRE</h1>
+          <h1 className="text-orange">{currentUser?.profile.firstname}</h1>
         </div>
         <div>
           <p className="text-2xl font-semibold">Quelques chiffres clés</p>

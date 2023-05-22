@@ -25,10 +25,9 @@ export default function Dashboard() {
     errorPolicy: "ignore",
   });
 
-  const allowedRoles = ["admin", "superadmin"];
-  const isAuthorized = currentUser
-    ? allowedRoles.includes(currentUser.profile.role)
-    : "";
+  const isSuperAdmin = currentUser?.profile.role === "superadmin";
+  const isAdmin = currentUser?.profile.role === "admin";
+  const isContributor = currentUser?.profile.role === "contributor";
 
   return (
     <div className="flex h-full">
@@ -62,7 +61,7 @@ export default function Dashboard() {
               <p>Accueil</p>
             </button>
           </div>
-          {isAuthorized && (
+          {isSuperAdmin && (
             <div
               className={
                 categoryClicked ? "sidebar__menu-active" : "sidebar__menu"
@@ -84,60 +83,66 @@ export default function Dashboard() {
               </button>
             </div>
           )}
-          <div
-            className={cityClicked ? "sidebar__menu-active" : "sidebar__menu"}
-          >
-            <button
-              className="sidebar__button"
-              disabled={cityClicked === true}
-              onClick={() => (
-                setCityClicked(!cityClicked),
-                setAccueilClicked(false),
-                setCategoryClicked(false),
-                setPoiClicked(false),
-                setUserClicked(false)
-              )}
+          {isSuperAdmin && (
+            <div
+              className={cityClicked ? "sidebar__menu-active" : "sidebar__menu"}
             >
-              <img className="w-6 h-6" src={city_icon} alt="" />
-              <p>Villes</p>
-            </button>
-          </div>
-          <div
-            className={poiClicked ? "sidebar__menu-active" : "sidebar__menu"}
-          >
-            <button
-              className="sidebar__button"
-              disabled={poiClicked === true}
-              onClick={() => (
-                setPoiClicked(!poiClicked),
-                setAccueilClicked(false),
-                setCategoryClicked(false),
-                setCityClicked(false),
-                setUserClicked(false)
-              )}
+              <button
+                className="sidebar__button"
+                disabled={cityClicked === true}
+                onClick={() => (
+                  setCityClicked(!cityClicked),
+                  setAccueilClicked(false),
+                  setCategoryClicked(false),
+                  setPoiClicked(false),
+                  setUserClicked(false)
+                )}
+              >
+                <img className="w-6 h-6" src={city_icon} alt="" />
+                <p>Villes</p>
+              </button>
+            </div>
+          )}
+          {(isSuperAdmin || isAdmin || isContributor) && (
+            <div
+              className={poiClicked ? "sidebar__menu-active" : "sidebar__menu"}
             >
-              <img className="w-6 h-6" src={poi_icon} alt="" />
-              <p>Points d'intérêts</p>
-            </button>
-          </div>
-          <div
-            className={userClicked ? "sidebar__menu-active" : "sidebar__menu"}
-          >
-            <button
-              className="sidebar__button"
-              disabled={userClicked === true}
-              onClick={() => (
-                setUserClicked(!userClicked),
-                setPoiClicked(false),
-                setAccueilClicked(false),
-                setCategoryClicked(false),
-                setCityClicked(false)
-              )}
+              <button
+                className="sidebar__button"
+                disabled={poiClicked === true}
+                onClick={() => (
+                  setPoiClicked(!poiClicked),
+                  setAccueilClicked(false),
+                  setCategoryClicked(false),
+                  setCityClicked(false),
+                  setUserClicked(false)
+                )}
+              >
+                <img className="w-6 h-6" src={poi_icon} alt="" />
+                <p>Points d'intérêts</p>
+              </button>
+            </div>
+          )}
+          {(isSuperAdmin || isAdmin) && (
+            <div
+              className={userClicked ? "sidebar__menu-active" : "sidebar__menu"}
             >
-              <img className="w-6 h-6" src={user_icon} alt="" />
-              <p>Utilisateurs</p>
-            </button>
-          </div>
+              <button
+                className="sidebar__button"
+                disabled={userClicked === true}
+                onClick={() => (
+                  setUserClicked(!userClicked),
+                  setPoiClicked(false),
+                  setAccueilClicked(false),
+                  setCategoryClicked(false),
+                  setCityClicked(false)
+                )}
+              >
+                <img className="w-6 h-6" src={user_icon} alt="" />
+                <p>Utilisateurs</p>
+              </button>
+            </div>
+          )}
         </div>
       </div>
       <div className="bg-white h-full w-full flex flex-col">
