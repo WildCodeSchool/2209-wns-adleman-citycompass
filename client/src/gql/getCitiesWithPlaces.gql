@@ -1,0 +1,16 @@
+query GetCitiesWithPlaces {
+  getCities {
+    name
+    places {
+      id
+      name
+      latitude
+      longitude
+      adress
+      website
+      picture
+      description
+      categoryId
+    }
+  }
+}

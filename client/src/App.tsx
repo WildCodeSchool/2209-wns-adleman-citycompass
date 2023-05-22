@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import Home from "./pages/Home";
 import City from "./pages/City";
@@ -12,19 +12,28 @@ import Footer from "./components/Footer";
 import Header from "./components/Header";
 
 function App() {
+  const currentLocation = useLocation();
+
   return (
     <>
       <Toaster position="bottom-center" />
       <main>
-        <Header />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/cities/:cityName" element={<City />} />
-          <Route path="/cities/:cityName/:placeName" element={<Place />} />
-          <Route path="/account/:userId" element={<Account />} />
-          <Route path="/dashboard/:userId" element={<Dashboard />} />
-        </Routes>
-        <Footer />
+        {currentLocation.pathname.includes("dashboard") ? (
+          <Routes>
+            <Route path="/dashboard/:userId" element={<Dashboard />} />
+          </Routes>
+        ) : (
+          <>
+            <Header />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/cities/:cityName" element={<City />} />
+              <Route path="/cities/:cityName/:placeName" element={<Place />} />
+              <Route path="/account/:userId" element={<Account />} />
+            </Routes>
+            <Footer />
+          </>
+        )}
       </main>
     </>
   );

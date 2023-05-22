@@ -24,7 +24,9 @@ export class CityResolver {
 
   @Query(() => [City])
   async getCities(): Promise<City[]> {
-    return await datasource.getRepository(City).find();
+    return await datasource.getRepository(City).find({
+      relations: { places: { category: true } },
+    });
   }
 
   @Authorized(["superadmin"])
