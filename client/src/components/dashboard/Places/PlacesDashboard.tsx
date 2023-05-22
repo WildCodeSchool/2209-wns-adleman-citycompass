@@ -17,8 +17,6 @@ function PlacesDashboard() {
 
   const cities = data?.getCities;
 
-  console.log(listPlaces);
-
   return (
     <>
       <div className="my-28 mx-auto h-full flex flex-col w-4/5 max-w-4xl">
