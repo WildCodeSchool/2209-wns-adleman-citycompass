@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Formik, Field, Form } from "formik";
-import { useCreateCategoryMutation } from "../gql/generated/schema";
+import {
+  CategoryInput,
+  useCreateCategoryMutation,
+} from "../gql/generated/schema";
 import { toast } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
 // validations
 
@@ -31,8 +34,34 @@ function validatePicto(picto: string) {
 // form building with Formik https://formik.org/docs/guides/validation
 
 export default function FormAddCategory() {
-  const [createCategory] = useCreateCategoryMutation();
-  const navigate = useNavigate();
+  // alias serverError is set  to avoid confusions with Formik errors
+  const [createCategory, { error: serverError, data }] =
+    useCreateCategoryMutation({
+      errorPolicy: "all",
+    });
+  // to do : add a navigate to category list
+  // const navigate = useNavigate();
+
+  const handleSubmit = async (values: CategoryInput) => {
+    await createCategory({
+      variables: {
+        data: { name: values.name, picto: values.picto },
+      },
+    });
+  };
+
+  useEffect(() => {
+    if (serverError) {
+      serverError.graphQLErrors.forEach(({ message }) => {
+        if ((message = "Category Already exists"))
+          toast.error("La catégorie existe déjà");
+      });
+    }
+    if (data) {
+      console.log("coucou");
+      toast.success("la catégorie est bien créée");
+    }
+  }, [data, serverError]);
 
   return (
     <div className="container mx-auto p-6 bg-cream flex flex-col">
@@ -42,15 +71,7 @@ export default function FormAddCategory() {
           name: "",
           picto: "",
         }}
-        onSubmit={(values) => {
-          createCategory({
-            variables: {
-              data: { name: values.name, picto: values.picto },
-            },
-          });
-          toast.success("La catégorie a bien été enregistrée");
-          navigate("/dashboard");
-        }}
+        onSubmit={(values) => handleSubmit(values)}
       >
         {({ errors, touched }) => (
           <Form className="container flex flex-col gap-2 w-3/4 md:w-2/5">
