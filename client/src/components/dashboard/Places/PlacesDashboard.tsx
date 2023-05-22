@@ -2,16 +2,22 @@
 import { useState } from "react";
 import add_icon from "../../../assets/add_icon.svg";
 import modify_icon from "../../../assets/modify_icon.svg";
-import { useGetPlacesQuery } from "../../../gql/generated/schema";
+import chevron_down from "../../../assets/chevron-arrow-down.png";
+import chevron_up from "../../../assets/up-arrow-angle.png";
+import { useGetCitiesWithPlacesQuery } from "../../../gql/generated/schema";
 
 function PlacesDashboard() {
-  const [listPlaces, setListPlaces] = useState(true);
+  const [places, setPlaces] = useState(true);
+  const [listPlaces, setListPlaces] = useState(false);
   const [addPlaces, setAddPlaces] = useState(false);
   const [modifyPlaces, setModifyPlaces] = useState(false);
+  const [cityName, setCityName] = useState("");
 
-  const { data } = useGetPlacesQuery();
+  const { data } = useGetCitiesWithPlacesQuery();
 
-  const places = data?.getPlaces;
+  const cities = data?.getCities;
+
+  console.log(listPlaces);
 
   return (
     <>
@@ -22,29 +28,55 @@ function PlacesDashboard() {
           </h1>
         </div>
         <div className="bg-cream w-full h-fit min-h-[75%] mt-10">
-          {listPlaces && (
+          {places && (
             <div className="flex flex-col w-full h-full gap-4 pb-8">
               <div className="p-4 w-16 self-end">
-                <button
-                  onClick={() => (setAddPlaces(true), setListPlaces(false))}
-                >
+                <button onClick={() => (setAddPlaces(true), setPlaces(false))}>
                   <img src={add_icon} alt="" />
                 </button>
               </div>
-              {places?.map((place) => (
-                <div
-                  className="h-12 w-96 px-6 self-center rounded bg-orange flex justify-between items-center"
-                  key={place.id}
-                >
-                  <p className="w-4/5">{place.name}</p>
-                  <button
-                    onClick={() => (
-                      setModifyPlaces(true), setListPlaces(false)
-                    )}
+              {cities?.map((city) => (
+                <>
+                  <div
+                    className="h-12 w-96 px-6 self-center rounded bg-orange flex justify-between items-center"
+                    key={city.name}
                   >
-                    <img src={modify_icon} alt="" className="w-6" />
-                  </button>
-                </div>
+                    <p className="w-4/5">{city.name}</p>
+                    <button
+                      onClick={() => {
+                        setCityName(city.name);
+                        setListPlaces(!listPlaces);
+                      }}
+                    >
+                      <img
+                        src={listPlaces ? chevron_up : chevron_down}
+                        alt=""
+                        className="w-4"
+                      />
+                    </button>
+                  </div>
+                  {listPlaces && cityName === city.name && (
+                    <div className="flex flex-col justify-between self-center">
+                      {city.places.map((place) => (
+                        <div
+                          className="h-12 w-96 px-6 flex justify-between items-center"
+                          key={place.id}
+                        >
+                          <p className="w-4/5">{place.name}</p>
+                          <button
+                            onClick={() => (
+                              setModifyPlaces(true),
+                              setPlaces(false),
+                              setListPlaces(false)
+                            )}
+                          >
+                            <img src={modify_icon} alt="" className="w-6" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </>
               ))}
             </div>
           )}
@@ -52,7 +84,9 @@ function PlacesDashboard() {
             <div>
               <p>FORMULAIRE AJOUT PLACE</p>
               <button
-                onClick={() => (setAddPlaces(false), setListPlaces(true))}
+                onClick={() => (
+                  setAddPlaces(false), setPlaces(true), setListPlaces(false)
+                )}
               >
                 Enregistrer
               </button>
@@ -62,7 +96,9 @@ function PlacesDashboard() {
             <div>
               <p>FORMULAIRE MODIFICATION PLACE</p>
               <button
-                onClick={() => (setModifyPlaces(false), setListPlaces(true))}
+                onClick={() => (
+                  setModifyPlaces(false), setPlaces(true), setListPlaces(false)
+                )}
               >
                 Enregistrer
               </button>
