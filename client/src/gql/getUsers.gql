@@ -4,7 +4,7 @@ query GetUsers {
     firstname
     lastname
     email
-    hashedPassword
+    password
     picture
     role
   }
