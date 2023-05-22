@@ -49,7 +49,7 @@ function PlacesDashboard() {
                       }}
                     >
                       <img
-                        src={listPlaces ? chevron_up : chevron_down}
+                        src={listPlaces && cityName === city.name ? chevron_up : chevron_down}
                         alt=""
                         className="w-4"
                       />
