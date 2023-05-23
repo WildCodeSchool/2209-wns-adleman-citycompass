@@ -54,13 +54,21 @@ function Header() {
               className="header__profile--loupe cursor-pointer"
               onClick={handleClick}
             />
-            <button type="button" onClick={handleModal}>
+            {currentUser ? (
               <img
                 src={person}
                 alt="person icon to profile"
                 className="header__profile--search"
               />
-            </button>
+            ) : (
+              <button type="button" onClick={handleModal}>
+                <img
+                  src={person}
+                  alt="person icon to profile"
+                  className="header__profile--search"
+                />
+              </button>
+            )}
             <div className="cursor-pointer	">
               {currentUser ? (
                 <div
