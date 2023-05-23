@@ -5,14 +5,17 @@ import category_icon from "../assets/category_icon.svg";
 import city_icon from "../assets/city_icon.svg";
 import poi_icon from "../assets/poi_icon.svg";
 import user_icon from "../assets/user_icon.svg";
+import logout_icon from "../assets/logout.png";
 import { useState } from "react";
-import { useGetProfileQuery } from "../gql/generated/schema";
+import { useGetProfileQuery, useLogoutMutation } from "../gql/generated/schema";
+import { toast } from "react-hot-toast";
 
 import AccueilDashboard from "../components/dashboard/Accueil/AccueilDashboard";
 import CategoriesDashboard from "../components/dashboard/Categories/CategoriesDashboard";
 import CitiesDashboard from "../components/dashboard/Cities/CitiesDashboard";
 import PlacesDashboard from "../components/dashboard/Places/PlacesDashboard";
 import UsersDashboard from "../components/dashboard/Users/UsersDashboard";
+import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
   const [accueilClicked, setAccueilClicked] = useState(true);
@@ -21,9 +24,13 @@ export default function Dashboard() {
   const [poiClicked, setPoiClicked] = useState(false);
   const [userClicked, setUserClicked] = useState(false);
 
-  const { data: currentUser } = useGetProfileQuery({
+  const { data: currentUser, client } = useGetProfileQuery({
     errorPolicy: "ignore",
   });
+
+  const [logout] = useLogoutMutation();
+
+  const navigate = useNavigate();
 
   const isSuperAdmin = currentUser?.profile.role === "superadmin";
   const isAdmin = currentUser?.profile.role === "admin";
@@ -143,6 +150,20 @@ export default function Dashboard() {
               </button>
             </div>
           )}
+          <div className="sidebar__menu">
+            <button
+              className="sidebar__button"
+              onClick={async () => {
+                await logout();
+                await client.resetStore();
+                toast.success("Vous avez été correctement déconnecté");
+                navigate("/");
+              }}
+            >
+              <img className="w-6 h-6" src={logout_icon} alt="" />
+              <p>Me déconnecter</p>
+            </button>
+          </div>
         </div>
       </div>
       <div className="bg-white h-full w-full flex flex-col">
