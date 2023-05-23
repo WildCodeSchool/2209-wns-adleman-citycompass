@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { toast } from "react-hot-toast";
 import { useGetProfileQuery, useLoginMutation } from "../gql/generated/schema";
 
 interface FormSignInProps {
@@ -28,7 +29,14 @@ function FormSignUp({ isLogin, setIsLogin }: FormSignInProps) {
           e.preventDefault();
           logInUser({ variables: { data: userInfos } })
             .then(() => client.resetStore)
-            .catch(console.error);
+            .then(() => {
+              toast.success("Connexion réussie");
+              window.location.reload();
+            })
+            .catch((error) => {
+              console.warn(error)
+              toast.error("Données de connexion incorrectes");
+            });
         }}
       >
         <div className="flex flex-col">
