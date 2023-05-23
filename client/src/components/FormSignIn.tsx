@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { useGetProfileQuery, useLoginMutation } from "../gql/generated/schema";
 
@@ -6,6 +7,8 @@ interface FormSignInProps {
   isLogin: boolean;
   setIsLogin: React.Dispatch<React.SetStateAction<boolean>>;
 }
+
+
 
 function FormSignUp({ isLogin, setIsLogin }: FormSignInProps) {
   const [userInfos, setUserInfos] = useState({
@@ -16,6 +19,8 @@ function FormSignUp({ isLogin, setIsLogin }: FormSignInProps) {
   const { data: currentUser, client } = useGetProfileQuery({
     errorPolicy: "ignore",
   });
+
+  const navigate = useNavigate();
 
   console.log(currentUser);
 
@@ -30,8 +35,9 @@ function FormSignUp({ isLogin, setIsLogin }: FormSignInProps) {
           logInUser({ variables: { data: userInfos } })
             .then(() => client.resetStore)
             .then(() => {
+              console.log(currentUser);
               toast.success("Connexion réussie");
-              window.location.reload();
+              navigate(`/dashboard/${currentUser?.profile.id}`);
             })
             .catch((error) => {
               console.warn(error)
