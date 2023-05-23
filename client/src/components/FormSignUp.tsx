@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useCreateUserMutation } from "../gql/generated/schema";
+import { toast } from "react-hot-toast";
 
 interface FormSignUpProps {
   isLogin: boolean;
@@ -25,26 +26,14 @@ function FormSignUp({ isLogin, setIsLogin }: FormSignUpProps) {
           e.preventDefault();
           createUser({ variables: { data: userInfos } })
             .then(() => {
-              console.log("ok");
+              toast.success("Inscription completée");
+              setIsLogin(!isLogin);
             })
             .catch(console.error);
         }}
       >
         <div className="flex flex-col">
-          <label className="modal__input--label" htmlFor="email">
-            Email
-          </label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={userInfos.email}
-            onChange={(e) => {
-              setUserInfos({ ...userInfos, email: e.target.value });
-            }}
-            className="modal__input shadow shadow-green mb-4"
-            placeholder="email"
-          />
+         
           <label className="modal__input--label" htmlFor="nom">
             Nom
           </label>
@@ -86,6 +75,20 @@ function FormSignUp({ isLogin, setIsLogin }: FormSignUpProps) {
             }}
             className="modal__input shadow shadow-green mb-4"
             placeholder="picture"
+          />
+           <label className="modal__input--label" htmlFor="email">
+            Email
+          </label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value={userInfos.email}
+            onChange={(e) => {
+              setUserInfos({ ...userInfos, email: e.target.value });
+            }}
+            className="modal__input shadow shadow-green mb-4"
+            placeholder="email"
           />
           <label className="modal__input--label" htmlFor="password">
             Password
