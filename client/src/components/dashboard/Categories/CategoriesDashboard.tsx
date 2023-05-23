@@ -53,6 +53,7 @@ function CategoriesDashboard() {
           {addCategories && (
             <div>
               <p>FORMULAIRE AJOUT CATEGORIE</p>
+
               <button
                 onClick={() => (
                   setAddCategories(false), setListCategories(true)
