@@ -10,6 +10,7 @@ function CategoriesDashboard() {
   const [listCategories, setListCategories] = useState(true);
   const [addCategories, setAddCategories] = useState(false);
   const [modifyCategories, setModifyCategories] = useState(false);
+  const [currentCategory, setCurrentCategory] = useState({});
 
   const { data } = useGetCategoriesQuery();
 
@@ -43,7 +44,9 @@ function CategoriesDashboard() {
                   <p className="w-4/5">{category.name}</p>
                   <button
                     onClick={() => (
-                      setModifyCategories(true), setListCategories(false)
+                      setModifyCategories(true),
+                      setListCategories(false),
+                      setCurrentCategory(category)
                     )}
                   >
                     <img src={modify_icon} alt="" className="w-6" />
@@ -63,7 +66,7 @@ function CategoriesDashboard() {
           {modifyCategories && (
             <div>
               <p>FORMULAIRE MODIFICATION CATEGORIE</p>
-              <FormUpdateCategory />
+              <FormUpdateCategory currentCategory={currentCategory} />
               <button
                 onClick={() => (
                   setModifyCategories(false), setListCategories(true)

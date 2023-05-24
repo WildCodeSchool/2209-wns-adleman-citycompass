@@ -45,6 +45,7 @@ export class CategoryResolver {
       // delete blank spaces before and after category name
       name = name.trim();
       // change category name first letter to Uppercase
+      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
       name = name.charAt(0).toUpperCase() + name.slice(1);
       categoryToUpdate.name = name;
     }
