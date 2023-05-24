@@ -63,6 +63,8 @@ export default function FormAddCategory({
         res.errors.forEach(({ message }) => {
           if ((message = "Category Already exists")) {
             toast.error("La catégorie existe déjà");
+          } else {
+            toast.error(message);
           }
         });
       }
