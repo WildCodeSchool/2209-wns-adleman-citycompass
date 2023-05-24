@@ -1,6 +1,7 @@
 import { Arg, Authorized, Mutation, Query, Resolver } from "type-graphql";
 import datasource from "../db";
 import Place, { PlaceInput } from "../entity/Place";
+import User from "../entity/User";
 import { existingPlace, existingPlaceCoordinates } from "../helpers/dbCheckers";
 
 @Resolver(Place)
@@ -51,6 +52,7 @@ export class PlaceResolver {
   @Authorized(["superadmin", "admin", "contributor"])
   @Mutation(() => Place)
   async updatePlace(
+    @Arg("userID") userID: string,
     @Arg("id") id: string,
     @Arg("data") data: PlaceInput
   ): Promise<Place> {
@@ -74,6 +76,11 @@ export class PlaceResolver {
     // check if city name & coordinates are already in database
     await existingPlace(data, id);
     await existingPlaceCoordinates(data);
+
+    const user = await datasource
+      .getRepository(User)
+      .findOne({ where: { id: parseInt(userID, 10) } });
+    console.log(user);
 
     placeToUpdate.adress = adress;
     placeToUpdate.categoryId = categoryId;
