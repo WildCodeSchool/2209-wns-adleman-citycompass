@@ -1,0 +1,10 @@
+mutation updateCity($data: CityUpdate!, $updateCityId: String!) {
+  updateCity(data: $data, id: $updateCityId) {
+    id
+    name
+    picture
+    description
+    latitude
+    longitude
+  }
+}
