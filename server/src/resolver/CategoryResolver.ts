@@ -6,7 +6,9 @@ import Category, { CategoryInput } from "../entity/Category";
 export class CategoryResolver {
   @Query(() => [Category])
   async getCategories(): Promise<Category[]> {
-    return await datasource.getRepository(Category).find();
+    return await datasource
+      .getRepository(Category)
+      .find({ order: { id: "DESC" } });
   }
 
   @Authorized(["superadmin"])
