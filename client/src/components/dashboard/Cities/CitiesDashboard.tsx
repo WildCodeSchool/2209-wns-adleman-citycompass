@@ -3,6 +3,7 @@ import { useState } from "react";
 import add_icon from "../../../assets/add_icon.svg";
 import modify_icon from "../../../assets/modify_icon.svg";
 import { useGetCitiesQuery } from "../../../gql/generated/schema";
+import FormAddCity from "./FormAddCity";
 
 function CitiesDashboard() {
   const [listCities, setListCities] = useState(true);
@@ -50,12 +51,10 @@ function CitiesDashboard() {
           )}
           {addCities && (
             <div>
-              <p>FORMULAIRE AJOUT CITY</p>
-              <button
-                onClick={() => (setAddCities(false), setListCities(true))}
-              >
-                Enregistrer
-              </button>
+              <FormAddCity
+                setAddCities={setAddCities}
+                setListCities={setListCities}
+              />
             </div>
           )}
           {modifyCities && (
