@@ -4,6 +4,7 @@ import add_icon from "../../../assets/add_icon.svg";
 import modify_icon from "../../../assets/modify_icon.svg";
 import { useGetCategoriesQuery } from "../../../gql/generated/schema";
 import FormAddCategory from "./FormAddCategory";
+import { FormUpdateCategory } from "./FormUpdateCategorie";
 
 function CategoriesDashboard() {
   const [listCategories, setListCategories] = useState(true);
@@ -62,6 +63,7 @@ function CategoriesDashboard() {
           {modifyCategories && (
             <div>
               <p>FORMULAIRE MODIFICATION CATEGORIE</p>
+              <FormUpdateCategory />
               <button
                 onClick={() => (
                   setModifyCategories(false), setListCategories(true)
