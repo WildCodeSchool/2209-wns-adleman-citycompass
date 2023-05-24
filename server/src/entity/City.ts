@@ -7,9 +7,10 @@ import {
   MaxLength,
   MinLength,
   Validate,
+  IsNotEmpty,
 } from "class-validator";
 import Place from "./Place";
-import { IsDotInString } from "../helpers/customValidators";
+import { IsDotInString, IsNotOnlySpaces } from "../helpers/customValidators";
 
 @Entity()
 @ObjectType()
@@ -55,6 +56,8 @@ export class CityInput {
   @Field()
   @MaxLength(50)
   @MinLength(2)
+  @IsNotEmpty({ message: "A city name cannot be empty" })
+  @Validate(IsNotOnlySpaces)
   name: string;
 
   @Field()
