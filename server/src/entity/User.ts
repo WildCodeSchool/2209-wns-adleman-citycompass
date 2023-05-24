@@ -77,6 +77,9 @@ export class UserInput {
   @Field()
   @MinLength(8)
   @MaxLength(255)
+  @Matches(/(?=.*\d)(?=.*\W+)(?![.\n])(?=.*[A-Z])(?=.*[a-z]).{8,}$/, {
+    message: "password too weak",
+  })
   password: string;
 
   @Field()
@@ -108,6 +111,9 @@ export class UserUpdate {
 
   @Field({ nullable: true })
   @MaxLength(255)
+  @Matches(/(?=.*\d)(?=.*\W+)(?![.\n])(?=.*[A-Z])(?=.*[a-z]).{8,}$/, {
+    message: "password too weak",
+  })
   password?: string;
 
   @Field({ nullable: true })
