@@ -6,7 +6,6 @@ import {
   useCreateCategoryMutation,
 } from "../../../gql/generated/schema";
 import { toast } from "react-hot-toast";
-// import { useNavigate } from "react-router-dom";
 
 interface FormAddCategoryProps {
   setListCategories: React.Dispatch<React.SetStateAction<boolean>>;
@@ -43,7 +42,6 @@ export default function FormAddCategory({
   setAddCategories,
   setListCategories,
 }: FormAddCategoryProps) {
-  // alias serverError is set  to avoid confusions with Formik errors
   const [createCategory] = useCreateCategoryMutation({
     errorPolicy: "all",
   });
