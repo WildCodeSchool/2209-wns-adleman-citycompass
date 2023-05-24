@@ -1,90 +1,116 @@
-import React, { useState } from "react";
+import React from "react";
+import { Formik, Field, Form } from "formik";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { useGetProfileQuery, useLoginMutation } from "../gql/generated/schema";
+import { UserLogin } from "../gql/generated/schema";
 
 interface FormSignInProps {
   isLogin: boolean;
   setIsLogin: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+// validations
 
+function validateEmail(email: string) {
+  let error;
+  if (!email) {
+    error = "L'email est obligatoire";
+  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
+    error = 'Adresse email invalide';
+  }
+  return error;
+}
+
+function validatePassword(password: string) {
+  let error;
+  if (!password) {
+    error = "Le mot de passe est obligatoire";
+  }
+  return error;
+}
 
 function FormSignUp({ isLogin, setIsLogin }: FormSignInProps) {
-  const [userInfos, setUserInfos] = useState({
-    email: "",
-    password: "",
-  });
+  const navigate = useNavigate();
 
-  const { data: currentUser, client } = useGetProfileQuery({
+  const [logInUser] = useLoginMutation();
+
+  const { client } = useGetProfileQuery({
     errorPolicy: "ignore",
   });
 
-  const navigate = useNavigate();
-
-  console.log(currentUser);
-
-  const [logInUser] = useLoginMutation();
+  const handleSignIn = (values: UserLogin) => {
+    logInUser({
+      variables: { data: { email: values.email, password: values.password } },
+    })
+      .then(client.resetStore)
+      .then((res) => {
+        if (res !== null) {
+          const userId = res[0].data.profile.id;
+          toast.success("Connexion réussie");
+          navigate(`/dashboard/${userId}`);
+        }
+      })
+      .catch(() => toast.error("Données de connexion invalides"));
+  };
 
   return (
     <div>
       <h4 className="text-center">Me connecter</h4>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          logInUser({ variables: { data: userInfos } })
-            .then(() => client.resetStore)
-            .then(() => {
-              console.log(currentUser);
-              toast.success("Connexion réussie");
-              navigate(`/dashboard/${currentUser?.profile.id}`);
-            })
-            .catch((error) => {
-              console.warn(error)
-              toast.error("Données de connexion incorrectes");
-            });
+      <Formik
+        initialValues={{
+          email: "",
+          password: "",
         }}
+        onSubmit={(values) => handleSignIn(values)}
       >
-        <div className="flex flex-col">
-          <label className="modal__input--label" htmlFor="email">
-            Email
-          </label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={userInfos.email}
-            onChange={(e) => {
-              setUserInfos({ ...userInfos, email: e.target.value });
-            }}
-            className="modal__input shadow shadow-green mb-4"
-            placeholder="email"
-          />
-          <label className="modal__input--label" htmlFor="password">
-            Password
-          </label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={userInfos.password}
-            onChange={(e) => {
-              setUserInfos({ ...userInfos, password: e.target.value });
-            }}
-            className="modal__input shadow shadow-green mb-4"
-            placeholder="password"
-          />
-          <button
-            className="modal__input--label text-xs"
-            onClick={(e) => {
-              setIsLogin(!isLogin);
-            }}
-          >
-            Créer un compte
-          </button>
-          <input type="submit" className="button--primary mt-6" />
-        </div>
-      </form>
+        {({ errors, touched }) => (
+          <Form className="flex flex-col">
+            <label className="modal__input--label" htmlFor="email">
+              Email
+            </label>
+            <Field
+              name="email"
+              validate={validateEmail}
+              placeholder="email"
+              className={`modal__input shadow shadow-green mb-4 ${
+                errors.email && touched.email ? "border-red" : "border-current"
+              }`}
+            ></Field>
+            {errors.email && touched.email && (
+              <div className="text-red">{errors.email}</div>
+            )}
+            <label className="modal__input--label" htmlFor="password">
+              Password
+            </label>
+            <Field
+              name="password"
+              validate={validatePassword}
+              placeholder="password"
+              className={`modal__input shadow shadow-green mb-4 ${
+                errors.password && touched.password
+                  ? "border-red"
+                  : "border-current"
+              }`}
+              label="Password"
+            />
+            {errors.password && touched.password && (
+              <div className="text-red">{errors.password}</div>
+            )}
+            <button
+              className="modal__input--label text-xs"
+              onClick={(e) => {
+                setIsLogin(!isLogin);
+              }}
+            >
+              Créer un compte
+            </button>
+            <button type="submit" className="button--primary mt-6">
+              Enregistrer
+            </button>
+          </Form>
+        )}
+      </Formik>
     </div>
   );
 }
