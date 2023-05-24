@@ -126,6 +126,74 @@ describe("User Resolver", () => {
         })
       ).rejects.toThrow();
     });
+    // try if password is to short
+    it("should reject if data send in password is less than 8 char", async () => {
+      await expect(() =>
+        client.mutate({
+          mutation: createUserMutation,
+          variables: {
+            data: {
+              firstname: "John",
+              lastname: "Test",
+              email: "test@monmail.com",
+              password: "m!nMpe1",
+              picture: "https://i.pravatar.cc/300",
+            },
+          },
+        })
+      ).rejects.toThrow();
+    });
+    // try if password is to weak
+    it("should reject if data send in password is all lowercase", async () => {
+      await expect(() =>
+        client.mutate({
+          mutation: createUserMutation,
+          variables: {
+            data: {
+              firstname: "John",
+              lastname: "Test",
+              email: "test@monmail.com",
+              password: "monmotsdepasse1!",
+              picture: "https://i.pravatar.cc/300",
+            },
+          },
+        })
+      ).rejects.toThrow();
+    });
+    // try if password is to weak
+    it("should reject if data send in password doesn't contains a number", async () => {
+      await expect(() =>
+        client.mutate({
+          mutation: createUserMutation,
+          variables: {
+            data: {
+              firstname: "John",
+              lastname: "Test",
+              email: "test@monmail.com",
+              password: "monMotsdepasse!",
+              picture: "https://i.pravatar.cc/300",
+            },
+          },
+        })
+      ).rejects.toThrow();
+    });
+    // try if password is to weak
+    it("should reject if data send in password doesn't contains a special character", async () => {
+      await expect(() =>
+        client.mutate({
+          mutation: createUserMutation,
+          variables: {
+            data: {
+              firstname: "John",
+              lastname: "Test",
+              email: "test@monmail.com",
+              password: "monMotsdepasse1",
+              picture: "https://i.pravatar.cc/300",
+            },
+          },
+        })
+      ).rejects.toThrow();
+    });
     // try if email is not an email
     it("should reject if data send in email is not an email", async () => {
       await expect(() =>
@@ -136,7 +204,7 @@ describe("User Resolver", () => {
               firstname: "John",
               lastname: "Test",
               email: "testmonmail.com",
-              password: "",
+              password: "monMotsdepasse1!",
               picture: "https://i.pravatar.cc/300",
             },
           },
@@ -153,7 +221,7 @@ describe("User Resolver", () => {
               firstname: "John",
               lastname: "Test",
               email: "test@monmail",
-              password: "",
+              password: "monMotsdepasse1!",
               picture: "https://i.pravatar.cc/300",
             },
           },
@@ -171,7 +239,7 @@ describe("User Resolver", () => {
               firstname: "John",
               lastname: "Test",
               email: "test@monmail",
-              password: "",
+              password: "monMotsdepasse1!",
               picture: "i.pravatar.cc/300",
             },
           },
