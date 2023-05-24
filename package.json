@@ -1,6 +1,7 @@
 {
   "dependencies": {
-    "pnpm": "^7.16.0"
+    "pnpm": "^7.16.0",
+    "typescript": "^5.0.4"
   },
   "scripts": {
     "integration-test": "docker compose -f docker-compose.integration-tests.yml up --build --exit-code-from testrunner",

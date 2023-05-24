@@ -1,6 +1,8 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Field, ObjectType, InputType } from "type-graphql";
 import Place from "./Place";
+import { IsNotEmpty, IsUrl, MinLength, Validate } from "class-validator";
+import { IsNotOnlySpaces } from "../helpers/customValidators";
 
 @ObjectType()
 @Entity()
@@ -25,9 +27,16 @@ class Category {
 @InputType()
 export class CategoryInput {
   @Field()
+  @MinLength(2, {
+    message: "A category name must be at least 2 characters long",
+  })
+  @IsNotEmpty({ message: "A category name cannot be empty" })
+  // custom validator
+  @Validate(IsNotOnlySpaces)
   name: string;
 
   @Field()
+  @IsUrl({ message: "A category picto must be an url" })
   picto: string;
 }
 

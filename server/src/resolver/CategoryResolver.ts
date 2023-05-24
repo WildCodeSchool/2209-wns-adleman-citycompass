@@ -6,16 +6,23 @@ import Category, { CategoryInput } from "../entity/Category";
 export class CategoryResolver {
   @Query(() => [Category])
   async getCategories(): Promise<Category[]> {
-    return await datasource.getRepository(Category).find();
+    return await datasource
+      .getRepository(Category)
+      .find({ order: { id: "DESC" } });
   }
 
   @Authorized(["superadmin"])
   @Mutation(() => Category)
   async createCategory(@Arg("data") data: CategoryInput): Promise<Category> {
+    // delete blank spaces before and after category name
+    data.name = data.name.trim();
+    // change category name first letter to Uppercase
+    data.name = data.name.charAt(0).toUpperCase() + data.name.slice(1);
+
     const categoryToCreate = await datasource
       .getRepository(Category)
       .findOne({ where: { name: data.name } });
-    if (categoryToCreate !== null) throw new Error("Category already exists");
+    if (categoryToCreate !== null) throw new Error("Category already exist");
 
     return await datasource.getRepository(Category).save(data);
   }
