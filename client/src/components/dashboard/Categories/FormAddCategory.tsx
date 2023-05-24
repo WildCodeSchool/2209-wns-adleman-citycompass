@@ -55,11 +55,10 @@ export default function FormAddCategory({
       },
       refetchQueries: [{ query: GetCategoriesDocument }],
     }).then((res) => {
-      console.log(res.data);
       setAddCategories(false);
       setListCategories(true);
+      // error handling in .then is due to Formik, errors can't be catch in .catch, because of on submit formik method
       if (res.errors) {
-        console.log(res.errors);
         res.errors.forEach(({ message }) => {
           if ((message = "Category Already exists")) {
             toast.error("La catégorie existe déjà");
