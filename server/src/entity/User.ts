@@ -5,7 +5,7 @@ import {
   ManyToMany,
   JoinTable,
 } from "typeorm";
-import { IsEmail, IsUrl, MaxLength, MinLength } from "class-validator";
+import { IsEmail, IsUrl, Matches, MaxLength, MinLength } from "class-validator";
 import { Field, ObjectType, InputType } from "type-graphql";
 import City from "./City";
 
@@ -32,6 +32,9 @@ class User {
 
   @Field()
   @Column({ length: 255, type: "varchar" })
+  @Matches(/(?=.*\d)(?=.*\W+)(?![.\n])(?=.*[A-Z])(?=.*[a-z]).{8,}$/, {
+    message: "password too weak",
+  })
   password: string;
 
   @Field()
