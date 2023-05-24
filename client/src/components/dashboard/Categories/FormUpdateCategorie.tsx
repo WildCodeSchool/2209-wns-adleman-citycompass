@@ -5,6 +5,7 @@ import {
   GetCategoriesDocument,
   useUpdateCategoryMutation,
 } from "../../../gql/generated/schema";
+import { toast } from "react-hot-toast";
 
 // validations
 
@@ -43,6 +44,11 @@ export function FormUpdateCategory({ currentCategory }: any) {
       refetchQueries: [{ query: GetCategoriesDocument }],
     }).then((res) => {
       console.log(res);
+      if (res.errors) {
+        res.errors.forEach(({ message }) => {
+          toast.error(message);
+        });
+      }
     });
   };
 
