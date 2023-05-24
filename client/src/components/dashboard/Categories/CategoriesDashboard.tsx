@@ -3,6 +3,7 @@ import { useState } from "react";
 import add_icon from "../../../assets/add_icon.svg";
 import modify_icon from "../../../assets/modify_icon.svg";
 import { useGetCategoriesQuery } from "../../../gql/generated/schema";
+import FormAddCategory from "./FormAddCategory";
 
 function CategoriesDashboard() {
   const [listCategories, setListCategories] = useState(true);
@@ -52,15 +53,10 @@ function CategoriesDashboard() {
           )}
           {addCategories && (
             <div>
-              <p>FORMULAIRE AJOUT CATEGORIE</p>
-
-              <button
-                onClick={() => (
-                  setAddCategories(false), setListCategories(true)
-                )}
-              >
-                Enregistrer
-              </button>
+              <FormAddCategory
+                setAddCategories={setAddCategories}
+                setListCategories={setListCategories}
+              />
             </div>
           )}
           {modifyCategories && (

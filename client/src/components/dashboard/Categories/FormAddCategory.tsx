@@ -1,11 +1,17 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Formik, Field, Form } from "formik";
 import {
   CategoryInput,
+  GetCategoriesDocument,
   useCreateCategoryMutation,
-} from "../gql/generated/schema";
+} from "../../../gql/generated/schema";
 import { toast } from "react-hot-toast";
 // import { useNavigate } from "react-router-dom";
+
+interface FormAddCategoryProps {
+  setListCategories: React.Dispatch<React.SetStateAction<boolean>>;
+  setAddCategories: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
 // validations
 
@@ -33,35 +39,35 @@ function validatePicto(picto: string) {
 
 // form building with Formik https://formik.org/docs/guides/validation
 
-export default function FormAddCategory() {
+export default function FormAddCategory({
+  setAddCategories,
+  setListCategories,
+}: FormAddCategoryProps) {
   // alias serverError is set  to avoid confusions with Formik errors
-  const [createCategory, { error: serverError, data }] =
-    useCreateCategoryMutation({
-      errorPolicy: "all",
-    });
-  // to do : add a navigate to category list
-  // const navigate = useNavigate();
+  const [createCategory] = useCreateCategoryMutation({
+    errorPolicy: "all",
+  });
 
-  const handleSubmit = async (values: CategoryInput) => {
-    await createCategory({
+  const handleSubmit = (values: CategoryInput) => {
+    createCategory({
       variables: {
         data: { name: values.name, picto: values.picto },
       },
+      refetchQueries: [{ query: GetCategoriesDocument }],
+    }).then((res) => {
+      console.log(res.data);
+      setAddCategories(false);
+      setListCategories(true);
+      if (res.errors) {
+        console.log(res.errors);
+        res.errors.forEach(({ message }) => {
+          if ((message = "Category Already exists")) {
+            toast.error("La catégorie existe déjà");
+          }
+        });
+      }
     });
   };
-
-  useEffect(() => {
-    if (serverError) {
-      serverError.graphQLErrors.forEach(({ message }) => {
-        if ((message = "Category Already exists"))
-          toast.error("La catégorie existe déjà");
-      });
-    }
-    if (data) {
-      console.log("coucou");
-      toast.success("la catégorie est bien créée");
-    }
-  }, [data, serverError]);
 
   return (
     <div className="container mx-auto p-6 bg-cream flex flex-col">
