@@ -12,15 +12,15 @@ export class CategoryResolver {
   @Authorized(["superadmin"])
   @Mutation(() => Category)
   async createCategory(@Arg("data") data: CategoryInput): Promise<Category> {
-    const categoryToCreate = await datasource
-      .getRepository(Category)
-      .findOne({ where: { name: data.name } });
-    if (categoryToCreate !== null) throw new Error("Category already exist");
-
     // delete blank spaces before and after category name
     data.name = data.name.trim();
     // change category name first letter to Uppercase
     data.name = data.name.charAt(0).toUpperCase() + data.name.slice(1);
+
+    const categoryToCreate = await datasource
+      .getRepository(Category)
+      .findOne({ where: { name: data.name } });
+    if (categoryToCreate !== null) throw new Error("Category already exist");
 
     return await datasource.getRepository(Category).save(data);
   }
