@@ -2,6 +2,7 @@ query GetProfile {
   profile {
     id
     email
+    firstname
     role
   }
 }

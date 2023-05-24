@@ -49,6 +49,7 @@ This is a GraphQL app using codeGen.
 To run CodeGen and generate schemas automatically on client, run :
 
 ```sh
+cd client
 npm run codegen
 ```
 

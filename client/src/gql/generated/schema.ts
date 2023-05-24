@@ -115,7 +115,7 @@ export type MutationUpdatePlaceArgs = {
 
 export type MutationUpdateUserArgs = {
   data: UserUpdate;
-  email: Scalars['String'];
+  id: Scalars['Int'];
 };
 
 export type Place = {
@@ -200,11 +200,11 @@ export type SearchResult = {
 
 export type User = {
   __typename?: 'User';
-  cities?: Maybe<Array<City>>;
   email: Scalars['String'];
   firstname: Scalars['String'];
   id: Scalars['Float'];
   lastname: Scalars['String'];
+  managedCities?: Maybe<Array<City>>;
   password: Scalars['String'];
   picture: Scalars['String'];
   role: Scalars['String'];
@@ -216,6 +216,7 @@ export type UserInput = {
   lastname: Scalars['String'];
   password: Scalars['String'];
   picture: Scalars['String'];
+  role?: Scalars['String'];
 };
 
 export type UserLogin = {
@@ -232,6 +233,13 @@ export type UserUpdate = {
   role?: InputMaybe<Scalars['String']>;
 };
 
+export type CreateCategoryMutationVariables = Exact<{
+  data: CategoryInput;
+}>;
+
+
+export type CreateCategoryMutation = { __typename?: 'Mutation', createCategory: { __typename?: 'Category', id: number, name: string, picto: string } };
+
 export type CreateUserMutationVariables = Exact<{
   data: UserInput;
 }>;
@@ -239,10 +247,20 @@ export type CreateUserMutationVariables = Exact<{
 
 export type CreateUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'User', id: number } };
 
+export type GetCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetCategoriesQuery = { __typename?: 'Query', getCategories: Array<{ __typename?: 'Category', id: number, name: string, picto: string }> };
+
 export type GetCitiesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetCitiesQuery = { __typename?: 'Query', getCities: Array<{ __typename?: 'City', picture: string, name: string, id: number, description: string }> };
+
+export type GetCitiesWithPlacesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetCitiesWithPlacesQuery = { __typename?: 'Query', getCities: Array<{ __typename?: 'City', name: string, places: Array<{ __typename?: 'Place', id: number, name: string, latitude: string, longitude: string, adress: string, website?: string | null, picture: string, description: string, categoryId: number }> }> };
 
 export type GetOneCitybyNameQueryVariables = Exact<{
   name: Scalars['String'];
@@ -258,10 +276,15 @@ export type GetOnePlacebyNameQueryVariables = Exact<{
 
 export type GetOnePlacebyNameQuery = { __typename?: 'Query', getOnePlacebyName: { __typename?: 'Place', id: number, name: string, latitude: string, longitude: string, adress: string, website?: string | null, picture: string, description: string, categoryId: number, category: { __typename?: 'Category', name: string, picto: string, id: number } } };
 
+export type GetPlacesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetPlacesQuery = { __typename?: 'Query', getPlaces: Array<{ __typename?: 'Place', id: number, name: string, latitude: string, longitude: string, adress: string, website?: string | null, picture: string, description: string, cityId: number, categoryId: number, city: { __typename?: 'City', id: number, name: string } }> };
+
 export type GetProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetProfileQuery = { __typename?: 'Query', profile: { __typename?: 'User', id: number, email: string, role: string } };
+export type GetProfileQuery = { __typename?: 'Query', profile: { __typename?: 'User', id: number, email: string, firstname: string, role: string } };
 
 export type GetSearchResultQueryVariables = Exact<{
   searchInput: Scalars['String'];
@@ -269,6 +292,11 @@ export type GetSearchResultQueryVariables = Exact<{
 
 
 export type GetSearchResultQuery = { __typename?: 'Query', Search: { __typename?: 'SearchResult', cities: Array<{ __typename?: 'City', name: string }>, placesByName: Array<{ __typename?: 'Place', name: string, city: { __typename?: 'City', name: string } }>, placesByAddress: Array<{ __typename?: 'Place', name: string, adress: string, city: { __typename?: 'City', name: string } }> } };
+
+export type GetUsersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetUsersQuery = { __typename?: 'Query', getUsers: Array<{ __typename?: 'User', id: number, firstname: string, lastname: string, email: string, password: string, picture: string, role: string }> };
 
 export type LoginMutationVariables = Exact<{
   data: UserLogin;
@@ -283,6 +311,41 @@ export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 export type LogoutMutation = { __typename?: 'Mutation', logout: string };
 
 
+export const CreateCategoryDocument = gql`
+    mutation CreateCategory($data: CategoryInput!) {
+  createCategory(data: $data) {
+    id
+    name
+    picto
+  }
+}
+    `;
+export type CreateCategoryMutationFn = Apollo.MutationFunction<CreateCategoryMutation, CreateCategoryMutationVariables>;
+
+/**
+ * __useCreateCategoryMutation__
+ *
+ * To run a mutation, you first call `useCreateCategoryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCategoryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createCategoryMutation, { data, loading, error }] = useCreateCategoryMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateCategoryMutation(baseOptions?: Apollo.MutationHookOptions<CreateCategoryMutation, CreateCategoryMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateCategoryMutation, CreateCategoryMutationVariables>(CreateCategoryDocument, options);
+      }
+export type CreateCategoryMutationHookResult = ReturnType<typeof useCreateCategoryMutation>;
+export type CreateCategoryMutationResult = Apollo.MutationResult<CreateCategoryMutation>;
+export type CreateCategoryMutationOptions = Apollo.BaseMutationOptions<CreateCategoryMutation, CreateCategoryMutationVariables>;
 export const CreateUserDocument = gql`
     mutation CreateUser($data: UserInput!) {
   createUser(data: $data) {
@@ -316,6 +379,42 @@ export function useCreateUserMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreateUserMutationHookResult = ReturnType<typeof useCreateUserMutation>;
 export type CreateUserMutationResult = Apollo.MutationResult<CreateUserMutation>;
 export type CreateUserMutationOptions = Apollo.BaseMutationOptions<CreateUserMutation, CreateUserMutationVariables>;
+export const GetCategoriesDocument = gql`
+    query GetCategories {
+  getCategories {
+    id
+    name
+    picto
+  }
+}
+    `;
+
+/**
+ * __useGetCategoriesQuery__
+ *
+ * To run a query within a React component, call `useGetCategoriesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCategoriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCategoriesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetCategoriesQuery(baseOptions?: Apollo.QueryHookOptions<GetCategoriesQuery, GetCategoriesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCategoriesQuery, GetCategoriesQueryVariables>(GetCategoriesDocument, options);
+      }
+export function useGetCategoriesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCategoriesQuery, GetCategoriesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCategoriesQuery, GetCategoriesQueryVariables>(GetCategoriesDocument, options);
+        }
+export type GetCategoriesQueryHookResult = ReturnType<typeof useGetCategoriesQuery>;
+export type GetCategoriesLazyQueryHookResult = ReturnType<typeof useGetCategoriesLazyQuery>;
+export type GetCategoriesQueryResult = Apollo.QueryResult<GetCategoriesQuery, GetCategoriesQueryVariables>;
 export const GetCitiesDocument = gql`
     query GetCities {
   getCities {
@@ -353,6 +452,51 @@ export function useGetCitiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type GetCitiesQueryHookResult = ReturnType<typeof useGetCitiesQuery>;
 export type GetCitiesLazyQueryHookResult = ReturnType<typeof useGetCitiesLazyQuery>;
 export type GetCitiesQueryResult = Apollo.QueryResult<GetCitiesQuery, GetCitiesQueryVariables>;
+export const GetCitiesWithPlacesDocument = gql`
+    query GetCitiesWithPlaces {
+  getCities {
+    name
+    places {
+      id
+      name
+      latitude
+      longitude
+      adress
+      website
+      picture
+      description
+      categoryId
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetCitiesWithPlacesQuery__
+ *
+ * To run a query within a React component, call `useGetCitiesWithPlacesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCitiesWithPlacesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCitiesWithPlacesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetCitiesWithPlacesQuery(baseOptions?: Apollo.QueryHookOptions<GetCitiesWithPlacesQuery, GetCitiesWithPlacesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCitiesWithPlacesQuery, GetCitiesWithPlacesQueryVariables>(GetCitiesWithPlacesDocument, options);
+      }
+export function useGetCitiesWithPlacesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCitiesWithPlacesQuery, GetCitiesWithPlacesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCitiesWithPlacesQuery, GetCitiesWithPlacesQueryVariables>(GetCitiesWithPlacesDocument, options);
+        }
+export type GetCitiesWithPlacesQueryHookResult = ReturnType<typeof useGetCitiesWithPlacesQuery>;
+export type GetCitiesWithPlacesLazyQueryHookResult = ReturnType<typeof useGetCitiesWithPlacesLazyQuery>;
+export type GetCitiesWithPlacesQueryResult = Apollo.QueryResult<GetCitiesWithPlacesQuery, GetCitiesWithPlacesQueryVariables>;
 export const GetOneCitybyNameDocument = gql`
     query GetOneCitybyName($name: String!) {
   getOneCitybyName(name: $name) {
@@ -456,11 +600,59 @@ export function useGetOnePlacebyNameLazyQuery(baseOptions?: Apollo.LazyQueryHook
 export type GetOnePlacebyNameQueryHookResult = ReturnType<typeof useGetOnePlacebyNameQuery>;
 export type GetOnePlacebyNameLazyQueryHookResult = ReturnType<typeof useGetOnePlacebyNameLazyQuery>;
 export type GetOnePlacebyNameQueryResult = Apollo.QueryResult<GetOnePlacebyNameQuery, GetOnePlacebyNameQueryVariables>;
+export const GetPlacesDocument = gql`
+    query GetPlaces {
+  getPlaces {
+    id
+    name
+    latitude
+    longitude
+    adress
+    website
+    picture
+    description
+    cityId
+    categoryId
+    city {
+      id
+      name
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetPlacesQuery__
+ *
+ * To run a query within a React component, call `useGetPlacesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPlacesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPlacesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetPlacesQuery(baseOptions?: Apollo.QueryHookOptions<GetPlacesQuery, GetPlacesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetPlacesQuery, GetPlacesQueryVariables>(GetPlacesDocument, options);
+      }
+export function useGetPlacesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPlacesQuery, GetPlacesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetPlacesQuery, GetPlacesQueryVariables>(GetPlacesDocument, options);
+        }
+export type GetPlacesQueryHookResult = ReturnType<typeof useGetPlacesQuery>;
+export type GetPlacesLazyQueryHookResult = ReturnType<typeof useGetPlacesLazyQuery>;
+export type GetPlacesQueryResult = Apollo.QueryResult<GetPlacesQuery, GetPlacesQueryVariables>;
 export const GetProfileDocument = gql`
     query GetProfile {
   profile {
     id
     email
+    firstname
     role
   }
 }
@@ -542,6 +734,46 @@ export function useGetSearchResultLazyQuery(baseOptions?: Apollo.LazyQueryHookOp
 export type GetSearchResultQueryHookResult = ReturnType<typeof useGetSearchResultQuery>;
 export type GetSearchResultLazyQueryHookResult = ReturnType<typeof useGetSearchResultLazyQuery>;
 export type GetSearchResultQueryResult = Apollo.QueryResult<GetSearchResultQuery, GetSearchResultQueryVariables>;
+export const GetUsersDocument = gql`
+    query GetUsers {
+  getUsers {
+    id
+    firstname
+    lastname
+    email
+    password
+    picture
+    role
+  }
+}
+    `;
+
+/**
+ * __useGetUsersQuery__
+ *
+ * To run a query within a React component, call `useGetUsersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUsersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUsersQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetUsersQuery(baseOptions?: Apollo.QueryHookOptions<GetUsersQuery, GetUsersQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUsersQuery, GetUsersQueryVariables>(GetUsersDocument, options);
+      }
+export function useGetUsersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUsersQuery, GetUsersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUsersQuery, GetUsersQueryVariables>(GetUsersDocument, options);
+        }
+export type GetUsersQueryHookResult = ReturnType<typeof useGetUsersQuery>;
+export type GetUsersLazyQueryHookResult = ReturnType<typeof useGetUsersLazyQuery>;
+export type GetUsersQueryResult = Apollo.QueryResult<GetUsersQuery, GetUsersQueryVariables>;
 export const LoginDocument = gql`
     mutation Login($data: UserLogin!) {
   login(data: $data)

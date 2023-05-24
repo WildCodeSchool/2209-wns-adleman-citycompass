@@ -14,3 +14,14 @@ export class IsDotInString implements ValidatorConstraintInterface {
     return `${args.property} must contain a period or dot (.) character.`;
   }
 }
+
+@ValidatorConstraint({ name: "IsNotOnlySpaces", async: false })
+export class IsNotOnlySpaces implements ValidatorConstraintInterface {
+  validate(value: string): boolean | Promise<boolean> {
+    return !(value.trim() === "");
+  }
+
+  defaultMessage(args: ValidationArguments): string {
+    return `${args.property} must not contain only space characters.`;
+  }
+}

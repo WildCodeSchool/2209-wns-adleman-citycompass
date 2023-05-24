@@ -5,11 +5,13 @@ import person from "../assets/person-circle-outline.svg";
 import SearchBar from "./SearchBar";
 import Modal from "./Modal";
 import { useGetProfileQuery, useLogoutMutation } from "../gql/generated/schema";
+import { useNavigate } from "react-router-dom";
 
 function Header() {
   const [showSearch, setShowSearch] = useState(false);
   const [searchInput, setSearchInput] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
 
   const handleClick = () => {
     setShowSearch(!showSearch);
@@ -59,18 +61,31 @@ function Header() {
                 className="header__profile--search"
               />
             </button>
-            {currentUser ? (
-              <div
-                onClick={async () => {
-                  await logout();
-                  await client.resetStore();
-                }}
-              >
-                <p className="type-h4 ml-2">Me déconnecter</p>
-              </div>
-            ) : (
-              <></>
-            )}
+            <div className="cursor-pointer	">
+              {currentUser ? (
+                <div
+                  onClick={async () => {
+                    await logout();
+                    await client.resetStore();
+                  }}
+                >
+                  <p className="type-h4 ml-2">Me déconnecter</p>
+                </div>
+              ) : (
+                <></>
+              )}
+              {currentUser ? (
+                <div
+                  onClick={() =>
+                    navigate(`/dashboard/${currentUser.profile.id}`)
+                  }
+                >
+                  <p className="type-h4 ml-2">Back-office</p>
+                </div>
+              ) : (
+                <></>
+              )}
+            </div>
           </div>
         </div>
         <SearchBar
