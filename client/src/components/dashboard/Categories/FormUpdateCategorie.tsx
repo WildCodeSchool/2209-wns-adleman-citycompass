@@ -26,7 +26,6 @@ export function FormUpdateCategory({
     errorPolicy: "all",
   });
   const handleSubmit = (values: CategoryUpdate) => {
-    console.log(values);
     updateCategory({
       variables: {
         data: { name: values.name, picto: values.picto },
