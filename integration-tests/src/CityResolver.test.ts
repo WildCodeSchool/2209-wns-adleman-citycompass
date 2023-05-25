@@ -2,6 +2,8 @@ import { gql } from "@apollo/client/core";
 import City from "../../server/src/entity/City";
 import client from "./apolloClient";
 import db from "../../server/src/db";
+import User from "../../server/src/entity/User";
+import { getJWTFor } from "./utils";
 
 /**
  * Mutations for testing
@@ -86,6 +88,47 @@ describe("City resolver", () => {
       ).rejects.toThrowErrorMatchingInlineSnapshot(
         `"Access denied! You don't have permission for this action!"`
       );
+    });
+
+    it("should create a city if conncted user has superadmin role", async () => {
+      const superadmin = await db.getRepository(User).save({
+        firstname: "John",
+        lastname: "Test",
+        email: "superadmin@example.com",
+        password: "monMotsdepasse1!",
+        picture: "https://i.pravatar.cc/300",
+        role: "superadmin",
+      });
+      console.log(superadmin);
+      const token = await getJWTFor({
+        firstname: "John",
+        lastname: "Test",
+        email: "superadmin@example.com",
+        password: "monMotsdepasse1!",
+        picture: "https://i.pravatar.cc/300",
+        role: "superadmin",
+      });
+
+      const res = await client.mutate({
+        mutation: createCityMutation,
+        fetchPolicy: "no-cache",
+        variables: {
+          data: {
+            name: "Ville",
+            picture: "https://picsum.photos/",
+            description: "la description un peu longue",
+            latitude: "52.12",
+            longitude: "12.52",
+          },
+        },
+        context: {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      });
+
+      expect(res.data?.createCity).toHaveProperty("id");
     });
   });
 });
