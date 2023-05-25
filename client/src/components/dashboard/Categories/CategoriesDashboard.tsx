@@ -4,11 +4,22 @@ import add_icon from "../../../assets/add_icon.svg";
 import modify_icon from "../../../assets/modify_icon.svg";
 import { useGetCategoriesQuery } from "../../../gql/generated/schema";
 import FormAddCategory from "./FormAddCategory";
+import { FormUpdateCategory } from "./FormUpdateCategorie";
 
+export interface CategoryProps {
+  id: number;
+  name: string;
+  picto: string;
+}
 function CategoriesDashboard() {
   const [listCategories, setListCategories] = useState(true);
   const [addCategories, setAddCategories] = useState(false);
   const [modifyCategories, setModifyCategories] = useState(false);
+  const [currentCategory, setCurrentCategory] = useState<CategoryProps>({
+    name: "",
+    picto: "",
+    id: 0,
+  });
 
   const { data } = useGetCategoriesQuery();
 
@@ -42,7 +53,9 @@ function CategoriesDashboard() {
                   <p className="w-4/5">{category.name}</p>
                   <button
                     onClick={() => (
-                      setModifyCategories(true), setListCategories(false)
+                      setModifyCategories(true),
+                      setListCategories(false),
+                      setCurrentCategory(category)
                     )}
                   >
                     <img src={modify_icon} alt="" className="w-6" />
@@ -61,14 +74,11 @@ function CategoriesDashboard() {
           )}
           {modifyCategories && (
             <div>
-              <p>FORMULAIRE MODIFICATION CATEGORIE</p>
-              <button
-                onClick={() => (
-                  setModifyCategories(false), setListCategories(true)
-                )}
-              >
-                Enregistrer
-              </button>
+              <FormUpdateCategory
+                currentCategory={currentCategory}
+                setModifyCategories={setModifyCategories}
+                setListCategories={setListCategories}
+              />
             </div>
           )}
         </div>

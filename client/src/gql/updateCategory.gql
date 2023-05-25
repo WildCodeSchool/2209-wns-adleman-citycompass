@@ -1,0 +1,7 @@
+mutation UpdateCategory($data: CategoryUpdate!, $updateCategoryId: Int!) {
+  updateCategory(data: $data, id: $updateCategoryId) {
+    id
+    name
+    picto
+  }
+}
