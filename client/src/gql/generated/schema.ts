@@ -245,6 +245,13 @@ export type CreateCategoryMutationVariables = Exact<{
 
 export type CreateCategoryMutation = { __typename?: 'Mutation', createCategory: { __typename?: 'Category', id: number, name: string, picto: string } };
 
+export type CreateCityMutationVariables = Exact<{
+  data: CityInput;
+}>;
+
+
+export type CreateCityMutation = { __typename?: 'Mutation', createCity: { __typename?: 'City', id: number, name: string, picture: string, description: string, latitude: string, longitude: string } };
+
 export type CreateUserMutationVariables = Exact<{
   data: UserInput;
 }>;
@@ -359,6 +366,44 @@ export function useCreateCategoryMutation(baseOptions?: Apollo.MutationHookOptio
 export type CreateCategoryMutationHookResult = ReturnType<typeof useCreateCategoryMutation>;
 export type CreateCategoryMutationResult = Apollo.MutationResult<CreateCategoryMutation>;
 export type CreateCategoryMutationOptions = Apollo.BaseMutationOptions<CreateCategoryMutation, CreateCategoryMutationVariables>;
+export const CreateCityDocument = gql`
+    mutation CreateCity($data: CityInput!) {
+  createCity(data: $data) {
+    id
+    name
+    picture
+    description
+    latitude
+    longitude
+  }
+}
+    `;
+export type CreateCityMutationFn = Apollo.MutationFunction<CreateCityMutation, CreateCityMutationVariables>;
+
+/**
+ * __useCreateCityMutation__
+ *
+ * To run a mutation, you first call `useCreateCityMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCityMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createCityMutation, { data, loading, error }] = useCreateCityMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateCityMutation(baseOptions?: Apollo.MutationHookOptions<CreateCityMutation, CreateCityMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateCityMutation, CreateCityMutationVariables>(CreateCityDocument, options);
+      }
+export type CreateCityMutationHookResult = ReturnType<typeof useCreateCityMutation>;
+export type CreateCityMutationResult = Apollo.MutationResult<CreateCityMutation>;
+export type CreateCityMutationOptions = Apollo.BaseMutationOptions<CreateCityMutation, CreateCityMutationVariables>;
 export const CreateUserDocument = gql`
     mutation CreateUser($data: UserInput!) {
   createUser(data: $data) {

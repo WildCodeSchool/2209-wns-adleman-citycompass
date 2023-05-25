@@ -7,9 +7,10 @@ import {
   MaxLength,
   MinLength,
   Validate,
+  IsNotEmpty,
 } from "class-validator";
 import Place from "./Place";
-import { IsDotInString } from "../helpers/customValidators";
+import { IsNotOnlySpaces } from "../helpers/customValidators";
 
 @Entity()
 @ObjectType()
@@ -34,15 +35,11 @@ class City {
   @Field()
   @Column({ length: 12, type: "varchar" })
   @IsLatitude()
-  // custom Validations
-  @Validate(IsDotInString)
   latitude: string;
 
   @Field()
   @Column({ length: 13, type: "varchar" })
   @IsLongitude()
-  // custom validations
-  @Validate(IsDotInString)
   longitude: string;
 
   @Field(() => [Place])
@@ -55,6 +52,8 @@ export class CityInput {
   @Field()
   @MaxLength(50)
   @MinLength(2)
+  @IsNotEmpty({ message: "A city name cannot be empty" })
+  @Validate(IsNotOnlySpaces)
   name: string;
 
   @Field()
@@ -68,14 +67,10 @@ export class CityInput {
 
   @Field()
   @IsLatitude()
-  // custom Validation
-  @Validate(IsDotInString)
   latitude: string;
 
   @Field()
   @IsLongitude()
-  // custom validations
-  @Validate(IsDotInString)
   longitude: string;
 }
 
@@ -97,14 +92,10 @@ export class CityUpdate {
 
   @Field({ nullable: true })
   @IsLatitude()
-  // custom Validation
-  @Validate(IsDotInString)
   latitude?: string;
 
   @Field({ nullable: true })
   @IsLongitude()
-  // custom validations
-  @Validate(IsDotInString)
   longitude?: string;
 }
 export default City;
