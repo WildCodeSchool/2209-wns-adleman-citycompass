@@ -2,9 +2,23 @@ import { gql } from "@apollo/client/core";
 import City from "../../server/src/entity/City";
 import client from "./apolloClient";
 import db from "../../server/src/db";
+
 /**
  * Mutations for testing
  */
+
+const createCityMutation = gql`
+  mutation CreateCity($data: CityInput!) {
+    createCity(data: $data) {
+      id
+      name
+      picture
+      description
+      latitude
+      longitude
+    }
+  }
+`;
 
 const getCityQuery = gql`
   query GetCities {
@@ -51,6 +65,27 @@ describe("City resolver", () => {
       expect(res.data.getCities.length).toBe(2);
       expect(res.data.getCities[0]).toHaveProperty("id");
       expect(res.data.getCities[0]).toHaveProperty("name");
+    });
+  });
+  describe("create city", () => {
+    it("should return an error message when not logged in", async () => {
+      await expect(() =>
+        client.mutate({
+          mutation: createCityMutation,
+          fetchPolicy: "no-cache",
+          variables: {
+            data: {
+              name: "Jack",
+              picture: "https://picsum.photos/",
+              description: "la description un peu longue",
+              latitude: "52.12",
+              longitude: "12.52",
+            },
+          },
+        })
+      ).rejects.toThrowErrorMatchingInlineSnapshot(
+        `"Access denied! You don't have permission for this action!"`
+      );
     });
   });
 });
