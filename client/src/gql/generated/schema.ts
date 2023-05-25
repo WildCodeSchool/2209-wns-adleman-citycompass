@@ -107,7 +107,7 @@ export type MutationUpdateCategoryArgs = {
 
 export type MutationUpdateCityArgs = {
   data: CityUpdate;
-  id: Scalars["String"];
+  id: Scalars["Float"];
 };
 
 export type MutationUpdatePlaceArgs = {
@@ -316,6 +316,41 @@ export type GetCitiesWithPlacesQuery = {
   }>;
 };
 
+export type GetCitiesQuery = {
+  __typename?: "Query";
+  getCities: Array<{
+    __typename?: "City";
+    picture: string;
+    name: string;
+    id: number;
+    description: string;
+    longitude: string;
+    latitude: string;
+  }>;
+};
+
+export type GetCitiesWithPlacesQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetCitiesWithPlacesQuery = {
+  __typename?: "Query";
+  getCities: Array<{
+    __typename?: "City";
+    name: string;
+    places: Array<{
+      __typename?: "Place";
+      id: number;
+      name: string;
+      latitude: string;
+      longitude: string;
+      adress: string;
+      website?: string | null;
+      picture: string;
+      description: string;
+      categoryId: number;
+    }>;
+  }>;
+};
+
 export type GetOneCitybyNameQueryVariables = Exact<{
   name: Scalars["String"];
 }>;
@@ -458,9 +493,11 @@ export type LogoutMutationVariables = Exact<{ [key: string]: never }>;
 
 export type LogoutMutation = { __typename?: "Mutation"; logout: string };
 
-export type UpdateCategoryMutationVariables = Exact<{
-  data: CategoryUpdate;
-  updateCategoryId: Scalars["Int"];
+export type LogoutMutation = { __typename?: "Mutation"; logout: string };
+
+export type UpdateCityMutationVariables = Exact<{
+  data: CityUpdate;
+  updateCityId: Scalars["Float"];
 }>;
 
 export type UpdateCategoryMutation = {
@@ -696,6 +733,8 @@ export const GetCitiesDocument = gql`
       name
       id
       description
+      longitude
+      latitude
     }
   }
 `;
@@ -1305,7 +1344,7 @@ export type LogoutMutationOptions = Apollo.BaseMutationOptions<
   LogoutMutationVariables
 >;
 export const UpdateCityDocument = gql`
-  mutation updateCity($data: CityUpdate!, $updateCityId: String!) {
+  mutation updateCity($data: CityUpdate!, $updateCityId: Float!) {
     updateCity(data: $data, id: $updateCityId) {
       id
       name
