@@ -4,11 +4,29 @@ import add_icon from "../../../assets/add_icon.svg";
 import modify_icon from "../../../assets/modify_icon.svg";
 import { useGetCitiesQuery } from "../../../gql/generated/schema";
 import FormAddCity from "./FormAddCity";
+import FormUpdateCity from "./FormUpdateCity";
+
+export interface CityProps {
+  description: string;
+  id: number;
+  latitude: string;
+  longitude: string;
+  name: string;
+  picture: string;
+}
 
 function CitiesDashboard() {
   const [listCities, setListCities] = useState(true);
   const [addCities, setAddCities] = useState(false);
   const [modifyCities, setModifyCities] = useState(false);
+  const [currentCity, setCurrentCity] = useState<CityProps>({
+    description: "",
+    id: 0,
+    latitude: "",
+    longitude: "",
+    name: "",
+    picture: "",
+  });
 
   const { data } = useGetCitiesQuery();
 
@@ -38,9 +56,12 @@ function CitiesDashboard() {
                   key={city.id}
                 >
                   <p className="w-4/5">{city.name}</p>
+
                   <button
                     onClick={() => (
-                      setModifyCities(true), setListCities(false)
+                      setModifyCities(true),
+                      setListCities(false),
+                      setCurrentCity(city)
                     )}
                   >
                     <img src={modify_icon} alt="" className="w-6" />
@@ -59,12 +80,18 @@ function CitiesDashboard() {
           )}
           {modifyCities && (
             <div>
-              <p>FORMULAIRE MODIFICATION CITY</p>
               <button
-                onClick={() => (setModifyCities(false), setListCities(true))}
+                onClick={() => (
+                  setModifyCities(!modifyCities), setListCities(!listCities)
+                )}
               >
-                Enregistrer
+                Retour
               </button>
+              <FormUpdateCity
+                setModifyCities={setModifyCities}
+                setListCities={setListCities}
+                currentCity={currentCity}
+              />
             </div>
           )}
         </div>
