@@ -216,5 +216,48 @@ describe("City resolver", () => {
         `"Access denied! You don't have permission for this action!"`
       );
     });
+
+    it("should throw an error if user has role admin", async () => {
+      const admin = await db.getRepository(User).save({
+        firstname: "Tim",
+        lastname: "Tam",
+        email: "admin@example.com",
+        password: "monMotsdepasse1!",
+        picture: "https://i.pravatar.cc/300",
+        role: "admin",
+      });
+      console.log(admin);
+      const token = await getJWTFor({
+        firstname: "Tim",
+        lastname: "Tam",
+        email: "admin@example.com",
+        password: "monMotsdepasse1!",
+        picture: "https://i.pravatar.cc/300",
+        role: "admin",
+      });
+
+      await expect(() =>
+        client.mutate({
+          mutation: createCityMutation,
+          fetchPolicy: "no-cache",
+          variables: {
+            data: {
+              name: "La ville",
+              picture: "https://picsum.photos/",
+              description: "la description un peu longue",
+              latitude: "52.123",
+              longitude: "12.523",
+            },
+          },
+          context: {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        })
+      ).rejects.toThrowErrorMatchingInlineSnapshot(
+        `"Access denied! You don't have permission for this action!"`
+      );
+    });
   });
 });
