@@ -40,3 +40,10 @@
   border: 2px solid #000000;
   padding-left: 8px;
 }
+
+textarea.modal__input {
+  border-radius: 20px;
+  min-height: 100px;
+  border: 2px solid #000000;
+  padding-left: 8px;
+}

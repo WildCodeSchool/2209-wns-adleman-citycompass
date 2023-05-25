@@ -31,7 +31,7 @@ function validatePicture(picture: string) {
   if (!picture) {
     error = "L'image est obligatoire";
   } else if (!/^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i.test(picture)) {
-    picture = "L'image doit être une URL";
+    error = "L'image doit être une URL";
   }
   return error;
 }
@@ -50,8 +50,8 @@ function validateLatitude(latitude: string) {
   let error;
   if (!latitude) {
     error = "La latitude est obligatoire";
-  } else if (!latitude.includes(".")) {
-    error = "La latitude doit contenir un point (.)";
+  } else if (!/^-?([1-8]?[0-9](\.[0-9]+)?|90(\.0+)?)/.test(latitude)) {
+    error = "La donnée doit être une latitude";
   }
   return error;
 }
@@ -60,8 +60,10 @@ function validateLongitude(longitude: string) {
   let error;
   if (!longitude) {
     error = "La longitude est obligatoire";
-  } else if (!longitude.includes(".")) {
-    error = "La longitude doit contenir un point (.)";
+  } else if (
+    !/^-?([1]?[1-7][1-9]|[1]?[1-8][0]|[1-9]?[0-9])\.{1}\d{1,6}/.test(longitude)
+  ) {
+    error = "La donnée doit être une longitude";
   }
   return error;
 }
@@ -89,19 +91,19 @@ export default function FormAddCity({
       },
       refetchQueries: [{ query: GetCitiesDocument }],
     }).then((res) => {
-      setAddCities(false);
-      setListCities(true);
       // error handling in .then is due to Formik, errors can't be catch in .catch, because of on submit formik method
-      console.log(res);
       if (res.errors) {
         res.errors.forEach(({ message }) => {
-          console.log(message);
-          if ((message = "City already exists")) {
+          if (message === "City already exists") {
             toast.error("La ville existe déjà");
           } else {
             toast.error(message);
           }
         });
+      } else {
+        toast.success("Ville ajoutée");
+        setAddCities(false);
+        setListCities(true);
       }
     });
   };
