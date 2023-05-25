@@ -4,67 +4,21 @@ import {
   CityUpdate,
   useUpdateCityMutation,
   GetCitiesDocument,
-  useGetOneCitybyNameQuery,
 } from "../../../gql/generated/schema";
 import { toast } from "react-hot-toast";
 import { CityProps } from "./CitiesDashboard";
+import {
+  validateDescription,
+  validateLatitude,
+  validateLongitude,
+  validateName,
+  validatePicture,
+} from "../../../utils/formValidator";
 
 interface FormUpdateCityProps {
   setListCities: React.Dispatch<React.SetStateAction<boolean>>;
   setModifyCities: React.Dispatch<React.SetStateAction<boolean>>;
   currentCity: CityProps;
-}
-
-function validateName(name: string) {
-  let error;
-  if (!name) {
-    error = "Le nom est obligatoire";
-  } else if (name.length < 2) {
-    error = "Le nom doit avoir au moins 2 caractères";
-  } else if (name.trim() === "") {
-    error = "Le nom est invalide";
-  }
-  return error;
-}
-
-function validatePicture(picture: string) {
-  let error;
-  if (!picture) {
-    error = "L'image est obligatoire";
-  } else if (!/^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i.test(picture)) {
-    picture = "L'image doit être une URL";
-  }
-  return error;
-}
-
-function validateDescription(description: string) {
-  let error;
-  if (!description) {
-    error = "La description est obligatoire";
-  } else if (description.length < 10) {
-    error = "La description doit faire au moins 10 caractères";
-  }
-  return error;
-}
-
-function validateLatitude(latitude: string) {
-  let error;
-  if (!latitude) {
-    error = "La latitude est obligatoire";
-  } else if (!latitude.includes(".")) {
-    error = "La latitude doit contenir un point (.)";
-  }
-  return error;
-}
-
-function validateLongitude(longitude: string) {
-  let error;
-  if (!longitude) {
-    error = "La longitude est obligatoire";
-  } else if (!longitude.includes(".")) {
-    error = "La longitude doit contenir un point (.)";
-  }
-  return error;
 }
 
 export default function FormUpdateCity({
