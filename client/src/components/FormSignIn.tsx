@@ -87,14 +87,14 @@ function FormSignUp({ isLogin, setIsLogin }: FormSignInProps) {
                 </>
               )}
             </Field>
-            <button
-              className="modal__input--label text-xs"
+            <div
+              className="modal__input--label text-xs text-center cursor-pointer"
               onClick={(e) => {
                 setIsLogin(!isLogin);
               }}
             >
               Créer un compte
-            </button>
+            </div>
             <button type="submit" className="button--primary mt-6">
               Enregistrer
             </button>

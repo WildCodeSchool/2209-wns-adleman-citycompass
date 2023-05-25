@@ -150,14 +150,14 @@ function FormSignUp({ isLogin, setIsLogin }: FormSignUpProps) {
                 </>
               )}
             </Field>
-            <button
-              className="modal__input--label text-xs"
-              onClick={(e) => {
+            <div
+              className="modal__input--label text-xs text-center cursor-pointer"
+              onClick={() => {
                 setIsLogin(!isLogin);
               }}
             >
               Se connecter
-            </button>
+            </div>
             <button type="submit" className="button--primary mt-6">
               Enregistrer
             </button>
