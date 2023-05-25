@@ -8,7 +8,7 @@ import {
   validateFirstname,
   validateLastname,
   validatePassword,
-} from "../utils/validation";
+} from "../utils/formValidator";
 
 interface FormSignUpProps {
   isLogin: boolean;
@@ -16,7 +16,9 @@ interface FormSignUpProps {
 }
 
 function FormSignUp({ isLogin, setIsLogin }: FormSignUpProps) {
-  const [createUser] = useCreateUserMutation();
+  const [createUser] = useCreateUserMutation({
+    errorPolicy: "all",
+  });
 
   const handleSignUp = (values: UserInput) => {
     createUser({

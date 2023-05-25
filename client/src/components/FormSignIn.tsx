@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { useGetProfileQuery, useLoginMutation } from "../gql/generated/schema";
 import { UserLogin } from "../gql/generated/schema";
-import { validateEmail, validatePasswordLogin } from "../utils/validation";
+import { validateEmail, validatePasswordLogin } from "../utils/formValidator";
 
 interface FormSignInProps {
   isLogin: boolean;
