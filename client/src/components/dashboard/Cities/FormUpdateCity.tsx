@@ -30,8 +30,6 @@ export default function FormUpdateCity({
     errorPolicy: "all",
   });
 
-  console.log(currentCity);
-
   const handleSubmit = (values: CityUpdate) => {
     updateCity({
       variables: {
@@ -47,10 +45,8 @@ export default function FormUpdateCity({
       refetchQueries: [{ query: GetCitiesDocument }],
     }).then((res) => {
       // error handling in .then is due to Formik, errors can't be catch in .catch, because of on submit formik method
-      console.log(res);
       if (res.errors) {
         res.errors.forEach(({ message }) => {
-          console.log(message);
           toast.error(message);
         });
       } else {
