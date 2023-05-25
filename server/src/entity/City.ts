@@ -77,6 +77,9 @@ export class CityInput {
 @InputType()
 export class CityUpdate {
   @Field({ nullable: true })
+  id?: number;
+
+  @Field({ nullable: true })
   @MaxLength(50)
   @MinLength(2)
   name?: string;
