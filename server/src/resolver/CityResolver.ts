@@ -32,13 +32,13 @@ export class CityResolver {
   @Authorized(["superadmin"])
   @Mutation(() => City)
   async updateCity(
-    @Arg("id") id: string,
+    @Arg("id") id: number,
     @Arg("data") data: CityUpdate
   ): Promise<City> {
     const { name, description, picture, latitude, longitude } = data;
 
     const cityToUpdate = await datasource.getRepository(City).findOne({
-      where: { id: parseInt(id, 10) },
+      where: { id },
     });
 
     if (cityToUpdate === null) throw new Error("City not found");
@@ -48,7 +48,7 @@ export class CityResolver {
       await existingCity(data, id);
     }
     if (latitude !== undefined || longitude !== undefined) {
-      await existingCoordinates(data);
+      await existingCoordinates(data, id);
     }
 
     if (name !== undefined) {
