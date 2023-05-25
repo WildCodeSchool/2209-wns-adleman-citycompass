@@ -91,6 +91,8 @@ export class PlaceResolver {
     if (user !== null && user.role === "admin") {
       const cityID = placeToUpdate.city.id;
       let boolean = false;
+      if (user.managedCities === undefined)
+        throw new Error("You don't have any city assigned to your profile");
       if (user.managedCities !== undefined) {
         for (let i = 0; i < user.managedCities?.length; i++) {
           if (user.managedCities[i].id === cityID) boolean = true;
