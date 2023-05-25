@@ -40,4 +40,20 @@ export class CategoryInput {
   picto: string;
 }
 
+@InputType()
+export class CategoryUpdate {
+  @Field({ nullable: true })
+  @MinLength(2, {
+    message: "A category name must be at least 2 characters long",
+  })
+  @IsNotEmpty({ message: "A category name cannot be empty" })
+  // custom validator
+  @Validate(IsNotOnlySpaces)
+  name?: string;
+
+  @Field({ nullable: true })
+  @IsUrl({ message: "A category picto must be an url" })
+  picto?: string;
+}
+
 export default Category;

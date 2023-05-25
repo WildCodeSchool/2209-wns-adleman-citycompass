@@ -28,6 +28,11 @@ export type CategoryInput = {
   picto: Scalars['String'];
 };
 
+export type CategoryUpdate = {
+  name?: InputMaybe<Scalars['String']>;
+  picto?: InputMaybe<Scalars['String']>;
+};
+
 export type City = {
   __typename?: 'City';
   description: Scalars['String'];
@@ -96,7 +101,7 @@ export type MutationLoginArgs = {
 
 
 export type MutationUpdateCategoryArgs = {
-  data: CategoryInput;
+  data: CategoryUpdate;
   id: Scalars['Int'];
 };
 
@@ -309,6 +314,14 @@ export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
 
 export type LogoutMutation = { __typename?: 'Mutation', logout: string };
+
+export type UpdateCategoryMutationVariables = Exact<{
+  data: CategoryUpdate;
+  updateCategoryId: Scalars['Int'];
+}>;
+
+
+export type UpdateCategoryMutation = { __typename?: 'Mutation', updateCategory: { __typename?: 'Category', id: number, name: string, picto: string } };
 
 
 export const CreateCategoryDocument = gql`
@@ -835,3 +848,39 @@ export function useLogoutMutation(baseOptions?: Apollo.MutationHookOptions<Logou
 export type LogoutMutationHookResult = ReturnType<typeof useLogoutMutation>;
 export type LogoutMutationResult = Apollo.MutationResult<LogoutMutation>;
 export type LogoutMutationOptions = Apollo.BaseMutationOptions<LogoutMutation, LogoutMutationVariables>;
+export const UpdateCategoryDocument = gql`
+    mutation UpdateCategory($data: CategoryUpdate!, $updateCategoryId: Int!) {
+  updateCategory(data: $data, id: $updateCategoryId) {
+    id
+    name
+    picto
+  }
+}
+    `;
+export type UpdateCategoryMutationFn = Apollo.MutationFunction<UpdateCategoryMutation, UpdateCategoryMutationVariables>;
+
+/**
+ * __useUpdateCategoryMutation__
+ *
+ * To run a mutation, you first call `useUpdateCategoryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateCategoryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateCategoryMutation, { data, loading, error }] = useUpdateCategoryMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *      updateCategoryId: // value for 'updateCategoryId'
+ *   },
+ * });
+ */
+export function useUpdateCategoryMutation(baseOptions?: Apollo.MutationHookOptions<UpdateCategoryMutation, UpdateCategoryMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateCategoryMutation, UpdateCategoryMutationVariables>(UpdateCategoryDocument, options);
+      }
+export type UpdateCategoryMutationHookResult = ReturnType<typeof useUpdateCategoryMutation>;
+export type UpdateCategoryMutationResult = Apollo.MutationResult<UpdateCategoryMutation>;
+export type UpdateCategoryMutationOptions = Apollo.BaseMutationOptions<UpdateCategoryMutation, UpdateCategoryMutationVariables>;
