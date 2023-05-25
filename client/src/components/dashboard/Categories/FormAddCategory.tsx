@@ -35,7 +35,7 @@ export default function FormAddCategory({
       // error handling in .then is due to Formik, errors can't be catch in .catch, because of on submit formik method
       if (res.errors) {
         res.errors.forEach(({ message }) => {
-          if ((message = "Category Already exists")) {
+          if (message === "Category Already exists") {
             toast.error("La catégorie existe déjà");
           } else {
             toast.error(message);
