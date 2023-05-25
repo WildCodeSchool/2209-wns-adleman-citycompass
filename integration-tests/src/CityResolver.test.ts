@@ -130,5 +130,48 @@ describe("City resolver", () => {
 
       expect(res.data?.createCity).toHaveProperty("id");
     });
+
+    it("should throw an error if user has role contributor", async () => {
+      const contributor = await db.getRepository(User).save({
+        firstname: "Jane",
+        lastname: "Doe",
+        email: "contributor@example.com",
+        password: "monMotsdepasse1!",
+        picture: "https://i.pravatar.cc/300",
+        role: "contributor",
+      });
+      console.log(contributor);
+      const token = await getJWTFor({
+        firstname: "JoJanehn",
+        lastname: "Doe",
+        email: "contributor@example.com",
+        password: "monMotsdepasse1!",
+        picture: "https://i.pravatar.cc/300",
+        role: "contributor",
+      });
+
+      await expect(() =>
+        client.mutate({
+          mutation: createCityMutation,
+          fetchPolicy: "no-cache",
+          variables: {
+            data: {
+              name: "Jack",
+              picture: "https://picsum.photos/",
+              description: "la description un peu longue",
+              latitude: "52.12",
+              longitude: "12.52",
+            },
+          },
+          context: {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        })
+      ).rejects.toThrowErrorMatchingInlineSnapshot(
+        `"Access denied! You don't have permission for this action!"`
+      );
+    });
   });
 });
