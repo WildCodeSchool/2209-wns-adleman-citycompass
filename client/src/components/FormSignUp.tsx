@@ -31,12 +31,20 @@ function FormSignUp({ isLogin, setIsLogin }: FormSignUpProps) {
           password: values.password,
         },
       },
-    })
-      .then(() => {
+    }).then((res) => {
+      if (res.errors) {
+        res.errors.forEach(({ message }) => {
+          if (message === "User email already found in database") {
+            toast.error("L'email existe déjà");
+          } else {            
+            toast.error(message);
+          }
+        });
+      } else if (res.errors === undefined) {
         toast.success("Inscription completée");
         setIsLogin(!isLogin);
-      })
-      .catch(console.error);
+      }
+    });
   };
 
   return (

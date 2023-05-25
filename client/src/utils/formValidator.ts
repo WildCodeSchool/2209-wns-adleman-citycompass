@@ -79,6 +79,14 @@ export function validatePassword(password: string) {
     error = "Le mot de passe doit avoir au moins 8 caractères";
   } else if (password.length > 255) {
     error = "Le mot de passe doit avoir moins de 255 caractères";
+  } else if (!/^(?=.*[0-9])/i.test(password)) {
+    error = "Le mot de passe doit contenir au moins un chiffre";
+  } else if (!/^(?=.*[#?!@$%^&*-])/i.test(password)) {
+    error = "Le mot de passe doit contenir au moins un caractère spécial";
+  } else if (!/^(?=.*[A-Z])/.test(password)) {
+    error = "Le mot de passe doit contenir au moins une majuscule";
+  } else if (!/^(?=.*[a-z])/.test(password)) {
+    error = "Le mot de passe doit contenir au moins une minuscule";
   }
   return error;
 }
