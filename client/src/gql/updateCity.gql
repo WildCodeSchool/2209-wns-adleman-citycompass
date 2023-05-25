@@ -1,4 +1,4 @@
-mutation updateCity($data: CityUpdate!, $updateCityId: String!) {
+mutation updateCity($data: CityUpdate!, $updateCityId: Float!) {
   updateCity(data: $data, id: $updateCityId) {
     id
     name
