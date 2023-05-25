@@ -65,15 +65,11 @@ function CategoriesDashboard() {
           )}
           {modifyCategories && (
             <div>
-              <p>FORMULAIRE MODIFICATION CATEGORIE</p>
-              <FormUpdateCategory currentCategory={currentCategory} />
-              <button
-                onClick={() => (
-                  setModifyCategories(false), setListCategories(true)
-                )}
-              >
-                Enregistrer
-              </button>
+              <FormUpdateCategory
+                currentCategory={currentCategory}
+                setModifyCategories={setModifyCategories}
+                setListCategories={setListCategories}
+              />
             </div>
           )}
         </div>

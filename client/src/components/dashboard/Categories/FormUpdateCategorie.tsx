@@ -29,8 +29,11 @@ function validatePicto(picto: string) {
 
 // form building with Formik https://formik.org/docs/guides/validation
 
-export function FormUpdateCategory({ currentCategory }: any) {
-  console.log("L'ID", currentCategory.id);
+export function FormUpdateCategory({
+  currentCategory,
+  setModifyCategories,
+  setListCategories,
+}: any) {
   const [updateCategory] = useUpdateCategoryMutation({
     errorPolicy: "all",
   });
@@ -43,12 +46,13 @@ export function FormUpdateCategory({ currentCategory }: any) {
       },
       refetchQueries: [{ query: GetCategoriesDocument }],
     }).then((res) => {
-      console.log(res);
       if (res.errors) {
         res.errors.forEach(({ message }) => {
           toast.error(message);
         });
       }
+      setModifyCategories(false);
+      setListCategories(true);
     });
   };
 
@@ -57,8 +61,8 @@ export function FormUpdateCategory({ currentCategory }: any) {
       <h1 className="type-h2 text-center">Modifier une catégorie</h1>
       <Formik
         initialValues={{
-          name: "",
-          picto: "",
+          name: currentCategory.name,
+          picto: currentCategory.picto,
         }}
         onSubmit={(values) => handleSubmit(values)}
       >
