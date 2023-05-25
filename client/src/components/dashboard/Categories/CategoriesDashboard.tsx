@@ -6,11 +6,20 @@ import { useGetCategoriesQuery } from "../../../gql/generated/schema";
 import FormAddCategory from "./FormAddCategory";
 import { FormUpdateCategory } from "./FormUpdateCategorie";
 
+export interface CategoryProps {
+  id: number;
+  name: string;
+  picto: string;
+}
 function CategoriesDashboard() {
   const [listCategories, setListCategories] = useState(true);
   const [addCategories, setAddCategories] = useState(false);
   const [modifyCategories, setModifyCategories] = useState(false);
-  const [currentCategory, setCurrentCategory] = useState({});
+  const [currentCategory, setCurrentCategory] = useState<CategoryProps>({
+    name: "",
+    picto: "",
+    id: 0,
+  });
 
   const { data } = useGetCategoriesQuery();
 

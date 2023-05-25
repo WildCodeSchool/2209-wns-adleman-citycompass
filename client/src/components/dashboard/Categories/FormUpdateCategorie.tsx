@@ -6,6 +6,13 @@ import {
   useUpdateCategoryMutation,
 } from "../../../gql/generated/schema";
 import { toast } from "react-hot-toast";
+import { CategoryProps } from "./CategoriesDashboard";
+
+interface FormUpdateCategoryProps {
+  setListCategories: React.Dispatch<React.SetStateAction<boolean>>;
+  setModifyCategories: React.Dispatch<React.SetStateAction<boolean>>;
+  currentCategory: CategoryProps;
+}
 
 // validations
 
@@ -33,7 +40,7 @@ export function FormUpdateCategory({
   currentCategory,
   setModifyCategories,
   setListCategories,
-}: any) {
+}: FormUpdateCategoryProps) {
   const [updateCategory] = useUpdateCategoryMutation({
     errorPolicy: "all",
   });
