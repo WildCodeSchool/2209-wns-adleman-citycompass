@@ -6,11 +6,27 @@ import { useGetCitiesQuery } from "../../../gql/generated/schema";
 import FormAddCity from "./FormAddCity";
 import FormUpdateCity from "./FormUpdateCity";
 
+export interface CityProps {
+  description: string;
+  id: number;
+  latitude: string;
+  longitude: string;
+  name: string;
+  picture: string;
+}
+
 function CitiesDashboard() {
   const [listCities, setListCities] = useState(true);
   const [addCities, setAddCities] = useState(false);
   const [modifyCities, setModifyCities] = useState(false);
-  const [currentCity, setCurrentCity] = useState("");
+  const [currentCity, setCurrentCity] = useState<CityProps>({
+    description: "",
+    id: 0,
+    latitude: "",
+    longitude: "",
+    name: "",
+    picture: "",
+  });
 
   const { data } = useGetCitiesQuery();
 
@@ -45,7 +61,7 @@ function CitiesDashboard() {
                     onClick={() => (
                       setModifyCities(true),
                       setListCities(false),
-                      setCurrentCity(city.name)
+                      setCurrentCity(city)
                     )}
                   >
                     <img src={modify_icon} alt="" className="w-6" />

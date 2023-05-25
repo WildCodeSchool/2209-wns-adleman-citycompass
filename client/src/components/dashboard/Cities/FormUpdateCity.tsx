@@ -7,11 +7,12 @@ import {
   useGetOneCitybyNameQuery,
 } from "../../../gql/generated/schema";
 import { toast } from "react-hot-toast";
+import { CityProps } from "./CitiesDashboard";
 
 interface FormUpdateCityProps {
   setListCities: React.Dispatch<React.SetStateAction<boolean>>;
   setModifyCities: React.Dispatch<React.SetStateAction<boolean>>;
-  currentCity: string;
+  currentCity: CityProps;
 }
 
 function validateName(name: string) {
@@ -75,14 +76,7 @@ export default function FormUpdateCity({
     errorPolicy: "all",
   });
 
-  const { data } = useGetOneCitybyNameQuery({
-    variables: {
-      name: currentCity,
-    },
-  });
-
-  const thisCity = data?.getOneCitybyName;
-  const thisCityId = thisCity?.id as const;
+  console.log(currentCity);
 
   const handleSubmit = (values: CityUpdate) => {
     updateCity({
@@ -94,12 +88,10 @@ export default function FormUpdateCity({
           latitude: values.latitude,
           longitude: values.longitude,
         },
-        updateCityId: { thisCityIdString },
+        updateCityId: currentCity.id,
       },
       refetchQueries: [{ query: GetCitiesDocument }],
     }).then((res) => {
-      setModifyCities(false);
-      setListCities(true);
       // error handling in .then is due to Formik, errors can't be catch in .catch, because of on submit formik method
       console.log(res);
       if (res.errors) {
@@ -107,21 +99,25 @@ export default function FormUpdateCity({
           console.log(message);
           toast.error(message);
         });
+      } else {
+        toast.success("Ville mise à jour");
+        setModifyCities(false);
+        setListCities(true);
       }
     });
   };
 
   return (
     <div className="container mx-auto p-6 bg-cream flex flex-col">
-      <h1 className="type-h2 text-center">Modifier {thisCity?.name}</h1>
+      <h1 className="type-h2 text-center">Modifier {currentCity.name}</h1>
       <Formik
+        enableReinitialize={true}
         initialValues={{
-          enableReinitialize: true,
-          name: thisCity?.name,
-          picture: thisCity?.picture,
-          description: thisCity?.description,
-          latitude: thisCity?.latitude,
-          longitude: thisCity?.longitude,
+          name: currentCity.name,
+          picture: currentCity.picture,
+          description: currentCity.description,
+          latitude: currentCity.latitude,
+          longitude: currentCity.longitude,
         }}
         onSubmit={(values) => handleSubmit(values)}
       >
