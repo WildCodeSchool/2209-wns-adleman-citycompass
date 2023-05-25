@@ -4,30 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { useGetProfileQuery, useLoginMutation } from "../gql/generated/schema";
 import { UserLogin } from "../gql/generated/schema";
+import { validateEmailLogin, validatePasswordLogin } from "../utils/validation";
 
 interface FormSignInProps {
   isLogin: boolean;
   setIsLogin: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-// validations
-
-function validateEmail(email: string) {
-  let error;
-  if (!email) {
-    error = "L'email est obligatoire";
-  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
-    error = "Adresse email invalide";
-  }
-  return error;
-}
-
-function validatePassword(password: string) {
-  let error;
-  if (!password) {
-    error = "Le mot de passe est obligatoire";
-  }
-  return error;
 }
 
 function FormSignUp({ isLogin, setIsLogin }: FormSignInProps) {
@@ -71,7 +52,7 @@ function FormSignUp({ isLogin, setIsLogin }: FormSignInProps) {
             </label>
             <Field
               name="email"
-              validate={validateEmail}
+              validate={validateEmailLogin}
               placeholder="email"
               className={`modal__input shadow shadow-green mb-4 ${
                 errors.email && touched.email ? "border-red" : "border-current"
@@ -83,7 +64,7 @@ function FormSignUp({ isLogin, setIsLogin }: FormSignInProps) {
             <label className="modal__input--label" htmlFor="password">
               Password
             </label>
-            <Field name="password" validate={validatePassword}>
+            <Field name="password" validate={validatePasswordLogin}>
               {({
                 field,
                 form: { touched, errors },
