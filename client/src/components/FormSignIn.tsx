@@ -1,5 +1,5 @@
 import React from "react";
-import { Formik, Field, Form } from "formik";
+import { Formik, Field, Form, FieldAttributes } from "formik";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { useGetProfileQuery, useLoginMutation } from "../gql/generated/schema";
@@ -17,7 +17,7 @@ function validateEmail(email: string) {
   if (!email) {
     error = "L'email est obligatoire";
   } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
-    error = 'Adresse email invalide';
+    error = "Adresse email invalide";
   }
   return error;
 }
@@ -83,20 +83,29 @@ function FormSignUp({ isLogin, setIsLogin }: FormSignInProps) {
             <label className="modal__input--label" htmlFor="password">
               Password
             </label>
-            <Field
-              name="password"
-              validate={validatePassword}
-              placeholder="password"
-              className={`modal__input shadow shadow-green mb-4 ${
-                errors.password && touched.password
-                  ? "border-red"
-                  : "border-current"
-              }`}
-              label="Password"
-            />
-            {errors.password && touched.password && (
-              <div className="text-red">{errors.password}</div>
-            )}
+            <Field name="password" validate={validatePassword}>
+              {({
+                field,
+                form: { touched, errors },
+                meta,
+              }: FieldAttributes<any>) => (
+                <>
+                  <input
+                    type="password"
+                    placeholder="password"
+                    {...field}
+                    className={`modal__input shadow shadow-green mb-4 ${
+                      errors.password && touched.password
+                        ? "border-red"
+                        : "border-current"
+                    }`}
+                  />
+                  {touched && errors && (
+                    <div className="text-red">{meta.error}</div>
+                  )}
+                </>
+              )}
+            </Field>
             <button
               className="modal__input--label text-xs"
               onClick={(e) => {
