@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { useGetProfileQuery, useLoginMutation } from "../gql/generated/schema";
 import { UserLogin } from "../gql/generated/schema";
-import { validateEmailLogin, validatePasswordLogin } from "../utils/validation";
+import { validateEmail, validatePasswordLogin } from "../utils/validation";
 
 interface FormSignInProps {
   isLogin: boolean;
@@ -52,7 +52,7 @@ function FormSignUp({ isLogin, setIsLogin }: FormSignInProps) {
             </label>
             <Field
               name="email"
-              validate={validateEmailLogin}
+              validate={validateEmail}
               placeholder="email"
               className={`modal__input shadow shadow-green mb-4 ${
                 errors.email && touched.email ? "border-red" : "border-current"
@@ -81,7 +81,7 @@ function FormSignUp({ isLogin, setIsLogin }: FormSignInProps) {
                         : "border-current"
                     }`}
                   />
-                  {touched && errors && (
+                  {touched.password && errors.password && (
                     <div className="text-red">{meta.error}</div>
                   )}
                 </>

@@ -1,7 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 import { Formik, Field, Form, FieldAttributes } from "formik";
 import { UserInput, useCreateUserMutation } from "../gql/generated/schema";
 import { toast } from "react-hot-toast";
+import {
+  validateAvatar,
+  validateEmail,
+  validateFirstname,
+  validateLastname,
+  validatePassword,
+} from "../utils/validation";
 
 interface FormSignUpProps {
   isLogin: boolean;
@@ -50,7 +57,7 @@ function FormSignUp({ isLogin, setIsLogin }: FormSignUpProps) {
             </label>
             <Field
               name="lastname"
-              // validate={validateEmailLogin}
+              validate={validateLastname}
               placeholder="lastname"
               className={`modal__input shadow shadow-green mb-4 ${
                 errors.lastname && touched.lastname
@@ -66,7 +73,7 @@ function FormSignUp({ isLogin, setIsLogin }: FormSignUpProps) {
             </label>
             <Field
               name="firstname"
-              // validate={validateEmailLogin}
+              validate={validateFirstname}
               placeholder="firstname"
               className={`modal__input shadow shadow-green mb-4 ${
                 errors.firstname && touched.firstname
@@ -82,7 +89,7 @@ function FormSignUp({ isLogin, setIsLogin }: FormSignUpProps) {
             </label>
             <Field
               name="picture"
-              // validate={validateEmailLogin}
+              validate={validateAvatar}
               placeholder="picture"
               className={`modal__input shadow shadow-green mb-4 ${
                 errors.picture && touched.picture
@@ -98,7 +105,7 @@ function FormSignUp({ isLogin, setIsLogin }: FormSignUpProps) {
             </label>
             <Field
               name="email"
-              // validate={validateEmailLogin}
+              validate={validateEmail}
               placeholder="email"
               className={`modal__input shadow shadow-green mb-4 ${
                 errors.email && touched.email ? "border-red" : "border-current"
@@ -110,10 +117,7 @@ function FormSignUp({ isLogin, setIsLogin }: FormSignUpProps) {
             <label className="modal__input--label" htmlFor="password">
               Password
             </label>
-            <Field
-              name="password"
-              // validate={validatePasswordLogin}
-            >
+            <Field name="password" validate={validatePassword}>
               {({
                 field,
                 form: { touched, errors },
@@ -130,7 +134,7 @@ function FormSignUp({ isLogin, setIsLogin }: FormSignUpProps) {
                         : "border-current"
                     }`}
                   />
-                  {touched && errors && (
+                  {touched.password && errors.password && (
                     <div className="text-red">{meta.error}</div>
                   )}
                 </>
