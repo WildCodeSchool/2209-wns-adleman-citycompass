@@ -7,31 +7,12 @@ import {
 } from "../../../gql/generated/schema";
 import { toast } from "react-hot-toast";
 import { CategoryProps } from "./CategoriesDashboard";
+import { validateName, validatePicto } from "../../../utils/formValidator";
 
 interface FormUpdateCategoryProps {
   setListCategories: React.Dispatch<React.SetStateAction<boolean>>;
   setModifyCategories: React.Dispatch<React.SetStateAction<boolean>>;
   currentCategory: CategoryProps;
-}
-
-// validations
-
-function validateName(name: string) {
-  let error;
-  if (name.length < 2) {
-    error = "Le nom doit avoir au moins 2 caractères";
-  } else if (name.trim() === "") {
-    error = "Le nom est invalide";
-  }
-  return error;
-}
-
-function validatePicto(picto: string) {
-  let error;
-  if (!/^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i.test(picto)) {
-    picto = "Le pictogramme doit être une URL";
-  }
-  return error;
 }
 
 // form building with Formik https://formik.org/docs/guides/validation
@@ -85,9 +66,9 @@ export function FormUpdateCategory({
                 errors.name && touched.name ? "border-red" : "border-current"
               }`}
             ></Field>
-            {/* {errors.name && touched.name && (
+            {errors.name && touched.name && (
               <div className="text-red">{errors.name}</div>
-            )} */}
+            )}
             <label htmlFor="name" className="modal__input--label">
               Pictogramme
             </label>
@@ -99,9 +80,9 @@ export function FormUpdateCategory({
               }`}
               label="Pictogramme"
             />
-            {/* {errors.picto && touched.picto && (
+            {errors.picto && touched.picto && (
               <div className="text-red">{errors.picto}</div>
-            )} */}
+            )}
             <button type="submit" className="button--primary mt-6">
               Enregistrer
             </button>
