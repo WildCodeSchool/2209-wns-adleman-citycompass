@@ -52,8 +52,8 @@ export class PlaceResolver {
   @Authorized(["superadmin", "admin", "contributor"])
   @Mutation(() => Place)
   async updatePlace(
-    @Arg("userID") userID: string,
-    @Arg("id") id: string,
+    @Arg("userID") userID: number,
+    @Arg("id") id: number,
     @Arg("data") data: PlaceInput
   ): Promise<Place> {
     const {
@@ -69,18 +69,39 @@ export class PlaceResolver {
     } = data;
     const placeToUpdate = await datasource
       .getRepository(Place)
-      .findOne({ where: { id: parseInt(id, 10) } });
+      .findOne({ where: { id } });
 
     if (placeToUpdate === null) throw new Error("Place not found");
+
+    const user = await datasource
+      .getRepository(User)
+      .findOne({ where: { id: userID } });
+
+    if (user === null) throw new Error("User doesn't exist");
+
+    // if the user is a contributor, check if he's the author of the place
+    if (
+      user !== null &&
+      user.role === "contributor" &&
+      user.id !== placeToUpdate.author.id
+    )
+      throw new Error("This place doesn't belong to you");
+
+    // if the user is a admin, check if he's the admin of the city linked to the place
+    if (user !== null && user.role === "admin") {
+      const cityID = placeToUpdate.city.id;
+      let boolean = false;
+      if (user.managedCities !== undefined) {
+        for (let i = 0; i < user.managedCities?.length; i++) {
+          if (user.managedCities[i].id === cityID) boolean = true;
+        }
+      }
+      if (!boolean) throw new Error("You don't manage this city");
+    }
 
     // check if city name & coordinates are already in database
     await existingPlace(data, id);
     await existingPlaceCoordinates(data);
-
-    const user = await datasource
-      .getRepository(User)
-      .findOne({ where: { id: parseInt(userID, 10) } });
-    console.log(user);
 
     placeToUpdate.adress = adress;
     placeToUpdate.categoryId = categoryId;
@@ -97,3 +118,12 @@ export class PlaceResolver {
     return placeToUpdate;
   }
 }
+// const city = await datasource
+//   .getRepository(City)
+//   .findOne({ where: { id: cityID } });
+// if (city !== null) {
+//   const managers = city.managers;
+//   for (let i = 0; i < managers.length; i++) {
+//     if (managers[i].id === userID) return managers[i];
+//   }
+// }

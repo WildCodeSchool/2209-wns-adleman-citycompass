@@ -58,7 +58,7 @@ export const existingCoordinates = async (
 
 export const existingPlace = async (
   data: PlaceInput,
-  id?: string | undefined
+  id?: number | undefined
 ): Promise<void> => {
   const nameExists = await datasource
     .getRepository(Place)
@@ -82,7 +82,7 @@ export const existingCategory = async (
   const nameExists = await datasource
     .getRepository(Category)
     .findOne({ where: { name: data.name } });
-   
+
   if (id !== undefined) {
     // test for modification
     if (nameExists !== null && nameExists.id !== id)
