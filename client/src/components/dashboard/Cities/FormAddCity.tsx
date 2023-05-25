@@ -50,7 +50,7 @@ function validateLatitude(latitude: string) {
   let error;
   if (!latitude) {
     error = "La latitude est obligatoire";
-  } else if (!/^-?([1-8]?[0-9](\.[0-9]+)?|90(\.0+)?)/.test(latitude)) {
+  } else if (!/^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?)$/.test(latitude)) {
     error = "La donnée doit être une latitude";
   }
   return error;
@@ -61,7 +61,7 @@ function validateLongitude(longitude: string) {
   if (!longitude) {
     error = "La longitude est obligatoire";
   } else if (
-    !/^-?([1]?[1-7][1-9]|[1]?[1-8][0]|[1-9]?[0-9])\.{1}\d{1,6}/.test(longitude)
+    !/^[-+]?([1-9]?\d(\.\d+)?|1[0-7]\d(\.\d+)?|180(\.0+)?)$/.test(longitude)
   ) {
     error = "La donnée doit être une longitude";
   }
@@ -79,6 +79,7 @@ export default function FormAddCity({
   });
 
   const handleSubmit = (values: CityInput) => {
+    console.log(/^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?)$/.test(values.latitude));
     createCity({
       variables: {
         data: {
@@ -186,6 +187,7 @@ export default function FormAddCity({
             <label htmlFor="name" className="modal__input--label">
               Longitude
             </label>
+
             <Field
               name="longitude"
               validate={validateLongitude}
