@@ -30,7 +30,6 @@ export default function FormAddCity({
   });
 
   const handleSubmit = (values: CityInput) => {
-    console.log(/^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?)$/.test(values.latitude));
     createCity({
       variables: {
         data: {
