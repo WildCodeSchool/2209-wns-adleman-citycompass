@@ -17,7 +17,7 @@ export function validatePicto(picto: string) {
   if (!picto) {
     error = "Le pictogramme est obligatoire";
   } else if (!/^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i.test(picto)) {
-    picto = "Le pictogramme doit être une URL";
+    error = "Le pictogramme doit être une URL";
   }
   return error;
 }
