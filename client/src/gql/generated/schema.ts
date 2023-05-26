@@ -73,6 +73,7 @@ export type Mutation = {
   updateCity: City;
   updatePlace: Place;
   updateUser: User;
+  updateUserRole: User;
 };
 
 
@@ -122,6 +123,12 @@ export type MutationUpdatePlaceArgs = {
 
 export type MutationUpdateUserArgs = {
   data: UserUpdate;
+  id: Scalars['Int'];
+};
+
+
+export type MutationUpdateUserRoleArgs = {
+  data: UserRoleUpdate;
   id: Scalars['Int'];
 };
 
@@ -241,6 +248,10 @@ export type UserInput = {
 export type UserLogin = {
   email: Scalars['String'];
   password: Scalars['String'];
+};
+
+export type UserRoleUpdate = {
+  role: Scalars['String'];
 };
 
 export type UserUpdate = {
@@ -366,6 +377,14 @@ export type UpdateUserMutationVariables = Exact<{
 
 
 export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: number, firstname: string, lastname: string, email: string, password: string, picture: string } };
+
+export type UpdateUserRoleMutationVariables = Exact<{
+  updateUserRoleId: Scalars['Int'];
+  data: UserRoleUpdate;
+}>;
+
+
+export type UpdateUserRoleMutation = { __typename?: 'Mutation', updateUserRole: { __typename?: 'User', id: number, role: string } };
 
 
 export const CreateCategoryDocument = gql`
@@ -1095,3 +1114,38 @@ export function useUpdateUserMutation(baseOptions?: Apollo.MutationHookOptions<U
 export type UpdateUserMutationHookResult = ReturnType<typeof useUpdateUserMutation>;
 export type UpdateUserMutationResult = Apollo.MutationResult<UpdateUserMutation>;
 export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<UpdateUserMutation, UpdateUserMutationVariables>;
+export const UpdateUserRoleDocument = gql`
+    mutation updateUserRole($updateUserRoleId: Int!, $data: UserRoleUpdate!) {
+  updateUserRole(id: $updateUserRoleId, data: $data) {
+    id
+    role
+  }
+}
+    `;
+export type UpdateUserRoleMutationFn = Apollo.MutationFunction<UpdateUserRoleMutation, UpdateUserRoleMutationVariables>;
+
+/**
+ * __useUpdateUserRoleMutation__
+ *
+ * To run a mutation, you first call `useUpdateUserRoleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateUserRoleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateUserRoleMutation, { data, loading, error }] = useUpdateUserRoleMutation({
+ *   variables: {
+ *      updateUserRoleId: // value for 'updateUserRoleId'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useUpdateUserRoleMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUserRoleMutation, UpdateUserRoleMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateUserRoleMutation, UpdateUserRoleMutationVariables>(UpdateUserRoleDocument, options);
+      }
+export type UpdateUserRoleMutationHookResult = ReturnType<typeof useUpdateUserRoleMutation>;
+export type UpdateUserRoleMutationResult = Apollo.MutationResult<UpdateUserRoleMutation>;
+export type UpdateUserRoleMutationOptions = Apollo.BaseMutationOptions<UpdateUserRoleMutation, UpdateUserRoleMutationVariables>;
