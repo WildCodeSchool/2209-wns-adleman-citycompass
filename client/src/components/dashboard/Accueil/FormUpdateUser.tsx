@@ -37,6 +37,7 @@ export function FormUpdateUser({ user, setModifyUser }: FormUpdateUserProps) {
         toast.error(message);
         });
       }
+      toast.success("Données enregistrée");
       setModifyUser(false)
     });
   };
