@@ -174,4 +174,11 @@ export class UserLogin {
   password: string;
 }
 
+@InputType()
+export class UserRoleUpdate {
+  @Field()
+  @MaxLength(20)
+  role?: string;
+}
+
 export default User;
