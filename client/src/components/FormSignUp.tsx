@@ -1,5 +1,14 @@
-import React, { useState } from "react";
-import { useCreateUserMutation } from "../gql/generated/schema";
+import React from "react";
+import { Formik, Field, Form, FieldAttributes } from "formik";
+import { UserInput, useCreateUserMutation } from "../gql/generated/schema";
+import { toast } from "react-hot-toast";
+import {
+  validateAvatar,
+  validateEmail,
+  validateFirstname,
+  validateLastname,
+  validatePassword,
+} from "../utils/formValidator";
 
 interface FormSignUpProps {
   isLogin: boolean;
@@ -7,111 +16,154 @@ interface FormSignUpProps {
 }
 
 function FormSignUp({ isLogin, setIsLogin }: FormSignUpProps) {
-  const [userInfos, setUserInfos] = useState({
-    email: "",
-    password: "",
-    firstname: "",
-    lastname: "",
-    picture: "",
+  const [createUser] = useCreateUserMutation({
+    errorPolicy: "all",
   });
 
-  const [createUser] = useCreateUserMutation();
+  const handleSignUp = (values: UserInput) => {
+    createUser({
+      variables: {
+        data: {
+          lastname: values.lastname,
+          firstname: values.firstname,
+          picture: values.picture,
+          email: values.email,
+          password: values.password,
+        },
+      },
+    }).then((res) => {
+      if (res.errors) {
+        res.errors.forEach(({ message }) => {
+          if (message === "User email already found in database") {
+            toast.error("L'email existe déjà");
+          } else {            
+            toast.error(message);
+          }
+        });
+      } else if (res.errors === undefined) {
+        toast.success("Inscription completée");
+        setIsLogin(!isLogin);
+      }
+    });
+  };
 
   return (
     <div>
       <h4 className="text-center">Créer un compte</h4>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          createUser({ variables: { data: userInfos } })
-            .then(() => {
-              console.log("ok");
-            })
-            .catch(console.error);
+      <Formik
+        initialValues={{
+          lastname: "",
+          firstname: "",
+          picture: "",
+          email: "",
+          password: "",
         }}
+        onSubmit={(values) => handleSignUp(values)}
       >
-        <div className="flex flex-col">
-          <label className="modal__input--label" htmlFor="email">
-            Email
-          </label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={userInfos.email}
-            onChange={(e) => {
-              setUserInfos({ ...userInfos, email: e.target.value });
-            }}
-            className="modal__input shadow shadow-green mb-4"
-            placeholder="email"
-          />
-          <label className="modal__input--label" htmlFor="nom">
-            Nom
-          </label>
-          <input
-            type="lastname"
-            id="lastname"
-            name="lastname"
-            value={userInfos.lastname}
-            onChange={(e) => {
-              setUserInfos({ ...userInfos, lastname: e.target.value });
-            }}
-            className="modal__input shadow shadow-green mb-4"
-            placeholder="lastname"
-          />
-          <label className="modal__input--label" htmlFor="prénom">
-            Prénom
-          </label>
-          <input
-            type="firstname"
-            id="firstname"
-            name="firstname"
-            value={userInfos.firstname}
-            onChange={(e) => {
-              setUserInfos({ ...userInfos, firstname: e.target.value });
-            }}
-            className="modal__input shadow shadow-green mb-4"
-            placeholder="firstname"
-          />
-          <label className="modal__input--label" htmlFor="Image url">
-            Image url
-          </label>
-          <input
-            type="picture"
-            id="picture"
-            name="picture"
-            value={userInfos.picture}
-            onChange={(e) => {
-              setUserInfos({ ...userInfos, picture: e.target.value });
-            }}
-            className="modal__input shadow shadow-green mb-4"
-            placeholder="picture"
-          />
-          <label className="modal__input--label" htmlFor="password">
-            Password
-          </label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={userInfos.password}
-            onChange={(e) => {
-              setUserInfos({ ...userInfos, password: e.target.value });
-            }}
-            className="modal__input shadow shadow-green mb-4"
-            placeholder="password"
-          />
-          <button
-            className="modal__input--label text-xs"
-            onClick={(e) => {
-              setIsLogin(!isLogin);
-            }}
-          >
-            Se connecter
-          </button>
-          <input type="submit" className="button--primary mt-6" />
-        </div>
-      </form>
+        {({ errors, touched }) => (
+          <Form className="flex flex-col">
+            <label className="modal__input--label" htmlFor="nom">
+              Nom
+            </label>
+            <Field
+              name="lastname"
+              validate={validateLastname}
+              placeholder="Nom"
+              className={`modal__input shadow shadow-green mb-4 ${
+                errors.lastname && touched.lastname
+                  ? "border-red"
+                  : "border-current"
+              }`}
+            ></Field>
+            {errors.lastname && touched.lastname && (
+              <div className="text-red">{errors.lastname}</div>
+            )}
+            <label className="modal__input--label" htmlFor="prenom">
+              Prénom
+            </label>
+            <Field
+              name="firstname"
+              validate={validateFirstname}
+              placeholder="Prénom"
+              className={`modal__input shadow shadow-green mb-4 ${
+                errors.firstname && touched.firstname
+                  ? "border-red"
+                  : "border-current"
+              }`}
+            ></Field>
+            {errors.firstname && touched.firstname && (
+              <div className="text-red">{errors.firstname}</div>
+            )}
+            <label className="modal__input--label" htmlFor="picture">
+              Avatar
+            </label>
+            <Field
+              name="picture"
+              validate={validateAvatar}
+              placeholder="https://mon-avatar.net"
+              className={`modal__input shadow shadow-green mb-4 ${
+                errors.picture && touched.picture
+                  ? "border-red"
+                  : "border-current"
+              }`}
+            ></Field>
+            {errors.picture && touched.picture && (
+              <div className="text-red">{errors.picture}</div>
+            )}
+            <label className="modal__input--label" htmlFor="email">
+              Email
+            </label>
+            <Field
+              name="email"
+              validate={validateEmail}
+              placeholder="monmail@email.fr"
+              className={`modal__input shadow shadow-green mb-4 ${
+                errors.email && touched.email ? "border-red" : "border-current"
+              }`}
+            ></Field>
+            {errors.email && touched.email && (
+              <div className="text-red">{errors.email}</div>
+            )}
+            <label className="modal__input--label" htmlFor="password">
+              Password
+            </label>
+            <Field name="password" validate={validatePassword}>
+              {({
+                field,
+                form: { touched, errors },
+                meta,
+              }: FieldAttributes<any>) => (
+                <>
+                  <input
+                    type="password"
+                    placeholder="Mot de passe"
+                    {...field}
+                    className={`modal__input shadow shadow-green mb-4 ${
+                      errors.password && touched.password
+                        ? "border-red"
+                        : "border-current"
+                    }`}
+                  />
+                  {touched.password && errors.password && (
+                    <div className="text-red">{meta.error}</div>
+                  )}
+                </>
+              )}
+            </Field>
+            <div
+              className="modal__input--label text-xs text-center cursor-pointer"
+              onClick={() => {
+                setIsLogin(!isLogin);
+              }}
+            >
+              Se connecter
+            </div>
+            <button type="submit" className="button--primary mt-6">
+              Enregistrer
+            </button>
+          </Form>
+        )}
+      </Formik>
     </div>
   );
 }
