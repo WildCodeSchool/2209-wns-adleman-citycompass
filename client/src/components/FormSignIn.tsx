@@ -53,7 +53,7 @@ function FormSignUp({ isLogin, setIsLogin }: FormSignInProps) {
             <Field
               name="email"
               validate={validateEmail}
-              placeholder="email"
+              placeholder="monmail@email.fr"
               className={`modal__input shadow shadow-green mb-4 ${
                 errors.email && touched.email ? "border-red" : "border-current"
               }`}
@@ -73,7 +73,7 @@ function FormSignUp({ isLogin, setIsLogin }: FormSignInProps) {
                 <>
                   <input
                     type="password"
-                    placeholder="password"
+                    placeholder="Mot de passe"
                     {...field}
                     className={`modal__input shadow shadow-green mb-4 ${
                       errors.password && touched.password

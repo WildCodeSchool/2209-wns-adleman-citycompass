@@ -68,7 +68,7 @@ function FormSignUp({ isLogin, setIsLogin }: FormSignUpProps) {
             <Field
               name="lastname"
               validate={validateLastname}
-              placeholder="lastname"
+              placeholder="Nom"
               className={`modal__input shadow shadow-green mb-4 ${
                 errors.lastname && touched.lastname
                   ? "border-red"
@@ -84,7 +84,7 @@ function FormSignUp({ isLogin, setIsLogin }: FormSignUpProps) {
             <Field
               name="firstname"
               validate={validateFirstname}
-              placeholder="firstname"
+              placeholder="Prénom"
               className={`modal__input shadow shadow-green mb-4 ${
                 errors.firstname && touched.firstname
                   ? "border-red"
@@ -100,7 +100,7 @@ function FormSignUp({ isLogin, setIsLogin }: FormSignUpProps) {
             <Field
               name="picture"
               validate={validateAvatar}
-              placeholder="picture"
+              placeholder="https://mon-avatar.net"
               className={`modal__input shadow shadow-green mb-4 ${
                 errors.picture && touched.picture
                   ? "border-red"
@@ -116,7 +116,7 @@ function FormSignUp({ isLogin, setIsLogin }: FormSignUpProps) {
             <Field
               name="email"
               validate={validateEmail}
-              placeholder="email"
+              placeholder="monmail@email.fr"
               className={`modal__input shadow shadow-green mb-4 ${
                 errors.email && touched.email ? "border-red" : "border-current"
               }`}
@@ -136,7 +136,7 @@ function FormSignUp({ isLogin, setIsLogin }: FormSignUpProps) {
                 <>
                   <input
                     type="password"
-                    placeholder="password"
+                    placeholder="Mot de passe"
                     {...field}
                     className={`modal__input shadow shadow-green mb-4 ${
                       errors.password && touched.password

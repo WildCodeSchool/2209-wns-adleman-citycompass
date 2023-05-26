@@ -32,9 +32,9 @@ function Modal({ showModal, setShowModal }: modalProps) {
           />
           <div className="flex flex-col w-full p-8">
             {isLogin ? (
-              <FormSignUp isLogin={isLogin} setIsLogin={setIsLogin} />
-            ) : (
               <FormSignIn isLogin={isLogin} setIsLogin={setIsLogin} />
+              ) : (
+              <FormSignUp isLogin={isLogin} setIsLogin={setIsLogin} />
             )}
           </div>
         </div>
