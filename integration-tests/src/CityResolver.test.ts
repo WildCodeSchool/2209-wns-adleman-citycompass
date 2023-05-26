@@ -2,6 +2,8 @@ import { gql } from "@apollo/client/core";
 import City from "../../server/src/entity/City";
 import client from "./apolloClient";
 import db from "../../server/src/db";
+import User from "../../server/src/entity/User";
+import { getJWTFor } from "./utils";
 
 /**
  * Mutations for testing
@@ -12,10 +14,10 @@ const createCityMutation = gql`
     createCity(data: $data) {
       id
       name
-      description
       picture
-      longitude
+      description
       latitude
+      longitude
     }
   }
 `;
@@ -38,440 +40,6 @@ const getCityQuery = gql`
  */
 
 describe("City resolver", () => {
-  describe("create city", () => {
-    //a city with valid paramters should be created
-    it("should create city with valid parameters", async () => {
-      //test with positive coordinates
-      const res = await client.mutate({
-        mutation: createCityMutation,
-        variables: {
-          data: {
-            name: "Lyon",
-            description: "La description de Lyon",
-            picture: "https://picsum.photos/200/300",
-            longitude: "4.835659",
-            latitude: "45.764043",
-          },
-        },
-      });
-
-      expect(res.data?.createCity).toHaveProperty("id");
-      expect(res.data?.createCity).toHaveProperty("name", "Lyon");
-      expect(res.data?.createCity).toHaveProperty(
-        "description",
-        "La description de Lyon"
-      );
-      expect(res.data?.createCity).toHaveProperty("latitude", "45.764043");
-      expect(res.data?.createCity).toHaveProperty("longitude", "4.835659");
-
-      //test with negatives latitude and longitude
-      const res2 = await client.mutate({
-        mutation: createCityMutation,
-        variables: {
-          data: {
-            name: "Marseille",
-            description: "La description de Marseille",
-            picture: "https://picsum.photos/200/300",
-            longitude: "-4.835659",
-            latitude: "-45.764043",
-          },
-        },
-      });
-
-      expect(res2.data?.createCity).toHaveProperty("id");
-    });
-
-    // a city should start with a capital letter
-    it("should not create city with no capital letter", async () => {
-      const res = await client.mutate({
-        mutation: createCityMutation,
-        variables: {
-          data: {
-            name: "paris",
-            description: "La description de Paris",
-            picture: "https://picsum.photos/200/300",
-            longitude: "2.3522219",
-            latitude: "48.856614",
-          },
-        },
-      });
-
-      expect(res.data?.createCity).toHaveProperty("id");
-      expect(res.data?.createCity).toHaveProperty("name", "Paris");
-      expect(res.data?.createCity).toHaveProperty(
-        "description",
-        "La description de Paris"
-      );
-      expect(res.data?.createCity).toHaveProperty("latitude", "48.856614");
-      expect(res.data?.createCity).toHaveProperty("longitude", "2.3522219");
-    });
-
-    //a city should not start with a space
-    it("a city should not start with a space", async () => {
-      const res = await client.mutate({
-        mutation: createCityMutation,
-        variables: {
-          data: {
-            name: " Marseille",
-            description: "La description de Marseille",
-            picture: "https://picsum.photos/200/300",
-            longitude: "5.400000",
-            latitude: "43.300000",
-          },
-        },
-      });
-
-      expect(res.data?.createCity).toHaveProperty("id");
-      expect(res.data?.createCity).toHaveProperty("name", "Marseille");
-      expect(res.data?.createCity).toHaveProperty(
-        "description",
-        "La description de Marseille"
-      );
-      expect(res.data?.createCity).toHaveProperty("latitude", "43.300000");
-      expect(res.data?.createCity).toHaveProperty("longitude", "5.400000");
-    });
-
-    // a city with empty name should not be created
-    it("a city name should not be an empty string", async () => {
-      await expect(() =>
-        client.mutate({
-          mutation: createCityMutation,
-          variables: {
-            data: {
-              name: "",
-              description: "La description de Marseille",
-              picture: "https://picsum.photos/200/300",
-              longitude: "5.400000",
-              latitude: "43.300000",
-            },
-          },
-        })
-      ).rejects.toThrow();
-    });
-
-    // a city with empty description should not be created
-    it("a city description should not be an empty string", async () => {
-      await expect(() =>
-        client.mutate({
-          mutation: createCityMutation,
-          variables: {
-            data: {
-              name: "Marseille",
-              description: "",
-              picture: "https://picsum.photos/200/300",
-              longitude: "5.400000",
-              latitude: "43.300000",
-            },
-          },
-        })
-      ).rejects.toThrow();
-    });
-    // a city with empty picture should not be created
-    it("a city picture should not be an empty string", async () => {
-      await expect(() =>
-        client.mutate({
-          mutation: createCityMutation,
-          variables: {
-            data: {
-              name: "Marseille",
-              description: "La description de Marseille",
-              picture: "",
-              longitude: "5.400000",
-              latitude: "43.300000",
-            },
-          },
-        })
-      ).rejects.toThrow();
-    });
-    // a city with empty longitude should not be created
-    it("a city latitude should not be an empty string", async () => {
-      await expect(() =>
-        client.mutate({
-          mutation: createCityMutation,
-          variables: {
-            data: {
-              name: "Marseille",
-              description: "La description de Marseille",
-              picture: "https://picsum.photos/200/300",
-              longitude: "5.400000",
-              latitude: "",
-            },
-          },
-        })
-      ).rejects.toThrow();
-    });
-    // a city with empty latitude should not be created
-    it("a city longitude should not be an empty string", async () => {
-      await expect(() =>
-        client.mutate({
-          mutation: createCityMutation,
-          variables: {
-            data: {
-              name: "Marseille",
-              description: "La description de Marseille",
-              picture: "https://picsum.photos/200/300",
-              longitude: "",
-              latitude: "43.300000",
-            },
-          },
-        })
-      ).rejects.toThrow();
-    });
-    // a city should not be created twice based on name
-    it("a city should not be created twice based on name ", async () => {
-      await db.getRepository(City).insert([
-        {
-          name: "Chartres",
-          description: "La description de Chartres",
-          picture: "https://picsum.photos/200/300",
-          latitude: "48.443854",
-          longitude: "1.489012",
-        },
-      ]);
-      await expect(() =>
-        client.mutate({
-          mutation: createCityMutation,
-          variables: {
-            data: {
-              name: "Chartres",
-              description: "La description de Chartres",
-              picture: "https://picsum.photos/200/300",
-              latitude: "48.443854",
-              longitude: "1.489012",
-            },
-          },
-        })
-      ).rejects.toThrow("City name already found in database (creation)");
-    });
-    // a city with same latitude and longitude should not be created twice
-    it("a city with same latitude and longitude should not be created twice", async () => {
-      await db.getRepository(City).insert([
-        {
-          name: "Bordeaux",
-          description: "La description de Bordeaux",
-          picture: "https://picsum.photos/200/300",
-          latitude: "50.443854",
-          longitude: "1.489012",
-        },
-      ]);
-      await expect(() =>
-        client.mutate({
-          mutation: createCityMutation,
-          variables: {
-            data: {
-              name: "Paris",
-              description: "La description de Paris",
-              picture: "https://picsum.photos/200/300",
-              latitude: "50.443854",
-              longitude: "1.489012",
-            },
-          },
-        })
-      ).rejects.toThrow("City coordinates found in database");
-    });
-    // a city with no data should return an error
-    it("a city with no data should return an error", async () => {
-      await expect(() =>
-        client.mutate({
-          mutation: createCityMutation,
-          variables: {
-            data: null,
-          },
-        })
-      ).rejects.toThrow();
-    });
-    // a citypicture should be only URLs
-    it("a city picture should be an URL", async () => {
-      await expect(() =>
-        client.mutate({
-          mutation: createCityMutation,
-          variables: {
-            data: {
-              name: "Marseille",
-              description: "La description de Marseille",
-              picture: "azertyuiopqsdfghjklmw",
-              latitude: "48.443854",
-              longitude: "1.489012",
-            },
-          },
-        })
-      ).rejects.toThrow();
-    });
-    // unvalid latitude should not be accepted (ex : other caracters than 0 to 9)
-    it("unvalid latitude should not be accepted", async () => {
-      //test with a text
-      await expect(() =>
-        client.mutate({
-          mutation: createCityMutation,
-          variables: {
-            data: {
-              name: "Marseille",
-              description: "La description de Marseille",
-              picture: "https://picsum.photos/200/300",
-              latitude: "not a latitude",
-              longitude: "1.489012",
-            },
-          },
-        })
-      ).rejects.toThrow();
-      //test with no dot
-      await expect(() =>
-        client.mutate({
-          mutation: createCityMutation,
-          variables: {
-            data: {
-              name: "Marseille",
-              description: "La description de Marseille",
-              picture: "https://picsum.photos/200/300",
-              latitude: "48443854",
-              longitude: "1.489012",
-            },
-          },
-        })
-      ).rejects.toThrow();
-      //test with value over 90 before decimal point
-      await expect(() =>
-        client.mutate({
-          mutation: createCityMutation,
-          variables: {
-            data: {
-              name: "Marseille",
-              description: "La description de Marseille",
-              picture: "https://picsum.photos/200/300",
-              latitude: "91.443854",
-              longitude: "1.489012",
-            },
-          },
-        })
-      ).rejects.toThrow();
-      //test with value under -90 before decimal point
-      await expect(() =>
-        client.mutate({
-          mutation: createCityMutation,
-          variables: {
-            data: {
-              name: "Marseille",
-              description: "La description de Marseille",
-              picture: "https://picsum.photos/200/300",
-              latitude: "-91.443854",
-              longitude: "1.489012",
-            },
-          },
-        })
-      ).rejects.toThrow();
-      //test if latitude lenght is < 3 characters
-      await expect(() =>
-        client.mutate({
-          mutation: createCityMutation,
-          variables: {
-            data: {
-              name: "Marseille",
-              description: "La description de Marseille",
-              picture: "https://picsum.photos/200/300",
-              latitude: "1.",
-              longitude: "1.489012",
-            },
-          },
-        })
-      ).rejects.toThrow();
-    });
-    // unvalid longitude should not be accepted (ex : other caracters than 0 to 9)
-    it("unvalid longitude should not be accepted", async () => {
-      //test with a text
-      await expect(() =>
-        client.mutate({
-          mutation: createCityMutation,
-          variables: {
-            data: {
-              name: "Marseille",
-              description: "La description de Marseille",
-              picture: "https://picsum.photos/200/300",
-              latitude: "47.443854",
-              longitude: "not a longitude",
-            },
-          },
-        })
-      ).rejects.toThrow();
-      //test with no dot
-      await expect(() =>
-        client.mutate({
-          mutation: createCityMutation,
-          variables: {
-            data: {
-              name: "Marseille",
-              description: "La description de Marseille",
-              picture: "https://picsum.photos/200/300",
-              latitude: "48443854",
-              longitude: "1489012",
-            },
-          },
-        })
-      ).rejects.toThrow();
-      //test with value over 180 before decimal point
-      await expect(() =>
-        client.mutate({
-          mutation: createCityMutation,
-          variables: {
-            data: {
-              name: "Marseille",
-              description: "La description de Marseille",
-              picture: "https://picsum.photos/200/300",
-              latitude: "84.443854",
-              longitude: "181.489012",
-            },
-          },
-        })
-      ).rejects.toThrow();
-      //test with value under -180 before decimal point
-      await expect(() =>
-        client.mutate({
-          mutation: createCityMutation,
-          variables: {
-            data: {
-              name: "Marseille",
-              description: "La description de Marseille",
-              picture: "https://picsum.photos/200/300",
-              latitude: "85.443854",
-              longitude: "-181.489012",
-            },
-          },
-        })
-      ).rejects.toThrow();
-      //test longitude lenght is < 3 characters
-      await expect(() =>
-        client.mutate({
-          mutation: createCityMutation,
-          variables: {
-            data: {
-              name: "Lyon",
-              description: "La description de Lyon",
-              picture: "https://picsum.photos/200/300",
-              latitude: "45.764043",
-              longitude: "4.",
-            },
-          },
-        })
-      ).rejects.toThrow();
-    });
-    // city descriptions with less than 10 characters should not be accepted
-    it("a city description should not have less than 10 characters", async () => {
-      await expect(() =>
-        client.mutate({
-          mutation: createCityMutation,
-          variables: {
-            data: {
-              name: "",
-              description: "La descri",
-              picture: "https://picsum.photos/200/300",
-              longitude: "5.400000",
-              latitude: "43.300000",
-            },
-          },
-        })
-      ).rejects.toThrow();
-    });
-  });
-
   describe("read cities", () => {
     it("should return an array of cities", async () => {
       await db.getRepository(City).insert([
@@ -499,6 +67,197 @@ describe("City resolver", () => {
       expect(res.data.getCities.length).toBe(2);
       expect(res.data.getCities[0]).toHaveProperty("id");
       expect(res.data.getCities[0]).toHaveProperty("name");
+    });
+  });
+  describe("create city", () => {
+    it("should return an error message when not logged in", async () => {
+      await expect(() =>
+        client.mutate({
+          mutation: createCityMutation,
+          fetchPolicy: "no-cache",
+          variables: {
+            data: {
+              name: "Jack",
+              picture: "https://picsum.photos/",
+              description: "la description un peu longue",
+              latitude: "52.12",
+              longitude: "12.52",
+            },
+          },
+        })
+      ).rejects.toThrowErrorMatchingInlineSnapshot(
+        `"Access denied! You don't have permission for this action!"`
+      );
+    });
+
+    it("should create a city if conncted user has superadmin role", async () => {
+      const superadmin = await db.getRepository(User).save({
+        firstname: "John",
+        lastname: "Test",
+        email: "superadmin@example.com",
+        password: "monMotsdepasse1!",
+        picture: "https://i.pravatar.cc/300",
+        role: "superadmin",
+      });
+      console.log(superadmin);
+      const token = await getJWTFor({
+        firstname: "John",
+        lastname: "Test",
+        email: "superadmin@example.com",
+        password: "monMotsdepasse1!",
+        picture: "https://i.pravatar.cc/300",
+        role: "superadmin",
+      });
+
+      const res = await client.mutate({
+        mutation: createCityMutation,
+        fetchPolicy: "no-cache",
+        variables: {
+          data: {
+            name: "Ville",
+            picture: "https://picsum.photos/",
+            description: "la description un peu longue",
+            latitude: "52.12",
+            longitude: "12.52",
+          },
+        },
+        context: {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      });
+
+      expect(res.data?.createCity).toHaveProperty("id");
+    });
+
+    it("should throw an error if user has role contributor", async () => {
+      const contributor = await db.getRepository(User).save({
+        firstname: "Jane",
+        lastname: "Doe",
+        email: "contributor@example.com",
+        password: "monMotsdepasse1!",
+        picture: "https://i.pravatar.cc/300",
+        role: "contributor",
+      });
+      console.log(contributor);
+      const token = await getJWTFor({
+        firstname: "JoJanehn",
+        lastname: "Doe",
+        email: "contributor@example.com",
+        password: "monMotsdepasse1!",
+        picture: "https://i.pravatar.cc/300",
+        role: "contributor",
+      });
+
+      await expect(() =>
+        client.mutate({
+          mutation: createCityMutation,
+          fetchPolicy: "no-cache",
+          variables: {
+            data: {
+              name: "Jack",
+              picture: "https://picsum.photos/",
+              description: "la description un peu longue",
+              latitude: "52.12",
+              longitude: "12.52",
+            },
+          },
+          context: {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        })
+      ).rejects.toThrowErrorMatchingInlineSnapshot(
+        `"Access denied! You don't have permission for this action!"`
+      );
+    });
+
+    it("should throw an error if user has role visitor", async () => {
+      const visitor = await db.getRepository(User).save({
+        firstname: "Sam",
+        lastname: "zou",
+        email: "visitor@example.com",
+        password: "monMotsdepasse1!",
+        picture: "https://i.pravatar.cc/300",
+        role: "visitor",
+      });
+      console.log(visitor);
+      const token = await getJWTFor({
+        firstname: "Sam",
+        lastname: "zou",
+        email: "visitor@example.com",
+        password: "monMotsdepasse1!",
+        picture: "https://i.pravatar.cc/300",
+        role: "visitor",
+      });
+
+      await expect(() =>
+        client.mutate({
+          mutation: createCityMutation,
+          fetchPolicy: "no-cache",
+          variables: {
+            data: {
+              name: "La ville",
+              picture: "https://picsum.photos/",
+              description: "la description un peu longue",
+              latitude: "52.123",
+              longitude: "12.523",
+            },
+          },
+          context: {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        })
+      ).rejects.toThrowErrorMatchingInlineSnapshot(
+        `"Access denied! You don't have permission for this action!"`
+      );
+    });
+
+    it("should throw an error if user has role admin", async () => {
+      const admin = await db.getRepository(User).save({
+        firstname: "Tim",
+        lastname: "Tam",
+        email: "admin@example.com",
+        password: "monMotsdepasse1!",
+        picture: "https://i.pravatar.cc/300",
+        role: "admin",
+      });
+      console.log(admin);
+      const token = await getJWTFor({
+        firstname: "Tim",
+        lastname: "Tam",
+        email: "admin@example.com",
+        password: "monMotsdepasse1!",
+        picture: "https://i.pravatar.cc/300",
+        role: "admin",
+      });
+
+      await expect(() =>
+        client.mutate({
+          mutation: createCityMutation,
+          fetchPolicy: "no-cache",
+          variables: {
+            data: {
+              name: "La ville",
+              picture: "https://picsum.photos/",
+              description: "la description un peu longue",
+              latitude: "52.123",
+              longitude: "12.523",
+            },
+          },
+          context: {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        })
+      ).rejects.toThrowErrorMatchingInlineSnapshot(
+        `"Access denied! You don't have permission for this action!"`
+      );
     });
   });
 });

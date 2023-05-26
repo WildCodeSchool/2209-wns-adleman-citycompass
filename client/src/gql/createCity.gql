@@ -1,0 +1,10 @@
+mutation CreateCity($data: CityInput!) {
+  createCity(data: $data) {
+    id
+    name
+    picture
+    description
+    latitude
+    longitude
+  }
+}

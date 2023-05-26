@@ -4,11 +4,15 @@ import loupe from "../assets/magnifying-glass.svg";
 import person from "../assets/person-circle-outline.svg";
 import SearchBar from "./SearchBar";
 import Modal from "./Modal";
+import { useGetProfileQuery, useLogoutMutation } from "../gql/generated/schema";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
 function Header() {
   const [showSearch, setShowSearch] = useState(false);
   const [searchInput, setSearchInput] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
 
   const handleClick = () => {
     setShowSearch(!showSearch);
@@ -20,6 +24,12 @@ function Header() {
     setShowModal(!showModal);
     setShowSearch(false);
   };
+
+  const { data: currentUser, client } = useGetProfileQuery({
+    errorPolicy: "ignore",
+  });
+
+  const [logout] = useLogoutMutation();
 
   return (
     <>
@@ -36,7 +46,7 @@ function Header() {
           </div>
 
           <a href="/" title="Accueil" className="type-h1 header__title">
-            CITY COMPASS X
+            CITY COMPASS
           </a>
           <div className="header__profile">
             <img
@@ -45,13 +55,45 @@ function Header() {
               className="header__profile--loupe cursor-pointer"
               onClick={handleClick}
             />
-            <button type="button" onClick={handleModal}>
+            {currentUser ? (
               <img
                 src={person}
                 alt="person icon to profile"
                 className="header__profile--search"
               />
-            </button>
+            ) : (
+              <button type="button" onClick={handleModal}>
+                <img
+                  src={person}
+                  alt="person icon to profile"
+                  className="header__profile--search"
+                />
+              </button>
+            )}
+            <div className="cursor-pointer	">
+              {currentUser ? (
+                <>
+                  <div
+                    onClick={async () => {
+                      await logout();
+                      await client.resetStore();
+                      toast.success("Vous avez été correctement déconnecté");
+                    }}
+                  >
+                    <p className="type-h4 ml-2">Me déconnecter</p>
+                  </div>
+                  <div
+                    onClick={() =>
+                      navigate(`/dashboard/${currentUser.profile.id}`)
+                    }
+                  >
+                    <p className="type-h4 ml-2">Back-office</p>
+                  </div>
+                </>
+              ) : (
+                <></>
+              )}
+            </div>
           </div>
         </div>
         <SearchBar
