@@ -66,7 +66,7 @@ export const existingPlace = async (
 
   if (id !== undefined) {
     // test for modification
-    if (nameExists !== null && nameExists.id !== parseInt(id, 10))
+    if (nameExists !== null && nameExists.id !== id)
       throw new Error("Place name already found in database (modification)");
   } else {
     // test for creation

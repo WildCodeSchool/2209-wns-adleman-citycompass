@@ -57,7 +57,7 @@ class City {
   @Field(() => [User], { nullable: true })
   @ManyToMany(() => User)
   @JoinTable()
-  managers: User[];
+  managers?: User[];
 }
 
 @InputType()

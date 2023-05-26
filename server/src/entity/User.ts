@@ -4,7 +4,7 @@ import {
   PrimaryGeneratedColumn,
   ManyToMany,
   JoinTable,
-  ManyToOne,
+  OneToMany,
 } from "typeorm";
 import {
   IsEmail,
@@ -68,7 +68,7 @@ class User {
   managedCities?: City[];
 
   @Field(() => [Place], { nullable: true })
-  @ManyToOne(() => Place)
+  @OneToMany(() => Place, (place) => place.author)
   places?: Place[];
 }
 

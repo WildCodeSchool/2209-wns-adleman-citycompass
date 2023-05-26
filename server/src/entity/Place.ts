@@ -1,10 +1,4 @@
-import {
-  Column,
-  Entity,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-  OneToMany,
-} from "typeorm";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Field, InputType, ObjectType } from "type-graphql";
 import { MaxLength, MinLength } from "class-validator";
 import City from "./City";
@@ -64,11 +58,15 @@ class Place {
   })
   category: Category;
 
-  @Field(() => User)
-  @OneToMany(() => User, (user) => user.places, {
+  @Field({ nullable: true })
+  @Column()
+  authorId?: number;
+
+  @Field(() => User, { nullable: true })
+  @ManyToOne(() => User, (user) => user.places, {
     onDelete: "CASCADE",
   })
-  author: User;
+  author?: User;
 
   // to do : add a many to one relation with user, and name the property "author"
   // a contributor can modify a place only if he is the author (but city admin can modify them all)
@@ -114,6 +112,9 @@ export class PlaceInput {
 
   @Field()
   categoryId: number;
+
+  @Field()
+  userId: number;
 }
 
 export default Place;

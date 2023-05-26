@@ -81,6 +81,7 @@ export class PlaceResolver {
 
     // if the user is a contributor, check if he's the author of the place
     if (
+      placeToUpdate.author !== undefined &&
       user !== null &&
       user.role === "contributor" &&
       user.id !== placeToUpdate.author.id
@@ -120,12 +121,3 @@ export class PlaceResolver {
     return placeToUpdate;
   }
 }
-// const city = await datasource
-//   .getRepository(City)
-//   .findOne({ where: { id: cityID } });
-// if (city !== null) {
-//   const managers = city.managers;
-//   for (let i = 0; i < managers.length; i++) {
-//     if (managers[i].id === userID) return managers[i];
-//   }
-// }
