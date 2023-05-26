@@ -54,7 +54,6 @@ export type CityInput = {
 
 export type CityUpdate = {
   description?: InputMaybe<Scalars['String']>;
-  id?: InputMaybe<Scalars['Float']>;
   latitude?: InputMaybe<Scalars['String']>;
   longitude?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
@@ -297,7 +296,7 @@ export type GetPlacesQuery = { __typename?: 'Query', getPlaces: Array<{ __typena
 export type GetProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetProfileQuery = { __typename?: 'Query', profile: { __typename?: 'User', id: number, email: string, firstname: string, role: string } };
+export type GetProfileQuery = { __typename?: 'Query', profile: { __typename?: 'User', id: number, firstname: string, lastname: string, email: string, picture: string, role: string } };
 
 export type GetSearchResultQueryVariables = Exact<{
   searchInput: Scalars['String'];
@@ -338,6 +337,14 @@ export type UpdateCityMutationVariables = Exact<{
 
 
 export type UpdateCityMutation = { __typename?: 'Mutation', updateCity: { __typename?: 'City', id: number, name: string, picture: string, description: string, latitude: string, longitude: string } };
+
+export type UpdateUserMutationVariables = Exact<{
+  data: UserUpdate;
+  updateUserId: Scalars['Int'];
+}>;
+
+
+export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: number, firstname: string, lastname: string, email: string, password: string, picture: string } };
 
 
 export const CreateCategoryDocument = gql`
@@ -720,8 +727,10 @@ export const GetProfileDocument = gql`
     query GetProfile {
   profile {
     id
-    email
     firstname
+    lastname
+    email
+    picture
     role
   }
 }
@@ -979,3 +988,42 @@ export function useUpdateCityMutation(baseOptions?: Apollo.MutationHookOptions<U
 export type UpdateCityMutationHookResult = ReturnType<typeof useUpdateCityMutation>;
 export type UpdateCityMutationResult = Apollo.MutationResult<UpdateCityMutation>;
 export type UpdateCityMutationOptions = Apollo.BaseMutationOptions<UpdateCityMutation, UpdateCityMutationVariables>;
+export const UpdateUserDocument = gql`
+    mutation UpdateUser($data: UserUpdate!, $updateUserId: Int!) {
+  updateUser(data: $data, id: $updateUserId) {
+    id
+    firstname
+    lastname
+    email
+    password
+    picture
+  }
+}
+    `;
+export type UpdateUserMutationFn = Apollo.MutationFunction<UpdateUserMutation, UpdateUserMutationVariables>;
+
+/**
+ * __useUpdateUserMutation__
+ *
+ * To run a mutation, you first call `useUpdateUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateUserMutation, { data, loading, error }] = useUpdateUserMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *      updateUserId: // value for 'updateUserId'
+ *   },
+ * });
+ */
+export function useUpdateUserMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUserMutation, UpdateUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateUserMutation, UpdateUserMutationVariables>(UpdateUserDocument, options);
+      }
+export type UpdateUserMutationHookResult = ReturnType<typeof useUpdateUserMutation>;
+export type UpdateUserMutationResult = Apollo.MutationResult<UpdateUserMutation>;
+export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<UpdateUserMutation, UpdateUserMutationVariables>;
