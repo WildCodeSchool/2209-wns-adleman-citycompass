@@ -7,7 +7,12 @@ import {
   Ctx,
   Int,
 } from "type-graphql";
-import User, { UserInput, UserUpdate, UserLogin } from "../entity/User";
+import User, {
+  UserInput,
+  UserUpdate,
+  UserLogin,
+  UserRoleUpdate,
+} from "../entity/User";
 import datasource from "../db";
 import { existingUser } from "../helpers/dbCheckers";
 import {
@@ -102,6 +107,26 @@ export class UserResolver {
     if (picture !== undefined) {
       userToUpdate.picture = picture;
     }
+
+    await datasource.getRepository(User).save(userToUpdate);
+
+    return userToUpdate;
+  }
+
+  @Mutation(() => User)
+  async updateUserRole(
+    @Arg("data") data: UserRoleUpdate,
+    @Arg("id", () => Int) id: number
+  ): Promise<User> {
+    const { role } = data;
+
+    const userToUpdate = await datasource.getRepository(User).findOne({
+      where: { id },
+    });
+
+    if (userToUpdate === null) throw new Error("User not found");
+
+    if (role !== undefined) userToUpdate.role = role;
 
     await datasource.getRepository(User).save(userToUpdate);
 
