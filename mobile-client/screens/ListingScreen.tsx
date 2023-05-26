@@ -4,88 +4,140 @@ import {
   FlatList,
   Image,
   View,
+  Button,
   TouchableOpacity,
 } from "react-native";
-import { useCallback } from "react";
-import { useFonts } from "expo-font";
+import { useState, useEffect } from "react";
 import * as SplashScreen from "expo-splash-screen";
-import { useGetPlacesQuery } from "../gql/generated/schema";
+import * as Location from "expo-location";
+import { useGetOneCitybyNameQuery } from "../gql/generated/schema";
+import { CityCoord, CityCoordInt } from "../services/interfaces";
 
 SplashScreen.preventAutoHideAsync();
 
-const data_City = [
-  { id: 1, name: "Chartres" },
-  { id: 2, name: "Lyon" },
-  { id: 16, name: "Strasbourg" },
-];
-
-// Type any is from documentation
-export default function ListingScreen({ navigation }: any) {
-  const { data } = useGetPlacesQuery();
-  const DATA_POI = data?.getPlaces || [];
-
-  const [fontsLoaded] = useFonts({
-    "Lato-Black": require("../assets/fonts/Lato/Lato-Black.ttf"),
-    "Karla-Medium": require("../assets/fonts/Karla/static/Karla-Medium.ttf"),
+export default function ListingScreen({ navigation, route }: any) {
+  const { CityName } = route.params;
+  const { data } = useGetOneCitybyNameQuery({
+    variables: {
+      name: CityName,
+    },
   });
+  const DATA_POI = data?.getOneCitybyName.places || [];
+  const [userLocation, setUserLocation] = useState<CityCoordInt>({
+    latitude: 0,
+    longitude: 0,
+  });
+  const [sortedPoiCoords, setSortedPoiCoords] = useState<any>([]);
+  const [sorted, setSorted] = useState(false);
 
-  const onLayoutRootView = useCallback(async () => {
-    if (fontsLoaded) {
-      await SplashScreen.hideAsync();
+  useEffect(() => {}, [sortedPoiCoords]);
+
+  const getUserLocation = async () => {
+    try {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        console.log("Permission to access location was denied");
+        return;
+      }
+      const location = await Location.getCurrentPositionAsync({
+        accuracy: Location.Accuracy.High,
+      });
+      const userLatitude = location.coords.latitude;
+      const userLongitude = location.coords.longitude;
+      setUserLocation({ latitude: userLatitude, longitude: userLongitude });
+      if (userLocation) {
+        console.log(userLocation);
+      }
+    } catch (error) {
+      console.log("Error getting location", error);
     }
-  }, [fontsLoaded]);
+  };
 
-  if (!fontsLoaded) {
-    return null;
-  }
+  const orderPoiCoords = () => {
+    setSorted(!sorted);
+    console.log("clicked");
+    console.log("unordered", sortedPoiCoords);
+    if (!userLocation) {
+      console.log("getting user loc");
+      getUserLocation();
+    } else {
+      console.log("creating order");
+      const PoiDistances = DATA_POI.map((poi: any) => {
+        const distance = calculateDistance(userLocation!, poi); // Use non-null assertion operator
+        return { ...poi, distance };
+      });
+      const sortedPoiCoords = PoiDistances.sort((placeA: any, placeB: any) => {
+        return placeA.distance - placeB.distance;
+      });
+      setSortedPoiCoords(sortedPoiCoords);
+      console.log("is sorted", sortedPoiCoords);
+    }
+  };
 
-  return data_City.length > 0 ? (
-    <FlatList
-      onLayout={onLayoutRootView}
-      style={styles.container}
-      data={data_City}
-      keyExtractor={(data_City) => data_City.id.toString()}
-      renderItem={(cityData) => {
-        return (
-          <>
-            {}
-            <Text style={styles.title}>{cityData.item.name}</Text>
+  // Function to calculate the distance between two coordinates using the Haversine formula
+  const calculateDistance = (
+    userLocation: CityCoordInt,
+    cityCoord: CityCoord
+  ) => {
+    const earthRadius = 6371; // Earth's radius in kilometers
+    const latDiff = degToRad(
+      parseFloat(cityCoord.latitude) - userLocation.latitude
+    );
+    const lonDiff = degToRad(
+      parseFloat(cityCoord.longitude) - userLocation.longitude
+    );
 
-            <FlatList
-              data={DATA_POI}
-              keyExtractor={(cityData) => cityData.id.toString()}
-              renderItem={(poiData) => {
-                return (
-                  <>
-                    {poiData.item.cityId === cityData.item.id ? (
-                      <TouchableOpacity
-                        onPress={() =>
-                          navigation.navigate("Place-details", {
-                            itemId: poiData.item.id,
-                          })
-                        }
-                      >
-                        <View style={styles.cardPoi}>
-                          <Text style={styles.poiText}>
-                            {poiData.item.name}
-                          </Text>
-                          <Image
-                            style={styles.poiPicture}
-                            source={{
-                              uri: poiData.item.picture,
-                            }}
-                          />
-                        </View>
-                      </TouchableOpacity>
-                    ) : null}
-                  </>
-                );
-              }}
-            />
-          </>
-        );
-      }}
-    />
+    const a =
+      Math.sin(latDiff / 2) * Math.sin(latDiff / 2) +
+      Math.cos(degToRad(userLocation.latitude)) *
+        Math.cos(degToRad(parseFloat(cityCoord.latitude))) *
+        Math.sin(lonDiff / 2) *
+        Math.sin(lonDiff / 2);
+
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const distance = earthRadius * c;
+
+    return distance;
+  };
+
+  // Helper function to convert degrees to radians
+  const degToRad = (degrees: number) => {
+    return (degrees * Math.PI) / 180;
+  };
+
+  const renderItem = (DATA_POI: any) => (
+    <>
+      <Text style={styles.title}>{DATA_POI.item.name}</Text>
+
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate("Place-details", {
+            itemId: DATA_POI.item.id,
+          })
+        }
+      >
+        <View style={styles.cardPoi}>
+          <Text style={styles.poiText}>{DATA_POI.item.name}</Text>
+          <Image
+            style={styles.poiPicture}
+            source={{
+              uri: DATA_POI.item.picture,
+            }}
+          />
+        </View>
+      </TouchableOpacity>
+    </>
+  );
+  return DATA_POI.length > 0 ? (
+    <>
+      <Button title="Trier par distance" onPress={orderPoiCoords} />
+      <FlatList
+        style={styles.container}
+        data={sorted ? sortedPoiCoords : DATA_POI}
+        keyExtractor={(item: any) => item.id.toString()}
+        renderItem={renderItem}
+      />
+    </>
   ) : null;
 }
 
@@ -97,6 +149,11 @@ const styles = StyleSheet.create({
   },
   header: {
     backgroundColor: "#fff",
+  },
+  button: {
+    borderRadius: 60,
+    backgroundColor: "#F6CDAF",
+    margin: 20,
   },
   title: {
     fontSize: 40,
