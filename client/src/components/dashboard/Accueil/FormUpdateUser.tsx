@@ -30,8 +30,6 @@ export function FormUpdateUser({ user, setModifyUser }: FormUpdateUserProps) {
       },
       refetchQueries: [{ query: GetProfileDocument }],
     }).then((res) => {
-      console.log(res);
-      
       if (res.errors) {
         res.errors.forEach(({ message }) => {
         toast.error(message);
@@ -41,8 +39,6 @@ export function FormUpdateUser({ user, setModifyUser }: FormUpdateUserProps) {
       setModifyUser(false)
     });
   };
-
-  console.log(user);
   
   return (
     <div className="container mx-auto p-6 bg-cream flex flex-col">

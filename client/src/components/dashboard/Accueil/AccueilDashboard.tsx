@@ -46,7 +46,7 @@ function AccueilDashboard() {
                 <UserInformations user={user} />
                 <button
                   type="button"
-                  className="button--primary mt-6 w-1/2 ml-6"
+                  className="button--primary w-1/2"
                   onClick={() => setModifyUser(true)}
                 >
                   Modifier le profil

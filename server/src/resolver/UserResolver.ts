@@ -68,7 +68,7 @@ export class UserResolver {
     @Arg("data") data: UserUpdate,
     @Ctx() ctx: ContextType
   ): Promise<User> {
-    const { firstname, lastname, picture, password } = data;
+    const { firstname, lastname, picture, password, email } = data;
     // get id of connected user from context, using JWT token
     const currentUserId = ctx.jwtPayload.userID;
 
@@ -87,6 +87,11 @@ export class UserResolver {
     if (firstname !== undefined) {
       userToUpdate.firstname = firstname;
     }
+
+    if (email !== undefined) {
+      userToUpdate.email = email;
+      }
+
     if (password !== undefined) {
       userToUpdate.password = password;
     }
