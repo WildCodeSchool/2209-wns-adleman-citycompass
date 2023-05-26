@@ -1,34 +1,62 @@
+import { useState } from "react";
 import { useGetProfileQuery } from "../../../gql/generated/schema";
+import { FormUpdateUser } from "./FormUpdateUser";
+import { UserInformations } from "./UserInformations";
+
+export interface UserProps {
+  id: number;
+  firstname: string;
+  lastname: string;
+  email: string;
+  picture: string;
+  role: string;
+}
 
 function AccueilDashboard() {
-  const { data: currentUser } = useGetProfileQuery({
+  const [modifyUser, setModifyUser] = useState(false);
+
+  const { data } = useGetProfileQuery({
     errorPolicy: "ignore",
   });
 
+  const user = data?.profile;
+
   return (
     <>
-      <div className="my-28 mx-auto h-full flex flex-col gap-10 w-4/5 max-w-4xl">
-        <div className="flex w-fit gap-8">
-          <h1 className="type-h1 header__title text-left ">BIENVENUE</h1>
-          <h1 className="text-orange">{currentUser?.profile.firstname}</h1>
-        </div>
-        <div>
-          <p className="text-2xl font-semibold">Quelques chiffres clés</p>
-        </div>
-        <div className="flex w-full justify-between mt-28">
-          <div className="h-24 w-52 rounded shadow shadow-cream bg-orange flex flex-col justify-center items-center">
-            <p>20</p>
-            <p>Catégories</p>
-          </div>
-          <div className="h-24 w-52 rounded shadow shadow-cream bg-orange flex flex-col justify-center items-center">
-            <p>20</p>
-            <p>Catégories</p>
-          </div>
-          <div className="h-24 w-52 rounded shadow shadow-cream bg-orange flex flex-col justify-center items-center">
-            <p>20</p>
-            <p>Catégories</p>
+      <div className="bg-cream my-20 mx-auto h-full flex flex-col gap-10 w-4/5 max-w-5xl p-10">
+        <div className="flex gap-36 self-center items-center">
+          <img
+            src={user?.picture}
+            alt=""
+            className="rounded-full w-36 h-36 border-4 border-white"
+          />
+          <div className="flex flex-col w-fit h-fit">
+            <h1 className="type-h1 header__title text-left">BIENVENUE</h1>
+            <h1 className="text-orange">{user?.firstname}</h1>
           </div>
         </div>
+        {user && (
+          <>
+            {modifyUser ? (
+              <div className="w-2/3 self-center">
+                <FormUpdateUser user={user} setModifyUser={setModifyUser} />
+              </div>
+            ) : (
+              <div className="w-2/3 self-center">
+                <UserInformations user={user} />
+                <div className="text-center">
+                  <button
+                    type="button"
+                    className="button--primary w-1/2"
+                    onClick={() => setModifyUser(true)}
+                  >
+                    Modifier le profil
+                  </button>
+                </div>
+              </div>
+            )}
+          </>
+        )}
       </div>
     </>
   );
