@@ -4,9 +4,28 @@ import modify_icon from "../../../assets/modify_icon.svg";
 import { useGetUsersQuery } from "../../../gql/generated/schema";
 import { FormUpdateRole } from "./FormUpdateRole";
 
+export interface userToUpdateProps {
+  id: number;
+  firstname: string;
+  lastname: string;
+  email: string;
+  password: string;
+  picture: string;
+  role: string;
+}
+
 function UsersDashboard() {
   const [listUsers, setListUsers] = useState(true);
   const [modifyUsers, setModifyUsers] = useState(false);
+  const [userToUpdate, setUserToUpdate] = useState<userToUpdateProps>({
+    id: 0,
+    firstname: "",
+    lastname: "",
+    email: "",
+    password: "",
+    picture: "",
+    role: "",
+  });
 
   const { data } = useGetUsersQuery();
 
@@ -30,7 +49,11 @@ function UsersDashboard() {
                 >
                   <p className="w-4/5">{user.firstname}</p>
                   <button
-                    onClick={() => (setModifyUsers(true), setListUsers(false))}
+                    onClick={() => (
+                      setModifyUsers(true),
+                      setListUsers(false),
+                      setUserToUpdate(user)
+                    )}
                   >
                     <img src={modify_icon} alt="" className="w-6" />
                   </button>
@@ -43,6 +66,7 @@ function UsersDashboard() {
               <FormUpdateRole
                 setListUsers={setListUsers}
                 setModifyUsers={setModifyUsers}
+                userToUpdate={userToUpdate}
               />
             </div>
           )}
