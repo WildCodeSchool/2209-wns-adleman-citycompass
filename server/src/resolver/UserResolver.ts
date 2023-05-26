@@ -113,12 +113,37 @@ export class UserResolver {
     return userToUpdate;
   }
 
+  @Authorized(["superadmin", "admin"])
   @Mutation(() => User)
   async updateUserRole(
     @Arg("data") data: UserRoleUpdate,
-    @Arg("id", () => Int) id: number
+    @Arg("id", () => Int) id: number,
+    @Ctx() ctx: ContextType
   ): Promise<User> {
     const { role } = data;
+    const roles = ["visitor", "contributor", "admin", "superadmin"];
+    const currentUserId = ctx.jwtPayload.userID;
+
+    if (role !== undefined && !roles.includes(role))
+      throw new Error("this is not an existing role");
+
+    if (currentUserId === undefined) throw new Error("unauthorized operation");
+
+    // to do : si le current user à le role admin et que le role n'est pas contributor ou visitor, alors lancer une erreur
+    const currentUser = await datasource.getRepository(User).findOne({
+      where: { id: currentUserId },
+    });
+
+    if (currentUser === null) throw new Error("current user not found");
+
+    console.log("🐛", currentUser);
+
+    if (
+      currentUser.role === "admin" &&
+      role !== "contributor" &&
+      role !== "visitor"
+    )
+      throw new Error("an admin is not authorized to give this role.");
 
     const userToUpdate = await datasource.getRepository(User).findOne({
       where: { id },
