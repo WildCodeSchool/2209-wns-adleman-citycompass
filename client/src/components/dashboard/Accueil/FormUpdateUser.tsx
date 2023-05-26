@@ -122,6 +122,14 @@ export function FormUpdateUser({ user, setModifyUser }: FormUpdateUserProps) {
             <button type="submit" className="button--primary mt-6">
               Enregistrer
             </button>
+            <div
+              className="modal__input--label text-s mt-3 text-center cursor-pointer"
+              onClick={() => {
+                setModifyUser(false)
+              }}
+            >
+              Annuler
+            </div>
           </Form>
         )}
       </Formik>
