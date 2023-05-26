@@ -1,12 +1,21 @@
 import React from "react";
 import { Formik, Field, Form } from "formik";
-import { GetProfileDocument, UserUpdate, useUpdateUserMutation } from "../../../gql/generated/schema";
+import {
+  GetProfileDocument,
+  UserUpdate,
+  useUpdateUserMutation,
+} from "../../../gql/generated/schema";
 import { toast } from "react-hot-toast";
-import { validateAvatar, validateEmail, validateFirstname, validateLastname } from "../../../utils/formValidator";
+import {
+  validateAvatar,
+  validateEmail,
+  validateFirstname,
+  validateLastname,
+} from "../../../utils/formValidator";
 import { UserProps } from "./AccueilDashboard";
 
 interface FormUpdateUserProps {
-  setModifyUser:React.Dispatch<React.SetStateAction<boolean>>;
+  setModifyUser: React.Dispatch<React.SetStateAction<boolean>>;
   user: UserProps;
 }
 
@@ -32,14 +41,19 @@ export function FormUpdateUser({ user, setModifyUser }: FormUpdateUserProps) {
     }).then((res) => {
       if (res.errors) {
         res.errors.forEach(({ message }) => {
-        toast.error(message);
+          if (message === "User email already found in database") {
+            toast.error("L'email existe déjà");
+          } else {
+            toast.error(message);
+          }
         });
+      } else if (res.errors === undefined) {
+        toast.success("Données enregistrée");
+        setModifyUser(false);
       }
-      toast.success("Données enregistrée");
-      setModifyUser(false)
     });
   };
-  
+
   return (
     <div className="container mx-auto p-6 bg-cream flex flex-col">
       <h3 className="type-h3 text-center">Données personnelles</h3>
@@ -115,14 +129,14 @@ export function FormUpdateUser({ user, setModifyUser }: FormUpdateUserProps) {
             ></Field>
             {errors.email && touched.email && (
               <div className="text-red">{errors.email}</div>
-            )}      
+            )}
             <button type="submit" className="button--primary mt-6">
               Enregistrer
             </button>
             <div
               className="modal__input--label text-s mt-3 text-center cursor-pointer"
               onClick={() => {
-                setModifyUser(false)
+                setModifyUser(false);
               }}
             >
               Annuler

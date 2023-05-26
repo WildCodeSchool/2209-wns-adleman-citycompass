@@ -20,7 +20,7 @@ function AccueilDashboard() {
   });
 
   const user = data?.profile;
-  
+
   return (
     <>
       <div className="bg-cream my-20 mx-auto h-full flex flex-col gap-10 w-4/5 max-w-5xl p-10">
@@ -39,18 +39,20 @@ function AccueilDashboard() {
           <>
             {modifyUser ? (
               <div className="w-2/3 self-center">
-                <FormUpdateUser user={user} setModifyUser={setModifyUser}/>
+                <FormUpdateUser user={user} setModifyUser={setModifyUser} />
               </div>
             ) : (
               <div className="w-2/3 self-center">
                 <UserInformations user={user} />
-                <button
-                  type="button"
-                  className="button--primary w-1/2"
-                  onClick={() => setModifyUser(true)}
-                >
-                  Modifier le profil
-                </button>
+                <div className="text-center">
+                  <button
+                    type="button"
+                    className="button--primary w-1/2"
+                    onClick={() => setModifyUser(true)}
+                  >
+                    Modifier le profil
+                  </button>
+                </div>
               </div>
             )}
           </>

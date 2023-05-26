@@ -87,7 +87,8 @@ export class UserResolver {
     if (firstname !== undefined) {
       userToUpdate.firstname = firstname;
     }
-
+    await existingUser(data);
+    
     if (email !== undefined) {
       userToUpdate.email = email;
       }
