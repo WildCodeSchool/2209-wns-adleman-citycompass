@@ -28,32 +28,36 @@ export class CategoryResolver {
     return await datasource.getRepository(Category).save(data);
   }
 
-  @Authorized(["superadmin"])
+  // @Authorized(["superadmin"])
   @Mutation(() => Category)
   async updateCategory(
     @Arg("id", () => Int) id: number,
     @Arg("data") data: CategoryUpdate
   ): Promise<Category> {
     if (data === null) throw new Error("No data found");
-    let { name, picto } = data;
+    if (data.name !== undefined) {
+      // delete blank spaces before and after category name
+      data.name = data.name.trim();
+      // change category name first letter to Uppercase
+      data.name = data.name.charAt(0).toUpperCase() + data.name.slice(1);
+    }
 
     const categoryToUpdate = await datasource
       .getRepository(Category)
       .findOne({ where: { id } });
-      
+
     if (categoryToUpdate === null) throw new Error("Category not found");
 
-    if (name !== undefined) {
+    if (data.name !== undefined) {
       await existingCategory(data, id);
-      // delete blank spaces before and after category name
-      name = name.trim();
-      // change category name first letter to Uppercase
-      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-      name = name.charAt(0).toUpperCase() + name.slice(1);
-      categoryToUpdate.name = name;
     }
-    if (picto !== undefined) {
-      categoryToUpdate.picto = picto;
+
+    if (data.name !== undefined) {
+      categoryToUpdate.name = data.name;
+    }
+
+    if (data.picto !== undefined) {
+      categoryToUpdate.picto = data.picto;
     }
 
     await datasource.getRepository(Category).save(categoryToUpdate);

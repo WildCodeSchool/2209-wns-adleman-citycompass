@@ -82,7 +82,7 @@ export const existingCategory = async (
   const nameExists = await datasource
     .getRepository(Category)
     .findOne({ where: { name: data.name } });
-
+   
   if (id !== undefined) {
     // test for modification
     if (nameExists !== null && nameExists.id !== id)
