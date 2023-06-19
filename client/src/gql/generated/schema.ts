@@ -296,7 +296,7 @@ export type GetPlacesQuery = { __typename?: 'Query', getPlaces: Array<{ __typena
 export type GetProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetProfileQuery = { __typename?: 'Query', profile: { __typename?: 'User', id: number, firstname: string, lastname: string, email: string, picture: string, role: string } };
+export type GetProfileQuery = { __typename?: 'Query', profile: { __typename?: 'User', id: number, firstname: string, lastname: string, email: string, picture: string, role: string, managedCities?: Array<{ __typename?: 'City', id: number, name: string }> | null } };
 
 export type GetSearchResultQueryVariables = Exact<{
   searchInput: Scalars['String'];
@@ -732,6 +732,10 @@ export const GetProfileDocument = gql`
     email
     picture
     role
+    managedCities {
+      id
+      name
+    }
   }
 }
     `;

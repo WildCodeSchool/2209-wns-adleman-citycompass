@@ -6,5 +6,9 @@ query GetProfile {
     email
     picture
     role
+     managedCities {
+      id
+      name
+    }
   }
 }
