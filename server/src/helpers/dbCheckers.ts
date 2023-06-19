@@ -1,4 +1,5 @@
 import datasource from "../db";
+import Category, { CategoryInput, CategoryUpdate } from "../entity/Category";
 import City, { CityInput, CityUpdate } from "../entity/City";
 import Place, { PlaceInput } from "../entity/Place";
 import User, { UserInput, UserUpdate } from "../entity/User";
@@ -71,6 +72,25 @@ export const existingPlace = async (
     // test for creation
     if (nameExists !== null)
       throw new Error("Place name already found in database (creation)");
+  }
+};
+
+export const existingCategory = async (
+  data: CategoryInput | CategoryUpdate,
+  id?: number | undefined
+): Promise<void> => {
+  const nameExists = await datasource
+    .getRepository(Category)
+    .findOne({ where: { name: data.name } });
+
+  if (id !== undefined) {
+    // test for modification
+    if (nameExists !== null && nameExists.id !== id)
+      throw new Error("Category name already found in database (modification)");
+  } else {
+    // test for creation
+    if (nameExists !== null)
+      throw new Error("Category name already found in database (creation)");
   }
 };
 

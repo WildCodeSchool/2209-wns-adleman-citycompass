@@ -1,6 +1,7 @@
 import { Resolver, Mutation, Query, Arg, Int, Authorized } from "type-graphql";
 import datasource from "../db";
 import Category, { CategoryInput, CategoryUpdate } from "../entity/Category";
+import { existingCategory } from "../helpers/dbCheckers";
 
 @Resolver(Category)
 export class CategoryResolver {
@@ -27,7 +28,7 @@ export class CategoryResolver {
     return await datasource.getRepository(Category).save(data);
   }
 
-  // @Authorized(["superadmin"])
+  @Authorized(["superadmin"])
   @Mutation(() => Category)
   async updateCategory(
     @Arg("id", () => Int) id: number,
@@ -39,9 +40,11 @@ export class CategoryResolver {
     const categoryToUpdate = await datasource
       .getRepository(Category)
       .findOne({ where: { id } });
+      
     if (categoryToUpdate === null) throw new Error("Category not found");
 
     if (name !== undefined) {
+      await existingCategory(data, id);
       // delete blank spaces before and after category name
       name = name.trim();
       // change category name first letter to Uppercase
