@@ -87,11 +87,14 @@ export class UserResolver {
     if (firstname !== undefined) {
       userToUpdate.firstname = firstname;
     }
-    await existingUser(data);
     
+    if (email !== userToUpdate.email) {
+      await existingUser(data);
+    }
+
     if (email !== undefined) {
       userToUpdate.email = email;
-      }
+    }
 
     if (password !== undefined) {
       userToUpdate.password = password;
