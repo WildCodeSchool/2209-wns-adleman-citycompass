@@ -1,5 +1,9 @@
 import React from "react";
 import { UserProps } from "./AccueilDashboard";
+import identity from "../../../assets/user-identity.png";
+import avatar from "../../../assets/user-avatar.png";
+import email from "../../../assets/user-email.png";
+import role from "../../../assets/user-role.png";
 
 interface FormUpdateUserProps {
   user: UserProps;
@@ -9,16 +13,26 @@ interface FormUpdateUserProps {
 
 export function UserInformations({ user }: FormUpdateUserProps) {
   return (
-    <div className="container py-6 bg-cream flex flex-col w-fit">
+    <div className="container py-4 bg-cream flex flex-col w-fit">
       <h3 className="type-h3">Informations de profil</h3>
-      <div className="my-6">
-        <ul className="flex flex-col gap-8 ml-5">
-          <li className="list-disc">Nom : {user.lastname}</li>
-          <li className="list-disc">Prénom : {user.firstname}</li>
-          <li className="list-disc">Avatar : {user.picture}</li>
-          <li className="list-disc">Email : {user.email}</li>
-          <li className="list-disc">Role: {user.role}</li>
-        </ul>
+      <div className="my-8 flex flex-col gap-6">
+        <div className="container gap-4 flex items-center">
+          <img src={identity} alt="user identity" className="w-8 h-8" />
+          <p>{user.firstname}</p>
+          <p>{user.lastname}</p>
+        </div>
+        <div className="container flex gap-4 items-center">
+          <img src={avatar} alt="user avatar" className="w-8 h-8" />
+          <p>{user.picture}</p>
+        </div>
+        <div className="container flex gap-4 items-center">
+          <img src={email} alt="user email" className="w-8 h-8" />
+          <p>{user.email}</p>
+        </div>
+        <div className="container flex gap-4 items-center">
+          <img src={role} alt="user email" className="w-8 h-8" />
+          <p>{user.role}</p>
+        </div>
       </div>
     </div>
   );
