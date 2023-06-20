@@ -6,7 +6,11 @@ import chevron_down from "../../../assets/chevron-arrow-down.png";
 import chevron_up from "../../../assets/up-arrow-angle.png";
 import { useGetCitiesWithPlacesQuery } from "../../../gql/generated/schema";
 
-function PlacesDashboard() {
+export interface CityArrayProps {
+  cityArray: string[] | undefined;
+}
+
+function PlacesDashboard({ cityArray }: CityArrayProps) {
   const [places, setPlaces] = useState(true);
   const [listPlaces, setListPlaces] = useState(false);
   const [addPlaces, setAddPlaces] = useState(false);
@@ -35,24 +39,30 @@ function PlacesDashboard() {
               </div>
               {cities?.map((city) => (
                 <>
-                  <div
-                    className="h-12 w-96 px-6 self-center rounded bg-orange flex justify-between items-center"
-                    key={city.name}
-                  >
-                    <p className="w-4/5">{city.name}</p>
-                    <button
-                      onClick={() => {
-                        setCityName(city.name);
-                        setListPlaces(!listPlaces);
-                      }}
+                  {cityArray?.includes(city.name) && (
+                    <div
+                      className="h-12 w-96 px-6 self-center rounded bg-orange flex justify-between items-center"
+                      key={city.name}
                     >
-                      <img
-                        src={listPlaces && cityName === city.name ? chevron_up : chevron_down}
-                        alt=""
-                        className="w-4"
-                      />
-                    </button>
-                  </div>
+                      <p className="w-4/5">{city.name}</p>
+                      <button
+                        onClick={() => {
+                          setCityName(city.name);
+                          setListPlaces(!listPlaces);
+                        }}
+                      >
+                        <img
+                          src={
+                            listPlaces && cityName === city.name
+                              ? chevron_up
+                              : chevron_down
+                          }
+                          alt=""
+                          className="w-4"
+                        />
+                      </button>
+                    </div>
+                  )}
                   {listPlaces && cityName === city.name && (
                     <div className="flex flex-col justify-between self-center">
                       {city.places.map((place) => (
