@@ -15,8 +15,8 @@ export interface CityCoord {
 }
 
 export interface CityCoordInt {
-  latitude: number;
-  longitude: number;
+  latitude: number | undefined;
+  longitude: number | undefined;
 }
 
 export interface Poi {

@@ -4,7 +4,6 @@ import {
   FlatList,
   Image,
   View,
-  Button,
   TouchableOpacity,
 } from "react-native";
 import { useState, useEffect } from "react";
@@ -24,15 +23,20 @@ export default function ListingScreen({ navigation, route }: any) {
   });
   const DATA_POI = data?.getOneCitybyName.places || [];
   const [userLocation, setUserLocation] = useState<CityCoordInt>({
-    latitude: 0,
-    longitude: 0,
+    latitude: undefined,
+    longitude: undefined,
   });
   const [sortedPoiCoords, setSortedPoiCoords] = useState<any>([]);
   const [sorted, setSorted] = useState(false);
+  const [clickable, setClickable] = useState(false);
 
-  useEffect(() => {}, [sortedPoiCoords]);
+  useEffect(() => {
+    getUserLocation();
+  }, [sortedPoiCoords, clickable]);
 
   const getUserLocation = async () => {
+    console.log("userLoc", userLocation);
+
     try {
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
@@ -46,7 +50,7 @@ export default function ListingScreen({ navigation, route }: any) {
       const userLongitude = location.coords.longitude;
       setUserLocation({ latitude: userLatitude, longitude: userLongitude });
       if (userLocation) {
-        console.log(userLocation);
+        setClickable(true);
       }
     } catch (error) {
       console.log("Error getting location", error);
@@ -54,23 +58,26 @@ export default function ListingScreen({ navigation, route }: any) {
   };
 
   const orderPoiCoords = () => {
-    setSorted(!sorted);
-    console.log("clicked");
-    console.log("unordered", sortedPoiCoords);
-    if (!userLocation) {
-      console.log("getting user loc");
-      getUserLocation();
-    } else {
-      console.log("creating order");
-      const PoiDistances = DATA_POI.map((poi: any) => {
-        const distance = calculateDistance(userLocation!, poi); // Use non-null assertion operator
-        return { ...poi, distance };
-      });
-      const sortedPoiCoords = PoiDistances.sort((placeA: any, placeB: any) => {
-        return placeA.distance - placeB.distance;
-      });
-      setSortedPoiCoords(sortedPoiCoords);
-      console.log("is sorted", sortedPoiCoords);
+    if (clickable) {
+      setSorted(!sorted);
+      if (!userLocation.latitude) {
+        console.log("getting user loc");
+        getUserLocation();
+      } else {
+        console.log("creating order");
+        console.log(userLocation);
+        const PoiDistances = DATA_POI.map((poi: any) => {
+          const distance = calculateDistance(userLocation!, poi); // Use non-null assertion operator
+          return { ...poi, distance };
+        });
+
+        const sortedPoiCoords = PoiDistances.sort(
+          (placeA: any, placeB: any) => {
+            return placeA.distance - placeB.distance;
+          }
+        );
+        setSortedPoiCoords(sortedPoiCoords);
+      }
     }
   };
 
@@ -79,25 +86,27 @@ export default function ListingScreen({ navigation, route }: any) {
     userLocation: CityCoordInt,
     cityCoord: CityCoord
   ) => {
-    const earthRadius = 6371; // Earth's radius in kilometers
-    const latDiff = degToRad(
-      parseFloat(cityCoord.latitude) - userLocation.latitude
-    );
-    const lonDiff = degToRad(
-      parseFloat(cityCoord.longitude) - userLocation.longitude
-    );
+    if (userLocation.latitude && userLocation.longitude) {
+      const earthRadius = 6371; // Earth's radius in kilometers
+      const latDiff = degToRad(
+        parseFloat(cityCoord.latitude) - userLocation.latitude
+      );
+      const lonDiff = degToRad(
+        parseFloat(cityCoord.longitude) - userLocation.longitude
+      );
 
-    const a =
-      Math.sin(latDiff / 2) * Math.sin(latDiff / 2) +
-      Math.cos(degToRad(userLocation.latitude)) *
-        Math.cos(degToRad(parseFloat(cityCoord.latitude))) *
-        Math.sin(lonDiff / 2) *
-        Math.sin(lonDiff / 2);
+      const a =
+        Math.sin(latDiff / 2) * Math.sin(latDiff / 2) +
+        Math.cos(degToRad(userLocation.latitude)) *
+          Math.cos(degToRad(parseFloat(cityCoord.latitude))) *
+          Math.sin(lonDiff / 2) *
+          Math.sin(lonDiff / 2);
 
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    const distance = earthRadius * c;
-
-    return distance;
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      let distance: number | string = earthRadius * c;
+      distance = distance.toFixed(2);
+      return distance;
+    }
   };
 
   // Helper function to convert degrees to radians
@@ -117,7 +126,13 @@ export default function ListingScreen({ navigation, route }: any) {
         }
       >
         <View style={styles.cardPoi}>
-          <Text style={styles.poiText}>{DATA_POI.item.name}</Text>
+          {sorted ? (
+            <Text style={styles.poiText}>
+              Situé à {DATA_POI.item.distance} km de votre position
+            </Text>
+          ) : (
+            <Text style={styles.poiText}>{DATA_POI.item.adress}</Text>
+          )}
           <Image
             style={styles.poiPicture}
             source={{
@@ -130,7 +145,19 @@ export default function ListingScreen({ navigation, route }: any) {
   );
   return DATA_POI.length > 0 ? (
     <>
-      <Button title="Trier par distance" onPress={orderPoiCoords} />
+      <TouchableOpacity
+        key="Trier par distance"
+        onPress={orderPoiCoords}
+        style={[
+          styles.button,
+          sorted && styles.selected,
+          clickable ? styles.opacity1 : styles.opacity0,
+        ]}
+      >
+        <Text style={[styles.buttonLabel, sorted && styles.selectedLabel]}>
+          {sorted ? "Trier par default" : "Trier par distance"}
+        </Text>
+      </TouchableOpacity>
       <FlatList
         style={styles.container}
         data={sorted ? sortedPoiCoords : DATA_POI}
@@ -145,15 +172,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+    paddingTop: 40,
     backgroundColor: "#fff",
   },
   header: {
     backgroundColor: "#fff",
-  },
-  button: {
-    borderRadius: 60,
-    backgroundColor: "#F6CDAF",
-    margin: 20,
   },
   title: {
     fontSize: 40,
@@ -174,17 +197,48 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     overflow: "hidden",
   },
+  opacity1: {
+    opacity: 1,
+  },
+  opacity0: {
+    opacity: 0.5,
+  },
   poiText: {
     flex: 1,
     padding: 15,
     fontSize: 18,
     fontFamily: "Karla-Medium",
   },
-
   poiPicture: {
     flex: 1,
     height: 250,
     borderBottomRightRadius: 40,
     borderBottomLeftRadius: 40,
+  },
+  button: {
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    borderRadius: 4,
+    backgroundColor: "#23272D",
+    marginHorizontal: "auto",
+    marginVertical: 12,
+    textAlign: "center",
+    alignSelf: "center",
+  },
+  selected: {
+    backgroundColor: "#84A59D",
+  },
+  buttonLabel: {
+    fontSize: 12,
+    fontWeight: "500",
+    color: "#84A59D",
+  },
+  selectedLabel: {
+    color: "#23272D",
+  },
+  label: {
+    textAlign: "center",
+    marginBottom: 10,
+    fontSize: 24,
   },
 });

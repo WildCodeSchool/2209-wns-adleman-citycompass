@@ -1,28 +1,14 @@
-import {
-  Text,
-  StyleSheet,
-  FlatList,
-  Image,
-  View,
-  Button,
-  TouchableOpacity,
-} from "react-native";
-import { useCallback, useState, useEffect } from "react";
+import { Text, StyleSheet, FlatList, TouchableOpacity } from "react-native";
+import { useCallback } from "react";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
-import * as Location from "expo-location";
-import { useGetPlacesQuery, useGetCitiesQuery } from "../gql/generated/schema";
-import { CityCoord, CityCoordInt } from "../services/interfaces";
+import { useGetCitiesQuery } from "../gql/generated/schema";
 
 SplashScreen.preventAutoHideAsync();
 
 export default function ListingCity({ navigation }: any) {
-  const { data } = useGetPlacesQuery();
-  const DATA_POI = data?.getPlaces || [];
-
   const cities = useGetCitiesQuery();
   const DATA_City = cities.data?.getCities || [];
-  let sortedCityCoords = [];
 
   const [fontsLoaded] = useFonts({
     "Lato-Black": require("../assets/fonts/Lato/Lato-Black.ttf"),
@@ -40,6 +26,7 @@ export default function ListingCity({ navigation }: any) {
   }
   return DATA_City.length > 0 ? (
     <>
+      <Text style={styles.titleText}>Choisissez votre ville</Text>
       <FlatList
         onLayout={onLayoutRootView}
         style={styles.container}
@@ -104,6 +91,14 @@ const styles = StyleSheet.create({
     padding: 15,
     fontSize: 18,
     fontFamily: "Karla-Medium",
+  },
+  titleText: {
+    flex: 0.03,
+    padding: 15,
+    fontSize: 18,
+    textAlign: "center",
+    fontFamily: "Karla-Medium",
+    backgroundColor: "#F6CDAF",
   },
 
   poiPicture: {

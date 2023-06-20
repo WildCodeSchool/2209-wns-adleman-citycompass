@@ -20,10 +20,11 @@ export default function App() {
             headerTintColor: "#fff",
             headerTitleStyle: {
               fontWeight: "bold",
+              fontSize: 22,
             },
           }}
         >
-          <Stack.Screen name="Cities" component={ListingCity} />
+          <Stack.Screen name="City Compass" component={ListingCity} />
           <Stack.Screen name="City-details" component={ListingScreen} />
 
           <Stack.Screen
