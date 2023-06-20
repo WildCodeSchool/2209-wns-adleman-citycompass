@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "npx playwright test -c dist/e2e-tests --trace on",
-    "test:gui": "npm run pretest && npx playwright test -c dist/e2e-tests --trace on --headed",
+    "test": "npx playwright test --trace on",
+    "test:gui": "npm run pretest && npx playwright test --trace on --headed",
     "test:watch": "npm run test && chokidar 'src/**/*.spec.ts' -c 'npm run test'",
     "test:watch:gui": "npm run test:gui && chokidar 'src/**/*.spec.ts' -c 'npm run test:gui'",
     "pretest": "tsc --incremental -p tsconfig.json"

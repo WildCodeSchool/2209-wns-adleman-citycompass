@@ -1,4 +1,16 @@
-node_modules/
-/test-results/
-/playwright-report/
-/playwright/.cache/
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/playwright-report
+/test-results
+
+# production
+/build
+
+# misc
+.env
