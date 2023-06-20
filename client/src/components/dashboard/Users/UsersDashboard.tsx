@@ -41,7 +41,7 @@ function UsersDashboard() {
         </div>
         <div className="bg-cream w-full h-fit min-h-[75%] mt-10">
           {listUsers && (
-            <div className="flex flex-col w-full h-full gap-4 pb-8">
+            <div className="flex flex-col justify-center w-full h-full gap-4 pb-8">
               {users?.map((user) => (
                 <div
                   className="h-12 w-96 px-6 self-center rounded bg-orange flex justify-between items-center"
