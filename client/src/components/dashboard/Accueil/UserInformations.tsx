@@ -14,7 +14,6 @@ interface FormUpdateUserProps {
 export function UserInformations({ user }: FormUpdateUserProps) {
   return (
     <div className="container py-4 bg-cream flex flex-col w-fit">
-      <h3 className="type-h3">Informations de profil</h3>
       <div className="my-8 flex flex-col gap-6">
         <div className="container gap-4 flex items-center">
           <img src={identity} alt="user identity" className="w-8 h-8" />
