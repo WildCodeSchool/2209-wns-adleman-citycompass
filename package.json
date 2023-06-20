@@ -10,5 +10,8 @@
     "publish:server": "cd server && docker build -f Dockerfile.production . -t kaitolight/2209-wns-adleman-citycompass-server && docker push kaitolight/2209-wns-adleman-citycompass-server && cd ..",
     "publish:client": "cd client && docker build -f Dockerfile.production -t kaitolight/2209-wns-adleman-citycompass-client . && docker push kaitolight/2209-wns-adleman-citycompass-client && cd ..",
     "pgadmin": "docker run --name pgadmin -p 5050:80 --env PGADMIN_DEFAULT_EMAIL=root@app.com --env PGADMIN_DEFAULT_PASSWORD=root dpage/pgadmin4 -d"
+  },
+  "devDependencies": {
+    "@types/node": "^20.3.1"
   }
 }
