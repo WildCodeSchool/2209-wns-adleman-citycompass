@@ -58,15 +58,15 @@ class Place {
   })
   category: Category;
 
-  @Field({ nullable: true })
+  @Field()
   @Column()
-  authorId?: number;
+  authorId: number;
 
-  @Field(() => User, { nullable: true })
-  @ManyToOne(() => User, (user) => user.places, {
+  @Field(() => User)
+  @ManyToOne(() => User, (user) => user.managedPlaces, {
     onDelete: "CASCADE",
   })
-  author?: User;
+  author: User;
 
   // to do : add a many to one relation with user, and name the property "author"
   // a contributor can modify a place only if he is the author (but city admin can modify them all)
@@ -112,9 +112,6 @@ export class PlaceInput {
 
   @Field()
   categoryId: number;
-
-  @Field()
-  userId: number;
 }
 
 export default Place;

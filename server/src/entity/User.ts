@@ -69,7 +69,7 @@ class User {
 
   @Field(() => [Place], { nullable: true })
   @OneToMany(() => Place, (place) => place.author)
-  places?: Place[];
+  managedPlaces?: Place[];
 }
 
 @InputType()

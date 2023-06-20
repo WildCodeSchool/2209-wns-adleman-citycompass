@@ -100,8 +100,8 @@ async function reset(): Promise<void> {
     picture: "https://i.pravatar.cc/300",
     role: "superadmin",
     managedCities: await datasource.getRepository(City).find(),
-    places: await datasource.getRepository(Place).find(),
   });
+  console.log("😀", tam.id);
 
   await datasource.getRepository(User).save([
     {
