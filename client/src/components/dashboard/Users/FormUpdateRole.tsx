@@ -38,30 +38,76 @@ export function FormUpdateRole({
   return (
     <div className="container mx-auto p-6 bg-cream flex flex-col">
       <UserInformations user={userToUpdate} />
+      <h3 className="type-h4 text-center py-6">
+        Changer le role de l'utilisateur
+      </h3>
       <Formik
         initialValues={{ role: userToUpdate.role }}
         onSubmit={handleSubmit}
       >
         {({ values }) => (
-          <Form className="flex flex-col">
-            <div role="group" aria-labelledby="my-radio-group">
-              <label htmlFor="role">
-                <Field type="radio" name="role" value="superadmin"></Field>
+          <Form className="flex flex-col gap-4 my-8">
+            <div
+              role="group"
+              aria-labelledby="my-radio-group"
+              className="flex flex-row gap-4 justify-center align-center"
+            >
+              <label
+                htmlFor="superadmin"
+                className="flex gap-3 py-4 px-6 border-2 border-gray rounded
+                bg-white cursor-pointer hover:bg-orange"
+              >
+                <Field
+                  type="radio"
+                  name="role"
+                  value="superadmin"
+                  id="superadmin"
+                ></Field>
                 superadmin
               </label>
-              <label htmlFor="role">
-                <Field type="radio" name="role" value="admin"></Field>admin
+
+              <label
+                htmlFor="admin"
+                className="flex gap-3 py-4 px-6 border-2 border-gray rounded bg-white cursor-pointer"
+              >
+                <Field
+                  type="radio"
+                  name="role"
+                  value="admin"
+                  id="admin"
+                ></Field>
+                admin
               </label>
-              <label htmlFor="role">
-                <Field type="radio" name="role" value="contributor"></Field>
+              <label
+                htmlFor="contributor"
+                className="flex gap-3 py-4 px-6 border-2 border-gray rounded bg-white cursor-pointer"
+              >
+                <Field
+                  type="radio"
+                  name="role"
+                  value="contributor"
+                  id="contributor"
+                ></Field>
                 contributor
               </label>
-              <label htmlFor="role">
-                <Field type="radio" name="role" value="visitor"></Field>
+
+              <label
+                htmlFor="visitor"
+                className="flex gap-3 py-4 px-6 border-2 border-gray rounded bg-white cursor-pointer"
+              >
+                <Field
+                  type="radio"
+                  name="role"
+                  value="visitor"
+                  id="visitor"
+                ></Field>
                 visitor
               </label>
             </div>
-            <button type="submit" className="button--primary mt-6">
+            <button
+              type="submit"
+              className="button--primary mt-6 w-1/4 self-center"
+            >
               Enregistrer
             </button>
             <div

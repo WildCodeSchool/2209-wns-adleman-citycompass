@@ -27,7 +27,7 @@ export function UserInformations({ user }: FormUpdateUserProps) {
         </div>
         <div className="container flex gap-4 items-center">
           <img src={email} alt="user email" className="w-8 h-8" />
-          <p>{user.email}</p>
+          <a href={`mailto: ${user.email}`}>{user.email}</a>
         </div>
         <div className="container flex gap-4 items-center">
           <img src={role} alt="user email" className="w-8 h-8" />
