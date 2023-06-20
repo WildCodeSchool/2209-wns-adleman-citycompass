@@ -15,7 +15,7 @@ export function UserInformations({ user }: FormUpdateUserProps) {
   return (
     <div className="container py-4 bg-cream flex flex-col w-fit">
       <div className="my-8 flex flex-col gap-6">
-        <div className="container gap-4 flex items-center">
+        <div className="container gap-4 flex items-center font-semibold">
           <img src={identity} alt="user identity" className="w-8 h-8" />
           <p>{user.firstname}</p>
           <p>{user.lastname}</p>

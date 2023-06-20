@@ -5,6 +5,7 @@ import { UserInformations } from "../Accueil/UserInformations";
 import { UserRoleUpdate } from "../../../gql/generated/schema";
 import { useUpdateUserRoleMutation } from "../../../gql/generated/schema";
 import { toast } from "react-hot-toast";
+import { roles } from "../../../utils/userRoles";
 
 interface FormUpdateRoleProps {
   setListUsers: React.Dispatch<React.SetStateAction<boolean>>;
@@ -52,57 +53,21 @@ export function FormUpdateRole({
               aria-labelledby="my-radio-group"
               className="flex flex-row gap-4 justify-center align-center"
             >
-              <label
-                htmlFor="superadmin"
-                className="flex gap-3 py-4 px-6 border-2 border-gray rounded
+              {roles?.map((e) => (
+                <label
+                  htmlFor={`${e}`}
+                  className="flex gap-3 py-4 px-6 border-2 border-gray rounded
                 bg-white cursor-pointer hover:bg-orange"
-              >
-                <Field
-                  type="radio"
-                  name="role"
-                  value="superadmin"
-                  id="superadmin"
-                ></Field>
-                superadmin
-              </label>
-
-              <label
-                htmlFor="admin"
-                className="flex gap-3 py-4 px-6 border-2 border-gray rounded bg-white cursor-pointer"
-              >
-                <Field
-                  type="radio"
-                  name="role"
-                  value="admin"
-                  id="admin"
-                ></Field>
-                admin
-              </label>
-              <label
-                htmlFor="contributor"
-                className="flex gap-3 py-4 px-6 border-2 border-gray rounded bg-white cursor-pointer"
-              >
-                <Field
-                  type="radio"
-                  name="role"
-                  value="contributor"
-                  id="contributor"
-                ></Field>
-                contributor
-              </label>
-
-              <label
-                htmlFor="visitor"
-                className="flex gap-3 py-4 px-6 border-2 border-gray rounded bg-white cursor-pointer"
-              >
-                <Field
-                  type="radio"
-                  name="role"
-                  value="visitor"
-                  id="visitor"
-                ></Field>
-                visitor
-              </label>
+                >
+                  <Field
+                    type="radio"
+                    name="role"
+                    value={`${e}`}
+                    id={`${e}`}
+                  ></Field>
+                  {e}
+                </label>
+              ))}
             </div>
             <button
               type="submit"
