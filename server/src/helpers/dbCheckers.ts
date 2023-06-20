@@ -1,4 +1,5 @@
 import datasource from "../db";
+import Category, { CategoryInput, CategoryUpdate } from "../entity/Category";
 import City, { CityInput, CityUpdate } from "../entity/City";
 import Place, { PlaceInput } from "../entity/Place";
 import User, { UserInput, UserUpdate } from "../entity/User";
@@ -9,7 +10,7 @@ import User, { UserInput, UserUpdate } from "../entity/User";
 
 export const existingCity = async (
   data: CityInput | CityUpdate,
-  id?: string | undefined
+  id?: number | undefined
 ): Promise<void> => {
   const nameExists = await datasource
     .getRepository(City)
@@ -17,16 +18,12 @@ export const existingCity = async (
 
   if (id !== undefined) {
     // test for modification
-    if (nameExists !== null && nameExists.id !== parseInt(id, 10))
-      throw new Error(
-        "City name already found in database (modification)"
-      );
+    if (nameExists !== null && nameExists.id !== id)
+      throw new Error("City name already found in database (modification)");
   } else {
     // test for creation
     if (nameExists !== null)
-      throw new Error(
-        "City name already found in database (creation)"
-      );
+      throw new Error("City name already found in database (creation)");
   }
 };
 
@@ -39,22 +36,24 @@ export const existingUser = async (
 
   // test for creation
   if (emailExist !== null)
-    throw new Error(
-      "User email already found in database"
-    );
+    throw new Error("User email already found in database");
 };
 
 export const existingCoordinates = async (
-  data: CityInput | CityUpdate
+  data: CityInput | CityUpdate,
+  id?: number | undefined
 ): Promise<void> => {
   const coordo = await datasource.getRepository(City).findOne({
     where: { latitude: data.latitude, longitude: data.longitude },
   });
-
-  if (coordo !== null)
-    throw new Error(
-      "City coordinates found in database"
-    );
+  if (id !== undefined) {
+    // test for modification
+    if (coordo !== null && coordo.id !== id)
+      throw new Error("City coordinates found in another city");
+  } else {
+    if (coordo !== null) throw new Error("City coordinates found in database");
+    // Vérifier si les coordonnées existent déjà pour une autre ville
+  }
 };
 
 export const existingPlace = async (
@@ -68,15 +67,30 @@ export const existingPlace = async (
   if (id !== undefined) {
     // test for modification
     if (nameExists !== null && nameExists.id !== parseInt(id, 10))
-      throw new Error(
-        "Place name already found in database (modification)"
-      );
+      throw new Error("Place name already found in database (modification)");
   } else {
     // test for creation
     if (nameExists !== null)
-      throw new Error(
-        "Place name already found in database (creation)"
-      );
+      throw new Error("Place name already found in database (creation)");
+  }
+};
+
+export const existingCategory = async (
+  data: CategoryInput | CategoryUpdate,
+  id?: number | undefined
+): Promise<void> => {
+  const nameExists = await datasource
+    .getRepository(Category)
+    .findOne({ where: { name: data.name } });
+   
+  if (id !== undefined) {
+    // test for modification
+    if (nameExists !== null && nameExists.id !== id)
+      throw new Error("Category name already found in database (modification)");
+  } else {
+    // test for creation
+    if (nameExists !== null)
+      throw new Error("Category name already found in database (creation)");
   }
 };
 
@@ -87,8 +101,5 @@ export const existingPlaceCoordinates = async (
     where: { latitude: data.latitude, longitude: data.longitude },
   });
 
-  if (coordo !== null)
-    throw new Error(
-      "Place coordinates found in database"
-    );
+  if (coordo !== null) throw new Error("Place coordinates found in database");
 };

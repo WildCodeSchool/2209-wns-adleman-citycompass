@@ -6,6 +6,7 @@ import SearchBar from "./SearchBar";
 import Modal from "./Modal";
 import { useGetProfileQuery, useLogoutMutation } from "../gql/generated/schema";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
 function Header() {
   const [showSearch, setShowSearch] = useState(false);
@@ -54,34 +55,41 @@ function Header() {
               className="header__profile--loupe cursor-pointer"
               onClick={handleClick}
             />
-            <button type="button" onClick={handleModal}>
+            {currentUser ? (
               <img
                 src={person}
                 alt="person icon to profile"
                 className="header__profile--search"
               />
-            </button>
+            ) : (
+              <button type="button" onClick={handleModal}>
+                <img
+                  src={person}
+                  alt="person icon to profile"
+                  className="header__profile--search"
+                />
+              </button>
+            )}
             <div className="cursor-pointer	">
               {currentUser ? (
-                <div
-                  onClick={async () => {
-                    await logout();
-                    await client.resetStore();
-                  }}
-                >
-                  <p className="type-h4 ml-2">Me déconnecter</p>
-                </div>
-              ) : (
-                <></>
-              )}
-              {currentUser ? (
-                <div
-                  onClick={() =>
-                    navigate(`/dashboard/${currentUser.profile.id}`)
-                  }
-                >
-                  <p className="type-h4 ml-2">Back-office</p>
-                </div>
+                <>
+                  <div
+                    onClick={async () => {
+                      await logout();
+                      await client.resetStore();
+                      toast.success("Vous avez été correctement déconnecté");
+                    }}
+                  >
+                    <p className="type-h4 ml-2">Me déconnecter</p>
+                  </div>
+                  <div
+                    onClick={() =>
+                      navigate(`/dashboard/${currentUser.profile.id}`)
+                    }
+                  >
+                    <p className="type-h4 ml-2">Back-office</p>
+                  </div>
+                </>
               ) : (
                 <></>
               )}

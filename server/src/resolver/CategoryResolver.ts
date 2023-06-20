@@ -1,6 +1,7 @@
 import { Resolver, Mutation, Query, Arg, Int, Authorized } from "type-graphql";
 import datasource from "../db";
-import Category, { CategoryInput } from "../entity/Category";
+import Category, { CategoryInput, CategoryUpdate } from "../entity/Category";
+import { existingCategory } from "../helpers/dbCheckers";
 
 @Resolver(Category)
 export class CategoryResolver {
@@ -27,20 +28,37 @@ export class CategoryResolver {
     return await datasource.getRepository(Category).save(data);
   }
 
-  @Authorized(["superadmin"])
+  // @Authorized(["superadmin"])
   @Mutation(() => Category)
   async updateCategory(
     @Arg("id", () => Int) id: number,
-    @Arg("data") data: CategoryInput
+    @Arg("data") data: CategoryUpdate
   ): Promise<Category> {
-    const { name, picto } = data;
+    if (data === null) throw new Error("No data found");
+    if (data.name !== undefined) {
+      // delete blank spaces before and after category name
+      data.name = data.name.trim();
+      // change category name first letter to Uppercase
+      data.name = data.name.charAt(0).toUpperCase() + data.name.slice(1);
+    }
+
     const categoryToUpdate = await datasource
       .getRepository(Category)
       .findOne({ where: { id } });
+
     if (categoryToUpdate === null) throw new Error("Category not found");
 
-    categoryToUpdate.name = name;
-    categoryToUpdate.picto = picto;
+    if (data.name !== undefined) {
+      await existingCategory(data, id);
+    }
+
+    if (data.name !== undefined) {
+      categoryToUpdate.name = data.name;
+    }
+
+    if (data.picto !== undefined) {
+      categoryToUpdate.picto = data.picto;
+    }
 
     await datasource.getRepository(Category).save(categoryToUpdate);
 

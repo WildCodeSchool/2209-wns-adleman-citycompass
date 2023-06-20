@@ -5,9 +5,10 @@ import {
   ManyToMany,
   JoinTable,
 } from "typeorm";
-import { IsEmail, IsUrl, MaxLength, MinLength } from "class-validator";
+import { IsEmail, IsNotEmpty, IsUrl, Matches, MaxLength, MinLength, Validate } from "class-validator";
 import { Field, ObjectType, InputType } from "type-graphql";
 import City from "./City";
+import { IsNotOnlySpaces } from "../helpers/customValidators";
 
 export type Role = "superadmin" | "admin" | "contributor" | "visitor";
 
@@ -32,6 +33,9 @@ class User {
 
   @Field()
   @Column({ length: 255, type: "varchar" })
+  @Matches(/(?=.*\d)(?=.*\W+)(?![.\n])(?=.*[A-Z])(?=.*[a-z]).{8,}$/, {
+    message: "password too weak",
+  })
   password: string;
 
   @Field()
@@ -57,28 +61,53 @@ class User {
 @InputType()
 export class UserInput {
   @Field()
-  @MaxLength(50)
-  @MinLength(2)
+  @MaxLength(50, {
+    message: "A firstname must be less than 50 characters long",
+  })
+  @MinLength(2, {
+    message: "A firstname must be at least 2 characters long",
+  })
+  @IsNotEmpty({ message: "A firstname cannot be empty" })
+  @Validate(IsNotOnlySpaces)
   firstname: string;
 
   @Field()
-  @MaxLength(50)
-  @MinLength(2)
+  @MaxLength(50, {
+    message: "A lastname must be less than 50 characters long",
+  })
+  @MinLength(2, {
+    message: "A lastname must be at least 2 characters long",
+  })
+  @IsNotEmpty({ message: "A lastname cannot be empty" })
+  @Validate(IsNotOnlySpaces)
   lastname: string;
 
   @Field()
-  @MaxLength(65)
-  @IsEmail()
+  @MaxLength(65, {
+    message: "Email must be less than 65 characters long",
+  })
+  @IsEmail({ message: "Email must be an valid email" })
+  @IsNotEmpty({ message: "Email cannot be empty" })
   email: string;
 
   @Field()
-  @MinLength(8)
-  @MaxLength(255)
+  @MinLength(8, {
+    message: "A password must be at least 8 characters long",
+  })
+  @MaxLength(255, {
+    message: "A lastname must be less than 255 characters long",
+  })
+  // Minimum 8 caractère, une minuscule, une majuscule, un caractère spécial et un chiffre
+  @Matches(/(?=.*\d)(?=.*\W+)(?![.\n])(?=.*[A-Z])(?=.*[a-z]).{8,}$/, {
+    message: "password too weak",
+  })
+  @IsNotEmpty({ message: "A password cannot be empty" })
   password: string;
 
   @Field()
   @MaxLength(2083)
-  @IsUrl()
+  @IsUrl({ message: "A picture must be an url" })
+  @IsNotEmpty({ message: "A picture cannot be empty" })
   picture: string;
 
   @Field({ defaultValue: "visitor" })
@@ -105,6 +134,9 @@ export class UserUpdate {
 
   @Field({ nullable: true })
   @MaxLength(255)
+  @Matches(/(?=.*\d)(?=.*\W+)(?![.\n])(?=.*[A-Z])(?=.*[a-z]).{8,}$/, {
+    message: "password too weak",
+  })
   password?: string;
 
   @Field({ nullable: true })

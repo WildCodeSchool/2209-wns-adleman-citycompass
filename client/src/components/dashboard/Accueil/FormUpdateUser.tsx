@@ -1,64 +1,71 @@
 import React from "react";
-import { Formik, Field, Form, FieldAttributes } from "formik";
-import { UserInput, useCreateUserMutation } from "../gql/generated/schema";
+import { Formik, Field, Form } from "formik";
+import {
+  GetProfileDocument,
+  UserUpdate,
+  useUpdateUserMutation,
+} from "../../../gql/generated/schema";
 import { toast } from "react-hot-toast";
 import {
   validateAvatar,
   validateEmail,
   validateFirstname,
   validateLastname,
-  validatePassword,
-} from "../utils/formValidator";
+} from "../../../utils/formValidator";
+import { UserProps } from "./AccueilDashboard";
 
-interface FormSignUpProps {
-  isLogin: boolean;
-  setIsLogin: React.Dispatch<React.SetStateAction<boolean>>;
+interface FormUpdateUserProps {
+  setModifyUser: React.Dispatch<React.SetStateAction<boolean>>;
+  user: UserProps;
 }
 
-function FormSignUp({ isLogin, setIsLogin }: FormSignUpProps) {
-  const [createUser] = useCreateUserMutation({
+// form building with Formik https://formik.org/docs/guides/validation
+
+export function FormUpdateUser({ user, setModifyUser }: FormUpdateUserProps) {
+  const [updateUser] = useUpdateUserMutation({
     errorPolicy: "all",
   });
 
-  const handleSignUp = (values: UserInput) => {
-    createUser({
+  const handleSubmit = (values: UserUpdate) => {
+    updateUser({
       variables: {
         data: {
           lastname: values.lastname,
           firstname: values.firstname,
           picture: values.picture,
           email: values.email,
-          password: values.password,
         },
+        updateUserId: user.id,
       },
+      refetchQueries: [{ query: GetProfileDocument }],
     }).then((res) => {
       if (res.errors) {
         res.errors.forEach(({ message }) => {
           if (message === "User email already found in database") {
             toast.error("L'email existe déjà");
-          } else {            
+          } else {
             toast.error(message);
           }
         });
       } else if (res.errors === undefined) {
-        toast.success("Inscription completée");
-        setIsLogin(!isLogin);
+        toast.success("Données enregistrée");
+        setModifyUser(false);
       }
     });
   };
 
   return (
-    <div>
-      <h4 className="text-center">Créer un compte</h4>
+    <div className="container mx-auto p-6 bg-cream flex flex-col">
+      <h3 className="type-h3 text-center">Données personnelles</h3>
       <Formik
         initialValues={{
-          lastname: "",
-          firstname: "",
-          picture: "",
-          email: "",
-          password: "",
+          id: user.id,
+          firstname: user.firstname,
+          lastname: user.lastname,
+          email: user.email,
+          picture: user.picture,
         }}
-        onSubmit={(values) => handleSignUp(values)}
+        onSubmit={(values) => handleSubmit(values)}
       >
         {({ errors, touched }) => (
           <Form className="flex flex-col">
@@ -68,7 +75,6 @@ function FormSignUp({ isLogin, setIsLogin }: FormSignUpProps) {
             <Field
               name="lastname"
               validate={validateLastname}
-              placeholder="Nom"
               className={`modal__input shadow shadow-green mb-4 ${
                 errors.lastname && touched.lastname
                   ? "border-red"
@@ -124,48 +130,20 @@ function FormSignUp({ isLogin, setIsLogin }: FormSignUpProps) {
             {errors.email && touched.email && (
               <div className="text-red">{errors.email}</div>
             )}
-            <label className="modal__input--label" htmlFor="password">
-              Password
-            </label>
-            <Field name="password" validate={validatePassword}>
-              {({
-                field,
-                form: { touched, errors },
-                meta,
-              }: FieldAttributes<any>) => (
-                <>
-                  <input
-                    type="password"
-                    placeholder="Mot de passe"
-                    {...field}
-                    className={`modal__input shadow shadow-green mb-4 ${
-                      errors.password && touched.password
-                        ? "border-red"
-                        : "border-current"
-                    }`}
-                  />
-                  {touched.password && errors.password && (
-                    <div className="text-red">{meta.error}</div>
-                  )}
-                </>
-              )}
-            </Field>
-            <div
-              className="modal__input--label text-xs text-center cursor-pointer"
-              onClick={() => {
-                setIsLogin(!isLogin);
-              }}
-            >
-              Se connecter
-            </div>
             <button type="submit" className="button--primary mt-6">
               Enregistrer
             </button>
+            <div
+              className="modal__input--label text-s mt-3 text-center cursor-pointer"
+              onClick={() => {
+                setModifyUser(false);
+              }}
+            >
+              Annuler
+            </div>
           </Form>
         )}
       </Formik>
     </div>
   );
 }
-
-export default FormSignUp;
