@@ -1,4 +1,4 @@
-export default function Erreur() {
+export default function Error() {
   const goBack = () => {
     window.history.back();
   };
