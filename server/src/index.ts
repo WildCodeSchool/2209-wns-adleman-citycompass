@@ -48,7 +48,7 @@ async function start(): Promise<void> {
         // return profile's informations with relations
         user = await datasource.getRepository(User).findOne({
           where: { id },
-          relations: { managedCities: true },
+          relations: { managedCities: true, managedPlaces: true },
         });
       }
       if (user !== null) context.currentUser = user;
