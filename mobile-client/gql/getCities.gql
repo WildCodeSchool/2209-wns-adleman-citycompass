@@ -1,0 +1,10 @@
+query GetCities {
+  getCities {
+    picture
+    name
+    id
+    description
+    longitude
+    latitude
+  }
+}

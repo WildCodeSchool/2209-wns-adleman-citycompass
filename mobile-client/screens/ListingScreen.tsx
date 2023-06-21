@@ -6,92 +6,174 @@ import {
   View,
   TouchableOpacity,
 } from "react-native";
-import { useCallback } from "react";
-import { useFonts } from "expo-font";
+import { useState, useEffect } from "react";
 import * as SplashScreen from "expo-splash-screen";
-import { useGetPlacesQuery } from "../gql/generated/schema";
+import * as Location from "expo-location";
+import { useGetOneCitybyNameQuery } from "../gql/generated/schema";
+import { CityCoord, CityCoordInt } from "../services/interfaces";
 
 SplashScreen.preventAutoHideAsync();
 
-const data_City = [
-  { id: 1, name: "Chartres" },
-  { id: 2, name: "Lyon" },
-  { id: 16, name: "Strasbourg" },
-];
-
-// Type any is from documentation
-export default function ListingScreen({ navigation }: any) {
-  const { data } = useGetPlacesQuery();
-  const DATA_POI = data?.getPlaces || [];
-
-  const [fontsLoaded] = useFonts({
-    "Lato-Black": require("../assets/fonts/Lato/Lato-Black.ttf"),
-    "Karla-Medium": require("../assets/fonts/Karla/static/Karla-Medium.ttf"),
+export default function ListingScreen({ navigation, route }: any) {
+  const { CityName } = route.params;
+  const { data } = useGetOneCitybyNameQuery({
+    variables: {
+      name: CityName,
+    },
   });
+  const DATA_POI = data?.getOneCitybyName.places || [];
+  const [userLocation, setUserLocation] = useState<CityCoordInt>({
+    latitude: undefined,
+    longitude: undefined,
+  });
+  const [sortedPoiCoords, setSortedPoiCoords] = useState<any>([]);
+  const [sorted, setSorted] = useState(false);
+  const [clickable, setClickable] = useState(false);
 
-  const onLayoutRootView = useCallback(async () => {
-    if (fontsLoaded) {
-      await SplashScreen.hideAsync();
+  useEffect(() => {
+    getUserLocation();
+  }, [sortedPoiCoords, clickable]);
+
+  const getUserLocation = async () => {
+    console.log("userLoc", userLocation);
+
+    try {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        console.log("Permission to access location was denied");
+        return;
+      }
+      const location = await Location.getCurrentPositionAsync({
+        accuracy: Location.Accuracy.High,
+      });
+      const userLatitude = location.coords.latitude;
+      const userLongitude = location.coords.longitude;
+      setUserLocation({ latitude: userLatitude, longitude: userLongitude });
+      if (userLocation) {
+        setClickable(true);
+      }
+    } catch (error) {
+      console.log("Error getting location", error);
     }
-  }, [fontsLoaded]);
+  };
 
-  if (!fontsLoaded) {
-    return null;
-  }
+  const orderPoiCoords = () => {
+    if (clickable) {
+      setSorted(!sorted);
+      if (!userLocation.latitude) {
+        console.log("getting user loc");
+        getUserLocation();
+      } else {
+        console.log("creating order");
+        console.log(userLocation);
+        const PoiDistances = DATA_POI.map((poi: any) => {
+          const distance = calculateDistance(userLocation!, poi); // Use non-null assertion operator
+          return { ...poi, distance };
+        });
 
-  return data_City.length > 0 ? (
-    <FlatList
-      onLayout={onLayoutRootView}
-      style={styles.container}
-      data={data_City}
-      keyExtractor={(data_City) => data_City.id.toString()}
-      renderItem={(cityData) => {
-        return (
-          <>
-            {}
-            <Text style={styles.title}>{cityData.item.name}</Text>
-
-            <FlatList
-              data={DATA_POI}
-              keyExtractor={(cityData) => cityData.id.toString()}
-              renderItem={(poiData) => {
-                return (
-                  <>
-                    {poiData.item.cityId === cityData.item.id ? (
-                      <TouchableOpacity
-                        onPress={() =>
-                          navigation.navigate("Place-details", {
-                            itemId: poiData.item.id,
-                          })
-                        }
-                      >
-                        <View style={styles.cardPoi}>
-                          <Text style={styles.poiText}>
-                            {poiData.item.name}
-                          </Text>
-                          <Image
-                            style={styles.poiPicture}
-                            source={{
-                              uri: poiData.item.picture,
-                            }}
-                          />
-                        </View>
-                      </TouchableOpacity>
-                    ) : null}
-                  </>
-                );
-              }}
-            />
-          </>
+        const sortedPoiCoords = PoiDistances.sort(
+          (placeA: any, placeB: any) => {
+            return placeA.distance - placeB.distance;
+          }
         );
-      }}
-    />
+        setSortedPoiCoords(sortedPoiCoords);
+      }
+    }
+  };
+
+  // Function to calculate the distance between two coordinates using the Haversine formula
+  const calculateDistance = (
+    userLocation: CityCoordInt,
+    cityCoord: CityCoord
+  ) => {
+    if (userLocation.latitude && userLocation.longitude) {
+      const earthRadius = 6371; // Earth's radius in kilometers
+      const latDiff = degToRad(
+        parseFloat(cityCoord.latitude) - userLocation.latitude
+      );
+      const lonDiff = degToRad(
+        parseFloat(cityCoord.longitude) - userLocation.longitude
+      );
+
+      const a =
+        Math.sin(latDiff / 2) * Math.sin(latDiff / 2) +
+        Math.cos(degToRad(userLocation.latitude)) *
+          Math.cos(degToRad(parseFloat(cityCoord.latitude))) *
+          Math.sin(lonDiff / 2) *
+          Math.sin(lonDiff / 2);
+
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      let distance: number | string = earthRadius * c;
+      distance = distance.toFixed(2);
+      return distance;
+    }
+  };
+
+  // Helper function to convert degrees to radians
+  const degToRad = (degrees: number) => {
+    return (degrees * Math.PI) / 180;
+  };
+
+  const renderItem = (DATA_POI: any) => (
+    <>
+      <Text style={styles.title}>{DATA_POI.item.name}</Text>
+
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate("Place-details", {
+            itemId: DATA_POI.item.id,
+          })
+        }
+      >
+        <View style={styles.cardPoi}>
+          {sorted ? (
+            <Text style={styles.poiText}>
+              Situé à {DATA_POI.item.distance} km de votre position
+            </Text>
+          ) : (
+            <Text style={styles.poiText}>{DATA_POI.item.adress}</Text>
+          )}
+          <Image
+            style={styles.poiPicture}
+            source={{
+              uri: DATA_POI.item.picture,
+            }}
+          />
+        </View>
+      </TouchableOpacity>
+    </>
+  );
+  return DATA_POI.length > 0 ? (
+    <View style={styles.containerz}>
+      <TouchableOpacity
+        key="Trier par distance"
+        onPress={orderPoiCoords}
+        style={[
+          styles.button,
+          sorted && styles.selected,
+          clickable ? styles.opacity1 : styles.opacity0,
+        ]}
+      >
+        <Text style={[styles.buttonLabel, sorted && styles.selectedLabel]}>
+          {sorted ? "Trier par default" : "Trier par distance"}
+        </Text>
+      </TouchableOpacity>
+      <FlatList
+        style={styles.container}
+        data={sorted ? sortedPoiCoords : DATA_POI}
+        keyExtractor={(item: any) => item.id.toString()}
+        renderItem={renderItem}
+      />
+    </View>
   ) : null;
 }
 
 const styles = StyleSheet.create({
+  containerz: {
+    paddingBottom: 100,
+    backgroundColor: "#fff",
+  },
   container: {
-    flex: 1,
     padding: 20,
     backgroundColor: "#fff",
   },
@@ -114,8 +196,14 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 40,
     borderBottomLeftRadius: 40,
     backgroundColor: "#F5F2E1",
-    marginBottom: 20,
+    marginBottom: 70,
     overflow: "hidden",
+  },
+  opacity1: {
+    opacity: 1,
+  },
+  opacity0: {
+    opacity: 0.5,
   },
   poiText: {
     flex: 1,
@@ -123,11 +211,36 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: "Karla-Medium",
   },
-
   poiPicture: {
     flex: 1,
     height: 250,
     borderBottomRightRadius: 40,
     borderBottomLeftRadius: 40,
+  },
+  button: {
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    borderRadius: 4,
+    backgroundColor: "#23272D",
+    marginHorizontal: "auto",
+    marginVertical: 12,
+    textAlign: "center",
+    alignSelf: "center",
+  },
+  selected: {
+    backgroundColor: "#84A59D",
+  },
+  buttonLabel: {
+    fontSize: 12,
+    fontWeight: "500",
+    color: "#84A59D",
+  },
+  selectedLabel: {
+    color: "#23272D",
+  },
+  label: {
+    textAlign: "center",
+    marginBottom: 10,
+    fontSize: 24,
   },
 });
