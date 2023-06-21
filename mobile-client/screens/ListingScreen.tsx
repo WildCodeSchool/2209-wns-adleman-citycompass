@@ -144,7 +144,7 @@ export default function ListingScreen({ navigation, route }: any) {
     </>
   );
   return DATA_POI.length > 0 ? (
-    <>
+    <View style={styles.containerz}>
       <TouchableOpacity
         key="Trier par distance"
         onPress={orderPoiCoords}
@@ -164,16 +164,17 @@ export default function ListingScreen({ navigation, route }: any) {
         keyExtractor={(item: any) => item.id.toString()}
         renderItem={renderItem}
       />
-    </>
+    </View>
   ) : null;
 }
 
 const styles = StyleSheet.create({
+  containerz: {
+    paddingBottom: 100,
+    backgroundColor: "#fff",
+  },
   container: {
-    flex: 1,
     padding: 20,
-    paddingTop: 40,
-    paddingBottom: 110,
     backgroundColor: "#fff",
   },
   header: {
