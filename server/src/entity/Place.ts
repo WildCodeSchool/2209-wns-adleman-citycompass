@@ -63,8 +63,9 @@ class Place {
   authorId: number;
 
   @Field(() => User)
-  @ManyToOne(() => User, (user) => user.managedPlaces, {
+  @ManyToOne(() => User, (user: User) => user.managedPlaces, {
     onDelete: "CASCADE",
+    eager: true,
   })
   author?: User;
 
@@ -114,7 +115,7 @@ export class PlaceInput {
   categoryId: number;
 
   @Field()
-  userId: number;
+  authorId: number;
 }
 
 export default Place;

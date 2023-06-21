@@ -95,11 +95,22 @@ export const existingCategory = async (
 };
 
 export const existingPlaceCoordinates = async (
-  data: PlaceInput
+  data: PlaceInput,
+  id?: number
 ): Promise<void> => {
   const coordo = await datasource.getRepository(Place).findOne({
     where: { latitude: data.latitude, longitude: data.longitude },
   });
 
-  if (coordo !== null) throw new Error("Place coordinates found in database");
+  if (id !== undefined) {
+    // test for modification
+    if (coordo !== null && coordo.id !== id)
+      throw new Error(
+        "Place coordinates already found in database (modification)"
+      );
+  } else {
+    // test for creation
+    if (coordo !== null)
+      throw new Error("Place coordinates already found in database (creation)");
+  }
 };

@@ -100,48 +100,63 @@ async function reset(): Promise<void> {
     picture: "https://i.pravatar.cc/300",
     role: "superadmin",
     managedCities: await datasource.getRepository(City).find(),
-    managedPlaces: await datasource.getRepository(Place).find(),
   });
-  console.log("😀", tam.id);
 
-  // await datasource.getRepository(User).save([
-  //   {
-  //     firstname: "Jane",
-  //     lastname: "visitor",
-  //     email: "visitor@mail.com",
-  //     password: await hashPassword("visitorPassword1!"),
-  //     picture: "https://i.pravatar.cc/300",
-  //   },
-  //   {
-  //     firstname: "John",
-  //     lastname: "contributor",
-  //     email: "contributor@mail.com",
-  //     password: await hashPassword("contributorPassword1!"),
-  //     picture: "https://i.pravatar.cc/300",
-  //     role: "contributor",
-  //     managedCities: [
-  //       (await datasource
-  //         .getRepository(City)
-  //         .findOneBy({ name: "Marseille" })) as City,
-  //     ],
-  //   },
-  //   {
-  //     firstname: "Tim",
-  //     lastname: "admin",
-  //     email: "admin@mail.com",
-  //     password: await hashPassword("adminPassword1!"),
-  //     picture: "https://i.pravatar.cc/300",
-  //     role: "admin",
-  //     managedCities: [
-  //       (await datasource
-  //         .getRepository(City)
-  //         .findOneBy({ name: "Marseille" })) as City,
-  //       (await datasource
-  //         .getRepository(City)
-  //         .findOneBy({ name: "Lyon" })) as City,
-  //     ],
-  //   },
-  // ]);
+  const tom = await datasource.getRepository(User).save({
+    firstname: "Tom",
+    lastname: "contributor",
+    email: "contributor2@mail.com",
+    password: await hashPassword("contributorPassword2!"),
+    picture: "https://i.pravatar.cc/300",
+    role: "contributor",
+  });
+
+  await datasource.getRepository(User).save([
+    {
+      firstname: "Jane",
+      lastname: "visitor",
+      email: "visitor@mail.com",
+      password: await hashPassword("visitorPassword1!"),
+      picture: "https://i.pravatar.cc/300",
+    },
+    {
+      firstname: "John",
+      lastname: "contributor",
+      email: "contributor@mail.com",
+      password: await hashPassword("contributorPassword1!"),
+      picture: "https://i.pravatar.cc/300",
+      role: "contributor",
+      managedCities: [
+        (await datasource
+          .getRepository(City)
+          .findOneBy({ name: "Marseille" })) as City,
+      ],
+    },
+    {
+      firstname: "Tim",
+      lastname: "admin",
+      email: "admin@mail.com",
+      password: await hashPassword("adminPassword1!"),
+      picture: "https://i.pravatar.cc/300",
+      role: "admin",
+      managedCities: [
+        (await datasource
+          .getRepository(City)
+          .findOneBy({ name: "Marseille" })) as City,
+        (await datasource
+          .getRepository(City)
+          .findOneBy({ name: "Lyon" })) as City,
+      ],
+    },
+    {
+      firstname: "Tom",
+      lastname: "admin",
+      email: "admin2@mail.com",
+      password: await hashPassword("adminPassword2!"),
+      picture: "https://i.pravatar.cc/300",
+      role: "admin",
+    },
+  ]);
 
   // create fake places in DB
   await datasource.getRepository(Place).save([
@@ -200,7 +215,7 @@ async function reset(): Promise<void> {
         "Le muséum d’histoire naturelle de Marseille a été créé en 1819 par Jean-Baptiste, marquis de Montgrand, maire de Marseille de mars 1813 à 1830 et le comte de Villeneuve-Bargemon, alors préfet. Il occupe, depuis 1869, l’aile droite du Palais Longchamp construit par l’architecte Henri-Jacques Espérandieu (1829-1874), dans le 4e arrondissement de Marseille. Le muséum a été créé en 1819. Il a occupé différents lieux, dont la Chapelle des Bernardines, avant de s'implanter définitivement en 1869 au Palais Longchamp qu'il partage avec le musée des Beaux-Arts. Le musée est aujourd'hui sous la tutelle du ministère de l'Enseignement supérieur et de la Recherche. Il a été classé musée de France en 2002.",
       cityId: marseille.id,
       categoryId: monument.id,
-      authorId: tam.id,
+      authorId: tom.id,
     },
     {
       name: "Théâtres Romains de Fourvière",
@@ -356,6 +371,12 @@ async function reset(): Promise<void> {
       authorId: tam.id,
     },
   ]);
+
+  // const userToUpdate = await datasource
+  //   .getRepository(User)
+  //   .findOne({ where: { id: tam.id } });
+  // await datasource.getRepository(User).save(userToUpdate);
+
   await datasource.destroy();
   console.log("done !");
 }

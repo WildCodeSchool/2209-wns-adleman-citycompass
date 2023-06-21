@@ -46,7 +46,21 @@ export class PlaceResolver {
     await existingPlace(data);
     await existingPlaceCoordinates(data);
 
-    return await datasource.getRepository(Place).save(data);
+    const placeCreated = await datasource.getRepository(Place).save(data);
+
+    console.log("😀", placeCreated.authorId);
+
+    const user = await datasource.getRepository(User).findOne({
+      where: { id: placeCreated.authorId },
+    });
+    if (user === null) throw new Error("User not found in database");
+
+    user.managedPlaces = [placeCreated];
+    await datasource.getRepository(User).save(user);
+
+    return placeCreated;
+
+    // await la fonction qui va prendre la place qui vient d'être créé et l'associer à l'utilisateur
   }
 
   @Authorized(["superadmin", "admin", "contributor"])
@@ -67,32 +81,35 @@ export class PlaceResolver {
       adress,
       website,
     } = data;
+
     const placeToUpdate = await datasource
       .getRepository(Place)
-      .findOne({ where: { id } });
+      .findOne({ where: { id }, relations: { city: true } });
 
     if (placeToUpdate === null) throw new Error("Place not found");
 
-    const user = await datasource
-      .getRepository(User)
-      .findOne({ where: { id: userID } });
+    const user = await datasource.getRepository(User).findOne({
+      where: { id: userID },
+      relations: { managedCities: true, managedPlaces: true },
+    });
+    console.log(user);
 
     if (user === null) throw new Error("User doesn't exist");
 
     // if the user is a contributor, check if he's the author of the place
     if (
-      placeToUpdate.author !== undefined &&
-      user !== null &&
       user.role === "contributor" &&
+      placeToUpdate.author !== undefined &&
+      placeToUpdate.author !== null &&
       user.id !== placeToUpdate.author.id
     )
       throw new Error("This place doesn't belong to you");
 
     // if the user is a admin, check if he's the admin of the city linked to the place
-    if (user !== null && user.role === "admin") {
+    if (user.role === "admin") {
       const cityID = placeToUpdate.city.id;
       let boolean = false;
-      if (user.managedCities === undefined)
+      if (user.managedCities?.length === 0)
         throw new Error("You don't have any city assigned to your profile");
       if (user.managedCities !== undefined) {
         for (let i = 0; i < user.managedCities?.length; i++) {
@@ -104,7 +121,7 @@ export class PlaceResolver {
 
     // check if city name & coordinates are already in database
     await existingPlace(data, id);
-    await existingPlaceCoordinates(data);
+    await existingPlaceCoordinates(data, id);
 
     placeToUpdate.adress = adress;
     placeToUpdate.categoryId = categoryId;
