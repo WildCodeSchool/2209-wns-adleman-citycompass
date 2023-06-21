@@ -94,7 +94,8 @@ const styles = StyleSheet.create({
   },
   titleText: {
     flex: 0.03,
-    padding: 15,
+    padding: 20,
+    margin: 10,
     fontSize: 18,
     textAlign: "center",
     fontFamily: "Karla-Medium",

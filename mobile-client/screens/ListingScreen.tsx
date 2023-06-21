@@ -173,6 +173,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     paddingTop: 40,
+    paddingBottom: 110,
     backgroundColor: "#fff",
   },
   header: {
@@ -194,7 +195,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 40,
     borderBottomLeftRadius: 40,
     backgroundColor: "#F5F2E1",
-    marginBottom: 20,
+    marginBottom: 70,
     overflow: "hidden",
   },
   opacity1: {
