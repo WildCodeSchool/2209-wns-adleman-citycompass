@@ -16,7 +16,9 @@ export function UserInformations({ user }: FormUpdateUserProps) {
           <li className="list-disc">Nom : {user.lastname}</li>
           <li className="list-disc">Prénom : {user.firstname}</li>
           <li className="list-disc">Avatar : {user.picture}</li>
-          <li className="list-disc">Email : {user.email}</li>
+          <li data-test-id="login-email-dashboard" className="list-disc">
+            Email : {user.email}
+          </li>
         </ul>
       </div>
     </div>

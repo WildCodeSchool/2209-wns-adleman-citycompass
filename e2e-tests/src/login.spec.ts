@@ -11,16 +11,24 @@ test.beforeEach(clearDB);
 test.afterAll(disconnect);
 
 test("can log in with correct credentials", async ({ page }) => {
+  await page.goto("/");
   await page.getByRole('button', { name: 'person icon to profile' }).click();
 
-  const email = "visitor@mail.com";
-  const password = await hashPassword("visitorPassword1!");
-  await db.getRepository(User).insert({ email, password });
-
-  await page.getByRole('button', { name: 'person icon to profile' }).click();
-  await page.getByPlaceholder('monmail@email.fr').fill(email);
-  await page.getByPlaceholder('Mot de passe').fill(password);
+  const lastname= "contributor";
+  const firstname= "John";
+  const picture= "https://i.pravatar.cc/300";
+  const email = "contributor@mail.com";
+  const passwordClear = "contributorPassword1!";
+  const password = await hashPassword(passwordClear);
+  const user = await db.getRepository(User).insert({ lastname, firstname, picture, email, password });
+  // const user = db.getRepository(User).find()
+  console.log("😀", user);
+  
+  await page.getByTestId('login-email').fill(email);
+  await page.getByTestId('login-password').fill(passwordClear);
   await page.getByRole('button', { name: 'Enregistrer' }).click();
-  await expect(page).toHaveURL(/.*dashboard/)
-  await page.getByText(`Email : ${email}`).click();
+  
+  await expect(page.getByTestId("login-email-dashboard")).toContainText(
+    `Email : ${email}`
+  );
 });

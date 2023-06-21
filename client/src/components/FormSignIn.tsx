@@ -51,6 +51,7 @@ function FormSignUp({ isLogin, setIsLogin }: FormSignInProps) {
               Email
             </label>
             <Field
+              data-test-id="login-email"
               name="email"
               validate={validateEmail}
               placeholder="monmail@email.fr"
@@ -64,7 +65,10 @@ function FormSignUp({ isLogin, setIsLogin }: FormSignInProps) {
             <label className="modal__input--label" htmlFor="password">
               Password
             </label>
-            <Field name="password" validate={validatePasswordLogin}>
+            <Field
+              name="password"
+              validate={validatePasswordLogin}
+            >
               {({
                 field,
                 form: { touched, errors },
@@ -72,6 +76,7 @@ function FormSignUp({ isLogin, setIsLogin }: FormSignInProps) {
               }: FieldAttributes<any>) => (
                 <>
                   <input
+                    data-test-id="login-password"
                     type="password"
                     placeholder="Mot de passe"
                     {...field}
@@ -95,7 +100,11 @@ function FormSignUp({ isLogin, setIsLogin }: FormSignInProps) {
             >
               Créer un compte
             </div>
-            <button type="submit" className="button--primary mt-6">
+            <button
+              data-test-id="login-register"
+              type="submit"
+              className="button--primary mt-6"
+            >
               Enregistrer
             </button>
           </Form>
