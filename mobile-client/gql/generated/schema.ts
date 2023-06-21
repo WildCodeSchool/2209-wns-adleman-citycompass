@@ -289,7 +289,7 @@ export type GetOnePlacebyIdQuery = {
     id: number;
     name: string;
     adress: string;
-    website?: string | null;
+    website?: string | undefined;
     picture: string;
     description: string;
   };

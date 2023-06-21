@@ -23,14 +23,15 @@ export default function App() {
               fontSize: 22,
             },
           }}
+          initialRouteName="Home"
         >
-          <Stack.Screen name="City Compass" component={ListingCity} />
-          <Stack.Screen name="City-details" component={ListingScreen} />
+          <Stack.Screen name="Home" component={ListingCity}   options={{ title: 'Home' }}/>
+          <Stack.Screen name="City-details" component={ListingScreen}  options={{ title: PlaceDetails.name }} />
 
           <Stack.Screen
             name="Place-details"
             component={PlaceDetails}
-            options={{ title: "Details" }}
+            options={{ title: PlaceDetails.name }}
           />
         </Stack.Navigator>
       </NavigationContainer>
