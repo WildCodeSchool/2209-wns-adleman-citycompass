@@ -36,7 +36,7 @@ function FormSignUp({ isLogin, setIsLogin }: FormSignUpProps) {
         res.errors.forEach(({ message }) => {
           if (message === "User email already found in database") {
             toast.error("L'email existe déjà");
-          } else {            
+          } else {
             toast.error(message);
           }
         });
@@ -66,6 +66,7 @@ function FormSignUp({ isLogin, setIsLogin }: FormSignUpProps) {
               Nom
             </label>
             <Field
+              data-test-id="lastname"
               name="lastname"
               validate={validateLastname}
               placeholder="Nom"
@@ -82,6 +83,7 @@ function FormSignUp({ isLogin, setIsLogin }: FormSignUpProps) {
               Prénom
             </label>
             <Field
+              data-test-id="firstname"
               name="firstname"
               validate={validateFirstname}
               placeholder="Prénom"
@@ -98,6 +100,7 @@ function FormSignUp({ isLogin, setIsLogin }: FormSignUpProps) {
               Avatar
             </label>
             <Field
+              data-test-id="picture"
               name="picture"
               validate={validateAvatar}
               placeholder="https://mon-avatar.net"
@@ -114,6 +117,7 @@ function FormSignUp({ isLogin, setIsLogin }: FormSignUpProps) {
               Email
             </label>
             <Field
+              data-test-id="email"
               name="email"
               validate={validateEmail}
               placeholder="monmail@email.fr"
@@ -127,7 +131,11 @@ function FormSignUp({ isLogin, setIsLogin }: FormSignUpProps) {
             <label className="modal__input--label" htmlFor="password">
               Password
             </label>
-            <Field name="password" validate={validatePassword}>
+            <Field
+              data-test-id="password"
+              name="password"
+              validate={validatePassword}
+            >
               {({
                 field,
                 form: { touched, errors },
@@ -135,6 +143,7 @@ function FormSignUp({ isLogin, setIsLogin }: FormSignUpProps) {
               }: FieldAttributes<any>) => (
                 <>
                   <input
+                    data-test-id="password"
                     type="password"
                     placeholder="Mot de passe"
                     {...field}
@@ -158,7 +167,7 @@ function FormSignUp({ isLogin, setIsLogin }: FormSignUpProps) {
             >
               Se connecter
             </div>
-            <button type="submit" className="button--primary mt-6">
+            <button type="submit" data-test-id="register" className="button--primary mt-6">
               Enregistrer
             </button>
           </Form>
