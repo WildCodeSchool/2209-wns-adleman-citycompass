@@ -9,7 +9,7 @@ import {
 } from "../../../gql/generated/schema";
 import { useUpdateUserRoleMutation } from "../../../gql/generated/schema";
 import { toast } from "react-hot-toast";
-import { roles } from "../../../utils/userRoles";
+import { rolesAdmin, rolesSuperadmin } from "../../../utils/userRoles";
 
 interface FormUpdateRoleProps {
   setListUsers: React.Dispatch<React.SetStateAction<boolean>>;
@@ -47,9 +47,11 @@ export function FormUpdateRole({
     });
   };
 
-  const isAuthorized = (currentUser: any, userToUpdate: User): boolean => {
+  const isAccessAuthorized = (
+    currentUser: any,
+    userToUpdate: User
+  ): boolean => {
     if (currentUser.role === "superadmin") return true;
-    console.log(currentUser);
     if (
       currentUser.role === "admin" &&
       (userToUpdate.role === "contributor" || userToUpdate.role === "visitor")
@@ -62,7 +64,7 @@ export function FormUpdateRole({
     <>
       <div className="container mx-auto p-6 bg-cream flex flex-col">
         <UserInformations user={userToUpdate} />
-        {isAuthorized(currentUser, userToUpdate) ? (
+        {isAccessAuthorized(currentUser, userToUpdate) ? (
           <>
             <h3 className="type-h4 text-center py-6">
               Changer le role de l'utilisateur
@@ -78,21 +80,40 @@ export function FormUpdateRole({
                     aria-labelledby="my-radio-group"
                     className="flex flex-row gap-4 justify-center align-center"
                   >
-                    {roles?.map((e) => (
-                      <label
-                        htmlFor={`${e}`}
-                        className="flex gap-3 py-4 px-6 border-2 border-gray rounded
+                    {currentUser?.role === "superadmin" &&
+                      rolesSuperadmin?.map((e) => (
+                        <label
+                          htmlFor={`${e}`}
+                          key={`${e}`}
+                          className="flex gap-3 py-4 px-6 border-2 border-gray rounded
                 bg-white cursor-pointer hover:bg-orange"
-                      >
-                        <Field
-                          type="radio"
-                          name="role"
-                          value={`${e}`}
-                          id={`${e}`}
-                        ></Field>
-                        {e}
-                      </label>
-                    ))}
+                        >
+                          <Field
+                            type="radio"
+                            name="role"
+                            value={`${e}`}
+                            id={`${e}`}
+                          ></Field>
+                          {e}
+                        </label>
+                      ))}
+                    {currentUser?.role === "admin" &&
+                      rolesAdmin?.map((e) => (
+                        <label
+                          htmlFor={`${e}`}
+                          key={`${e}`}
+                          className="flex gap-3 py-4 px-6 border-2 border-gray rounded
+                bg-white cursor-pointer hover:bg-orange"
+                        >
+                          <Field
+                            type="radio"
+                            name="role"
+                            value={`${e}`}
+                            id={`${e}`}
+                          ></Field>
+                          {e}
+                        </label>
+                      ))}
                   </div>
                   <button
                     type="submit"

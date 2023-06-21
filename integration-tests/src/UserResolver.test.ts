@@ -291,22 +291,5 @@ describe("User Resolver", () => {
         `"Access denied! You don't have permission for this action!"`
       );
     });
-    // tester role superadmin user superadmin d'un autre user : ok
-
-    // tester role admin user superadmin : ok
-
-    // tester role contributor user superadmin : ok
-
-    // tester role visitor user superadmin : ok
-
-    // tester role superadmin user admin : nok
-
-    // tester role admin user superadmin : nok
-
-    // tester role contributor user superadmin : ok
-
-    // tester role visitor user superadmin : ok
-
-    // tester changement de role à soit même : nok
   });
 });

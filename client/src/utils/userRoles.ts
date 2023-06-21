@@ -1,5 +1,11 @@
 /**
- * Update enumeration in case of role change will apply it everywhere
+ * Update in case of role change will apply it everywhere
  */
 
-export const roles = ["superadmin", "admin", "contributor", "visitor"];
+export const rolesSuperadmin = [
+  "superadmin",
+  "admin",
+  "contributor",
+  "visitor",
+];
+export const rolesAdmin = ["contributor", "visitor"];

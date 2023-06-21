@@ -6,7 +6,7 @@ import {
   useGetUsersQuery,
 } from "../../../gql/generated/schema";
 import { FormUpdateRole } from "./FormUpdateRole";
-import { roles } from "../../../utils/userRoles";
+import { rolesSuperadmin } from "../../../utils/userRoles";
 import chevron_down from "../../../assets/chevron-arrow-down.png";
 import chevron_up from "../../../assets/up-arrow-angle.png";
 
@@ -54,7 +54,7 @@ function UsersDashboard() {
         <div className="bg-cream w-full h-fit min-h-[75%] mt-10">
           {listUsers && (
             <div className="flex flex-col justify-center w-full h-full gap-4 pb-8">
-              {roles.map((role) => (
+              {rolesSuperadmin.map((role) => (
                 <>
                   {
                     <div
