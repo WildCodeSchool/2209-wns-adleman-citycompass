@@ -80,7 +80,6 @@ export class PlaceResolver {
       where: { id: userID },
       relations: { managedCities: true, managedPlaces: true },
     });
-    console.log(user);
 
     if (user === null) throw new Error("User doesn't exist");
 
