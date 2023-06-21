@@ -124,35 +124,35 @@ export class UserResolver {
     const roles = ["visitor", "contributor", "admin", "superadmin"];
     const currentUserId = ctx.jwtPayload.userID;
 
+    // check datas sent
     if (role !== undefined && !roles.includes(role))
       throw new Error("this is not an existing role");
-
     if (currentUserId === undefined) throw new Error("unauthorized operation");
 
-    // to do : si le current user à le role admin et que le role n'est pas contributor ou visitor, alors lancer une erreur
+    // get currentUser
     const currentUser = await datasource.getRepository(User).findOne({
       where: { id: currentUserId },
     });
-
     if (currentUser === null) throw new Error("current user not found");
 
+    // check if currentUser is authorized to update role
+    // only superadmins can give superadmin & admin role to an user
     if (
-      currentUser.role === "admin" &&
-      role !== "contributor" &&
-      role !== "visitor"
+      currentUser.role !== "superadmin" &&
+      (role === "superadmin" || role === "admin")
     )
-      throw new Error("an admin is not authorized to give this role.");
+      throw new Error("Only superadmin can give this role");
 
+    // get and check user to update
     const userToUpdate = await datasource.getRepository(User).findOne({
       where: { id },
     });
-
     if (userToUpdate === null) throw new Error("User not found");
     if (currentUserId === userToUpdate.id)
       throw new Error("User cannot change his own role");
 
+    // update user role
     if (role !== undefined) userToUpdate.role = role;
-
     await datasource.getRepository(User).save(userToUpdate);
 
     return userToUpdate;
