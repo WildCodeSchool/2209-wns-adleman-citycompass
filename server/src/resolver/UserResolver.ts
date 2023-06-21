@@ -136,8 +136,6 @@ export class UserResolver {
 
     if (currentUser === null) throw new Error("current user not found");
 
-    console.log("🐛", currentUser);
-
     if (
       currentUser.role === "admin" &&
       role !== "contributor" &&
@@ -150,6 +148,8 @@ export class UserResolver {
     });
 
     if (userToUpdate === null) throw new Error("User not found");
+    if (currentUserId === userToUpdate.id)
+      throw new Error("User cannot change his own role");
 
     if (role !== undefined) userToUpdate.role = role;
 
