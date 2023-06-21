@@ -87,7 +87,7 @@ export class UserResolver {
     if (firstname !== undefined) {
       userToUpdate.firstname = firstname;
     }
-    
+
     if (email !== userToUpdate.email) {
       await existingUser(data);
     }
@@ -112,7 +112,7 @@ export class UserResolver {
   async getUsers(): Promise<User[]> {
     return await datasource
       .getRepository(User)
-      .find({ relations: { managedCities: true } });
+      .find({ relations: { managedCities: true, managedPlaces: true } });
   }
 
   @Query(() => User)

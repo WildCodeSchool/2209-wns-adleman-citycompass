@@ -46,19 +46,7 @@ export class PlaceResolver {
     await existingPlace(data);
     await existingPlaceCoordinates(data);
 
-    const placeCreated = await datasource.getRepository(Place).save(data);
-
-    console.log("😀", placeCreated.authorId);
-
-    const user = await datasource.getRepository(User).findOne({
-      where: { id: placeCreated.authorId },
-    });
-    if (user === null) throw new Error("User not found in database");
-
-    user.managedPlaces = [placeCreated];
-    await datasource.getRepository(User).save(user);
-
-    return placeCreated;
+    return await datasource.getRepository(Place).save(data);
 
     // await la fonction qui va prendre la place qui vient d'être créé et l'associer à l'utilisateur
   }
