@@ -118,4 +118,49 @@ export class PlaceInput {
   authorId: number;
 }
 
+@InputType()
+export class PlaceUpdate {
+  @Field({ nullable: true })
+  @MaxLength(50)
+  @MinLength(1)
+  name?: string;
+
+  @Field({ nullable: true })
+  @MaxLength(12)
+  @MinLength(1)
+  latitude?: string;
+
+  @Field({ nullable: true })
+  @MaxLength(13)
+  @MinLength(1)
+  longitude?: string;
+
+  @Field({ nullable: true })
+  @MaxLength(255)
+  @MinLength(10)
+  adress?: string;
+
+  @Field({ nullable: true })
+  @MaxLength(2083)
+  website?: string;
+
+  @Field({ nullable: true })
+  @MaxLength(2083)
+  @MinLength(21)
+  picture?: string;
+
+  @Field({ nullable: true })
+  @MinLength(10)
+  description?: string;
+
+  @Field({ nullable: true })
+  cityId?: number;
+
+  @Field({ nullable: true })
+  categoryId?: number;
+
+  @Field({ nullable: true })
+  authorId?: number;
+}
+
 export default Place;

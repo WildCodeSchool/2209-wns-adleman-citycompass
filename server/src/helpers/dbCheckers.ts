@@ -1,7 +1,7 @@
 import datasource from "../db";
 import Category, { CategoryInput, CategoryUpdate } from "../entity/Category";
 import City, { CityInput, CityUpdate } from "../entity/City";
-import Place, { PlaceInput } from "../entity/Place";
+import Place, { PlaceInput, PlaceUpdate } from "../entity/Place";
 import User, { UserInput, UserUpdate } from "../entity/User";
 
 /**
@@ -57,7 +57,7 @@ export const existingCoordinates = async (
 };
 
 export const existingPlace = async (
-  data: PlaceInput,
+  data: PlaceInput | PlaceUpdate,
   id?: number | undefined
 ): Promise<void> => {
   const nameExists = await datasource
@@ -95,7 +95,7 @@ export const existingCategory = async (
 };
 
 export const existingPlaceCoordinates = async (
-  data: PlaceInput,
+  data: PlaceInput | PlaceUpdate,
   id?: number
 ): Promise<void> => {
   const coordo = await datasource.getRepository(Place).findOne({

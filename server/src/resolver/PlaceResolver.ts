@@ -1,6 +1,6 @@
 import { Arg, Authorized, Mutation, Query, Resolver } from "type-graphql";
 import datasource from "../db";
-import Place, { PlaceInput } from "../entity/Place";
+import Place, { PlaceInput, PlaceUpdate } from "../entity/Place";
 import User from "../entity/User";
 import { existingPlace, existingPlaceCoordinates } from "../helpers/dbCheckers";
 
@@ -56,7 +56,7 @@ export class PlaceResolver {
   async updatePlace(
     @Arg("userID") userID: number,
     @Arg("id") id: number,
-    @Arg("data") data: PlaceInput
+    @Arg("data") data: PlaceUpdate
   ): Promise<Place> {
     const {
       name,
@@ -110,15 +110,15 @@ export class PlaceResolver {
     await existingPlace(data, id);
     await existingPlaceCoordinates(data, id);
 
-    placeToUpdate.adress = adress;
-    placeToUpdate.categoryId = categoryId;
-    placeToUpdate.cityId = cityId;
-    placeToUpdate.description = description;
-    placeToUpdate.latitude = latitude;
-    placeToUpdate.longitude = longitude;
-    placeToUpdate.name = name;
-    placeToUpdate.picture = picture;
-    placeToUpdate.website = website;
+    if (adress !== undefined) placeToUpdate.adress = adress;
+    if (categoryId !== undefined) placeToUpdate.categoryId = categoryId;
+    if (cityId !== undefined) placeToUpdate.cityId = cityId;
+    if (description !== undefined) placeToUpdate.description = description;
+    if (latitude !== undefined) placeToUpdate.latitude = latitude;
+    if (longitude !== undefined) placeToUpdate.longitude = longitude;
+    if (name !== undefined) placeToUpdate.name = name;
+    if (picture !== undefined) placeToUpdate.picture = picture;
+    if (website !== undefined) placeToUpdate.website = website;
 
     await datasource.getRepository(Place).save(placeToUpdate);
 
