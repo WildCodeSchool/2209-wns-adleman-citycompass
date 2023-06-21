@@ -1,7 +1,10 @@
 /* eslint-disable no-sequences */
 import { useState } from "react";
 import modify_icon from "../../../assets/modify_icon.svg";
-import { useGetUsersQuery } from "../../../gql/generated/schema";
+import {
+  useGetProfileQuery,
+  useGetUsersQuery,
+} from "../../../gql/generated/schema";
 import { FormUpdateRole } from "./FormUpdateRole";
 import { roles } from "../../../utils/userRoles";
 import chevron_down from "../../../assets/chevron-arrow-down.png";
@@ -34,6 +37,11 @@ function UsersDashboard() {
 
   const { data } = useGetUsersQuery();
   const users = data?.getUsers;
+  const getProfile = useGetProfileQuery({
+    errorPolicy: "ignore",
+  });
+
+  const currentUser = getProfile.data?.profile;
 
   return (
     <>
@@ -76,7 +84,10 @@ function UsersDashboard() {
                     {userList &&
                       role === roleToDisplay &&
                       users
-                        ?.filter((user) => user.role === role)
+                        ?.filter(
+                          (user) =>
+                            user.role === role && user.id !== currentUser?.id
+                        )
                         .map((user) => (
                           <div
                             className="h-12 w-96 px-6 flex justify-between items-center"
