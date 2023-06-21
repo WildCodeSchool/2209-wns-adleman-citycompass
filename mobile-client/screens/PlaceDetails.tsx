@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, View, Text, Image, ScrollView } from "react-native";
 import { useGetOnePlacebyIdQuery } from "../gql/generated/schema";
+import { A } from "@expo/html-elements";
 
 export default function PlaceDetails({ route }: any) {
   const { itemId } = route.params;
@@ -23,7 +24,15 @@ export default function PlaceDetails({ route }: any) {
             source={require("../assets/address-icon-mobile.png")}
             style={styles.icon}
           />
-          <Text>{place?.adress}</Text>
+          <A
+            href={
+              "https://www.google.com/maps/search/?api=1&query=" +
+              place?.adress +
+              "+field"
+            }
+          >
+            {place?.adress}
+          </A>
         </View>
         {/* website block */}
         <View style={styles.innerBlock}>
@@ -31,7 +40,7 @@ export default function PlaceDetails({ route }: any) {
             source={require("../assets/website-icon-mobile.png")}
             style={styles.icon}
           />
-          <Text>{place?.website}</Text>
+          <A href={place?.website}>{place?.website}</A>
         </View>
       </View>
 
@@ -62,11 +71,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
+    paddingHorizontal: 40,
+    paddingVertical: 10,
   },
   icon: {
     marginRight: 10,
   },
   title1: {
+    padding: 5,
     fontSize: 40,
     textTransform: "uppercase",
     fontFamily: "Lato-Black",
@@ -78,6 +90,7 @@ const styles = StyleSheet.create({
   },
   secondSection: {
     flex: 1,
+    marginBottom: 50,
   },
   title2: {
     color: "#23272D",
