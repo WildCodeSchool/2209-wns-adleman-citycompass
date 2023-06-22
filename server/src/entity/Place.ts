@@ -161,8 +161,8 @@ export class PlaceUpdate {
   @Field({ nullable: true })
   categoryId?: number;
 
-  @Field({ nullable: true })
-  authorId?: number;
+  @Field(() => InputAuthorId, { nullable: true })
+  author?: InputAuthorId;
 }
 
 export default Place;
