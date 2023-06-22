@@ -6,7 +6,6 @@ import {
   useGetUsersQuery,
 } from "../../../gql/generated/schema";
 import { FormUpdateRole } from "./FormUpdateRole";
-import { rolesSuperadmin } from "../../../utils/userRoles";
 import chevron_down from "../../../assets/chevron-arrow-down.png";
 import chevron_up from "../../../assets/up-arrow-angle.png";
 
@@ -37,6 +36,11 @@ function UsersDashboard() {
 
   const { data } = useGetUsersQuery();
   const users = data?.getUsers;
+  const roles: Array<string> = [];
+  users?.map((user) => {
+    return !roles.includes(user.role) ? roles.push(user.role) : undefined;
+  });
+
   const getProfile = useGetProfileQuery({
     errorPolicy: "ignore",
   });
@@ -54,7 +58,7 @@ function UsersDashboard() {
         <div className="bg-cream w-full h-fit min-h-[75%] mt-10">
           {listUsers && (
             <div className="flex flex-col justify-center w-full h-full gap-4 pb-8">
-              {rolesSuperadmin.map((role) => (
+              {roles.map((role) => (
                 <>
                   {
                     <div
