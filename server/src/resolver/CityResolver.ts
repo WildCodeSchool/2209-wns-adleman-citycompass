@@ -1,5 +1,6 @@
 import { Arg, Mutation, Resolver, Query, Authorized } from "type-graphql";
 import City, { CityInput, CityUpdate } from "../entity/City";
+import User from "../entity/User";
 import datasource from "../db";
 import { existingCity, existingCoordinates } from "../helpers/dbCheckers";
 
@@ -19,7 +20,32 @@ export class CityResolver {
     await existingCity(data);
     await existingCoordinates(data);
 
-    return await datasource.getRepository(City).save(data);
+    const createdCity = await datasource.getRepository(City).save(data);
+
+    const users = await datasource.getRepository(User).find({
+      where: { role: "superadmin" },
+      relations: { managedCities: true },
+    });
+
+    users.map(async (user) => {
+      console.log("🤬", user);
+      const toto = await datasource.getRepository(User).save({
+        firstname: user.firstname,
+        lastname: user.lastname,
+        email: user.email,
+        password: user.password,
+        picture: user.picture,
+        role: user.role,
+        managedCities: [
+          (await datasource
+            .getRepository(City)
+            .findOneBy({ name: createdCity.name })) as City,
+        ],
+      });
+      console.log("🤬", toto);
+    });
+
+    return createdCity;
   }
 
   @Query(() => [City])

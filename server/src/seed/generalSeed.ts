@@ -186,7 +186,7 @@ async function reset(): Promise<void> {
         "Le parc national des Calanques est un parc national français, couvrant, notamment, les calanques de Marseille, dans le département des Bouches-du-Rhône, au cœur de la métropole d'Aix-Marseille-Provence. Créé en 2012, il est le premier parc national périurbain d'Europe à la fois terrestre et marin. Il s'étend sur un massif littoral constitué de falaises calcaires et de poudingue, de criques et d'îlots qui constituent des écosystèmes relativement préservés pour de nombreuses espèces vivantes. Le plus haut sommet du parc national des Calanques est le mont Carpiagne (645 m) au cœur du massif de Saint-Cyr. Depuis plus d'un siècle, le site est fréquenté par de nombreux usagers dans un cadre professionnel ou touristique et sportif : pêcheurs, chasseurs, promeneurs, randonneurs, grimpeurs, plongeurs et, plus récemment, traileurs.",
       cityId: marseille.id,
       categoryId: park.id,
-      authorId: tam.id,
+      author: { id: tam.id },
     },
     {
       name: "La Delicatesse",
