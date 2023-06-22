@@ -27,7 +27,7 @@ export class CityResolver {
       relations: { managedCities: true },
     });
 
-    users.map(async (user) => {
+    users.forEach(async (user) => {
       console.log("🤬", user);
       const toto = await datasource.getRepository(User).save({
         firstname: user.firstname,
