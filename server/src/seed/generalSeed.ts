@@ -125,29 +125,9 @@ async function reset(): Promise<void> {
       picture: "https://i.pravatar.cc/300",
     },
     {
-      firstname: "Jean",
-      lastname: "visitor",
-      email: "visitor2@mail.com",
-      password: await hashPassword("visitorPassword1!"),
-      picture: "https://i.pravatar.cc/300",
-    },
-    {
       firstname: "John",
       lastname: "contributor",
       email: "contributor@mail.com",
-      password: await hashPassword("contributorPassword1!"),
-      picture: "https://i.pravatar.cc/300",
-      role: "contributor",
-      managedCities: [
-        (await datasource
-          .getRepository(City)
-          .findOneBy({ name: "Lyon" })) as City,
-      ],
-    },
-    {
-      firstname: "Jeanne",
-      lastname: "contributor",
-      email: "contributor2@mail.com",
       password: await hashPassword("contributorPassword1!"),
       picture: "https://i.pravatar.cc/300",
       role: "contributor",
@@ -174,37 +154,12 @@ async function reset(): Promise<void> {
       ],
     },
     {
-      firstname: "Jim",
+      firstname: "Tom",
       lastname: "admin",
       email: "admin2@mail.com",
-      password: await hashPassword("adminPassword1!"),
+      password: await hashPassword("adminPassword2!"),
       picture: "https://i.pravatar.cc/300",
       role: "admin",
-      managedCities: [
-        (await datasource
-          .getRepository(City)
-          .findOneBy({ name: "Marseille" })) as City,
-        (await datasource
-          .getRepository(City)
-          .findOneBy({ name: "Lyon" })) as City,
-      ],
-    },
-    {
-      firstname: "Tam",
-      lastname: "superadmin",
-      email: "superadmin@mail.com",
-      password: await hashPassword("superadminPassword1!"),
-      picture: "https://i.pravatar.cc/300",
-      role: "admin",
-    },
-    {
-      firstname: "Tom",
-      lastname: "superadmin",
-      email: "superadmin2@mail.com",
-      password: await hashPassword("superadminPassword1!"),
-      picture: "https://i.pravatar.cc/300",
-      role: "superadmin",
-      managedCities: await datasource.getRepository(City).find(),
     },
   ]);
 
