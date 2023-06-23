@@ -2,7 +2,9 @@ query GetPlaces {
   getPlaces {
     name
     id
-    cityId
+    city {
+      id
+    }
     picture
   }
 }
