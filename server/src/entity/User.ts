@@ -18,7 +18,7 @@ import {
 import { Field, ObjectType, InputType } from "type-graphql";
 import City from "./City";
 import { IsNotOnlySpaces } from "../helpers/customValidators";
-import Place from "./Place";
+import Place, { CityId } from "./Place";
 
 export type Role = "superadmin" | "admin" | "contributor" | "visitor";
 
@@ -179,6 +179,12 @@ export class UserRoleUpdate {
   @Field()
   @MaxLength(20)
   role?: string;
+}
+
+@InputType()
+export class UserManagedCityUpdate {
+  @Field(() => [CityId], { nullable: true })
+  managedCities?: CityId[];
 }
 
 export default User;

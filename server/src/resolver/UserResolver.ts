@@ -12,6 +12,7 @@ import User, {
   UserUpdate,
   UserLogin,
   UserRoleUpdate,
+  UserManagedCityUpdate,
 } from "../entity/User";
 import datasource from "../db";
 import { existingUser } from "../helpers/dbCheckers";
@@ -154,6 +155,35 @@ export class UserResolver {
     // update user role
     if (role !== undefined) userToUpdate.role = role;
     await datasource.getRepository(User).save(userToUpdate);
+
+    return userToUpdate;
+  }
+
+  @Authorized(["superadmin", "admin"])
+  @Mutation(() => User)
+  async updateManagedCities(
+    @Arg("data") data: UserManagedCityUpdate,
+    @Arg("userId", () => Int) id: number,
+    @Ctx() ctx: ContextType
+  ): Promise<User> {
+    const currentUserId = ctx.jwtPayload.userID;
+    const { managedCities } = data;
+
+    console.log("🐛", managedCities);
+
+    // get currentUser
+    const currentUser = await datasource.getRepository(User).findOne({
+      where: { id: currentUserId },
+    });
+    if (currentUser === null) throw new Error("current user not found");
+
+    const userToUpdate = await datasource.getRepository(User).findOne({
+      where: { id },
+    });
+    if (userToUpdate === null) throw new Error("User not found");
+
+    console.log("🐛", currentUser);
+    console.log("🐛", userToUpdate);
 
     return userToUpdate;
   }
