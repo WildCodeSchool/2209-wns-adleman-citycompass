@@ -36,8 +36,10 @@ export default function Dashboard() {
   const isAdmin = currentUser?.profile.role === "admin";
   const isContributor = currentUser?.profile.role === "contributor";
 
-  const userManagedCities = currentUser?.profile.managedCities?.map((city) => city.name)
- 
+  const userManagedCities = currentUser?.profile.managedCities?.map(
+    (city) => city.name
+  );
+
   return (
     <>
       {currentUser ? (
@@ -180,7 +182,7 @@ export default function Dashboard() {
             {accueilClicked && <AccueilDashboard />}
             {categoryClicked && <CategoriesDashboard />}
             {cityClicked && <CitiesDashboard />}
-            {poiClicked && <PlacesDashboard cityArray={userManagedCities}/>}
+            {poiClicked && <PlacesDashboard cityArray={userManagedCities} />}
             {userClicked && <UsersDashboard />}
           </div>
         </div>
