@@ -90,7 +90,7 @@ describe("City resolver", () => {
       );
     });
 
-    it("should create a city if conncted user has superadmin role", async () => {
+    it("should create a city if connected user has superadmin role", async () => {
       const superadmin = await db.getRepository(User).save({
         firstname: "John",
         lastname: "Test",
@@ -98,6 +98,7 @@ describe("City resolver", () => {
         password: "monMotsdepasse1!",
         picture: "https://i.pravatar.cc/300",
         role: "superadmin",
+        managedCities: await db.getRepository(City).find(),
       });
       console.log(superadmin);
       const token = await getJWTFor({

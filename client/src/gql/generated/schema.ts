@@ -23,6 +23,10 @@ export type Category = {
   places: Array<Place>;
 };
 
+export type CategoryId = {
+  id: Scalars['Float'];
+};
+
 export type CategoryInput = {
   name: Scalars['String'];
   picto: Scalars['String'];
@@ -39,9 +43,14 @@ export type City = {
   id: Scalars['Float'];
   latitude: Scalars['String'];
   longitude: Scalars['String'];
+  managers?: Maybe<Array<User>>;
   name: Scalars['String'];
   picture: Scalars['String'];
   places: Array<Place>;
+};
+
+export type CityId = {
+  id: Scalars['Float'];
 };
 
 export type CityInput = {
@@ -58,6 +67,10 @@ export type CityUpdate = {
   longitude?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
   picture?: InputMaybe<Scalars['String']>;
+};
+
+export type InputAuthorId = {
+  id: Scalars['Float'];
 };
 
 export type Mutation = {
@@ -113,8 +126,9 @@ export type MutationUpdateCityArgs = {
 
 
 export type MutationUpdatePlaceArgs = {
-  data: PlaceInput;
-  id: Scalars['String'];
+  data: PlaceUpdate;
+  id: Scalars['Float'];
+  userID: Scalars['Float'];
 };
 
 
@@ -126,6 +140,7 @@ export type MutationUpdateUserArgs = {
 export type Place = {
   __typename?: 'Place';
   adress: Scalars['String'];
+  author: User;
   category: Category;
   city: City;
   description: Scalars['String'];
@@ -139,11 +154,26 @@ export type Place = {
 
 export type PlaceInput = {
   adress: Scalars['String'];
+  author: InputAuthorId;
+  category: CategoryId;
+  city: CityId;
   description: Scalars['String'];
   latitude: Scalars['String'];
   longitude: Scalars['String'];
   name: Scalars['String'];
   picture: Scalars['String'];
+  website?: InputMaybe<Scalars['String']>;
+};
+
+export type PlaceUpdate = {
+  adress?: InputMaybe<Scalars['String']>;
+  category: CategoryId;
+  city: CityId;
+  description?: InputMaybe<Scalars['String']>;
+  latitude?: InputMaybe<Scalars['String']>;
+  longitude?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
+  picture?: InputMaybe<Scalars['String']>;
   website?: InputMaybe<Scalars['String']>;
 };
 
@@ -206,6 +236,7 @@ export type User = {
   id: Scalars['Float'];
   lastname: Scalars['String'];
   managedCities?: Maybe<Array<City>>;
+  managedPlaces?: Maybe<Array<Place>>;
   password: Scalars['String'];
   picture: Scalars['String'];
   role: Scalars['String'];

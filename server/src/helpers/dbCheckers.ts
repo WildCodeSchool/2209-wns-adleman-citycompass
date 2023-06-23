@@ -57,8 +57,8 @@ export const existingCoordinates = async (
 };
 
 export const existingPlace = async (
-  data: PlaceInput,
-  id?: string | undefined
+  data: PlaceInput | PlaceUpdate,
+  id?: number | undefined
 ): Promise<void> => {
   const nameExists = await datasource
     .getRepository(Place)
