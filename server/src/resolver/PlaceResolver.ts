@@ -62,15 +62,15 @@ export class PlaceResolver {
       picture,
       latitude,
       longitude,
-      categoryId,
-      cityId,
       adress,
       website,
+      city,
+      category,
     } = data;
 
     const placeToUpdate = await datasource
       .getRepository(Place)
-      .findOne({ where: { id }, relations: { city: true } });
+      .findOne({ where: { id }, relations: { city: true, category: true } });
 
     if (placeToUpdate === null) throw new Error("Place not found");
 
@@ -98,6 +98,15 @@ export class PlaceResolver {
     )
       throw new Error("This place doesn't belong to you");
 
+    // If the user is a contributor, can't modify the city.
+    if (
+      user.role === "contributor" &&
+      placeToUpdate.city.id !== undefined &&
+      placeToUpdate.city.id !== null &&
+      city.id !== placeToUpdate.city.id
+    )
+      throw new Error("You can not modify this place city");
+
     // if the user is a admin, check if he's the admin of the city linked to the place
     if (user.role === "admin") {
       const cityID = placeToUpdate.city.id;
@@ -113,14 +122,14 @@ export class PlaceResolver {
     }
 
     if (adress !== undefined) placeToUpdate.adress = adress;
-    if (categoryId !== undefined) placeToUpdate.categoryId = categoryId;
-    if (cityId !== undefined) placeToUpdate.cityId = cityId;
     if (description !== undefined) placeToUpdate.description = description;
     if (latitude !== undefined) placeToUpdate.latitude = latitude;
     if (longitude !== undefined) placeToUpdate.longitude = longitude;
     if (name !== undefined) placeToUpdate.name = name;
     if (picture !== undefined) placeToUpdate.picture = picture;
     if (website !== undefined) placeToUpdate.website = website;
+    if (city !== undefined) placeToUpdate.city.id = city.id;
+    if (category !== undefined) placeToUpdate.category.id = category.id;
 
     await datasource.getRepository(Place).save(placeToUpdate);
 

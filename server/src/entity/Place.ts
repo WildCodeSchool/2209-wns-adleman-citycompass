@@ -40,17 +40,9 @@ class Place {
   @Column({ type: "text" })
   description: string;
 
-  @Field()
-  @Column()
-  cityId: number;
-
   @Field(() => City)
   @ManyToOne(() => City, (city) => city.places, { onDelete: "CASCADE" })
   city: City;
-
-  @Field()
-  @Column()
-  categoryId: number;
 
   @Field(() => Category)
   @ManyToOne(() => Category, (category) => category.places, {
@@ -68,6 +60,18 @@ class Place {
 
 @InputType()
 export class InputAuthorId {
+  @Field()
+  id: number;
+}
+
+@InputType()
+export class CityId {
+  @Field()
+  id: number;
+}
+
+@InputType()
+export class CategoryId {
   @Field()
   id: number;
 }
@@ -107,11 +111,11 @@ export class PlaceInput {
   @MinLength(10)
   description: string;
 
-  @Field()
-  cityId: number;
+  @Field(() => CityId)
+  city: CityId;
 
-  @Field()
-  categoryId: number;
+  @Field(() => CategoryId)
+  category: CategoryId;
 
   @Field(() => InputAuthorId)
   author: InputAuthorId;
@@ -152,14 +156,11 @@ export class PlaceUpdate {
   @MinLength(10)
   description?: string;
 
-  @Field({ nullable: true })
-  cityId?: number;
+  @Field(() => CityId)
+  city: CityId;
 
-  @Field({ nullable: true })
-  categoryId?: number;
-
-  @Field(() => InputAuthorId, { nullable: true })
-  author?: InputAuthorId;
+  @Field(() => CategoryId)
+  category: CategoryId;
 }
 
 export default Place;

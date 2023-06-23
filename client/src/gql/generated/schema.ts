@@ -23,6 +23,10 @@ export type Category = {
   places: Array<Place>;
 };
 
+export type CategoryId = {
+  id: Scalars['Float'];
+};
+
 export type CategoryInput = {
   name: Scalars['String'];
   picto: Scalars['String'];
@@ -39,9 +43,14 @@ export type City = {
   id: Scalars['Float'];
   latitude: Scalars['String'];
   longitude: Scalars['String'];
+  managers?: Maybe<Array<User>>;
   name: Scalars['String'];
   picture: Scalars['String'];
   places: Array<Place>;
+};
+
+export type CityId = {
+  id: Scalars['Float'];
 };
 
 export type CityInput = {
@@ -58,6 +67,10 @@ export type CityUpdate = {
   longitude?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
   picture?: InputMaybe<Scalars['String']>;
+};
+
+export type InputAuthorId = {
+  id: Scalars['Float'];
 };
 
 export type Mutation = {
@@ -113,8 +126,9 @@ export type MutationUpdateCityArgs = {
 
 
 export type MutationUpdatePlaceArgs = {
-  data: PlaceInput;
-  id: Scalars['String'];
+  data: PlaceUpdate;
+  id: Scalars['Float'];
+  userID: Scalars['Float'];
 };
 
 
@@ -126,10 +140,9 @@ export type MutationUpdateUserArgs = {
 export type Place = {
   __typename?: 'Place';
   adress: Scalars['String'];
+  author: User;
   category: Category;
-  categoryId: Scalars['Float'];
   city: City;
-  cityId: Scalars['Float'];
   description: Scalars['String'];
   id: Scalars['Float'];
   latitude: Scalars['String'];
@@ -141,13 +154,26 @@ export type Place = {
 
 export type PlaceInput = {
   adress: Scalars['String'];
-  categoryId: Scalars['Float'];
-  cityId: Scalars['Float'];
+  author: InputAuthorId;
+  category: CategoryId;
+  city: CityId;
   description: Scalars['String'];
   latitude: Scalars['String'];
   longitude: Scalars['String'];
   name: Scalars['String'];
   picture: Scalars['String'];
+  website?: InputMaybe<Scalars['String']>;
+};
+
+export type PlaceUpdate = {
+  adress?: InputMaybe<Scalars['String']>;
+  category: CategoryId;
+  city: CityId;
+  description?: InputMaybe<Scalars['String']>;
+  latitude?: InputMaybe<Scalars['String']>;
+  longitude?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
+  picture?: InputMaybe<Scalars['String']>;
   website?: InputMaybe<Scalars['String']>;
 };
 
@@ -210,6 +236,7 @@ export type User = {
   id: Scalars['Float'];
   lastname: Scalars['String'];
   managedCities?: Maybe<Array<City>>;
+  managedPlaces?: Maybe<Array<Place>>;
   password: Scalars['String'];
   picture: Scalars['String'];
   role: Scalars['String'];
@@ -272,7 +299,7 @@ export type GetCitiesQuery = { __typename?: 'Query', getCities: Array<{ __typena
 export type GetCitiesWithPlacesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCitiesWithPlacesQuery = { __typename?: 'Query', getCities: Array<{ __typename?: 'City', name: string, places: Array<{ __typename?: 'Place', id: number, name: string, latitude: string, longitude: string, adress: string, website?: string | null, picture: string, description: string, categoryId: number }> }> };
+export type GetCitiesWithPlacesQuery = { __typename?: 'Query', getCities: Array<{ __typename?: 'City', name: string, places: Array<{ __typename?: 'Place', id: number, name: string, latitude: string, longitude: string, adress: string, website?: string | null, picture: string, description: string, category: { __typename?: 'Category', id: number } }> }> };
 
 export type GetOneCitybyNameQueryVariables = Exact<{
   name: Scalars['String'];
@@ -286,12 +313,12 @@ export type GetOnePlacebyNameQueryVariables = Exact<{
 }>;
 
 
-export type GetOnePlacebyNameQuery = { __typename?: 'Query', getOnePlacebyName: { __typename?: 'Place', id: number, name: string, latitude: string, longitude: string, adress: string, website?: string | null, picture: string, description: string, categoryId: number, category: { __typename?: 'Category', name: string, picto: string, id: number } } };
+export type GetOnePlacebyNameQuery = { __typename?: 'Query', getOnePlacebyName: { __typename?: 'Place', id: number, name: string, latitude: string, longitude: string, adress: string, website?: string | null, picture: string, description: string, category: { __typename?: 'Category', name: string, picto: string, id: number } } };
 
 export type GetPlacesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetPlacesQuery = { __typename?: 'Query', getPlaces: Array<{ __typename?: 'Place', id: number, name: string, latitude: string, longitude: string, adress: string, website?: string | null, picture: string, description: string, cityId: number, categoryId: number, city: { __typename?: 'City', id: number, name: string } }> };
+export type GetPlacesQuery = { __typename?: 'Query', getPlaces: Array<{ __typename?: 'Place', id: number, name: string, latitude: string, longitude: string, adress: string, website?: string | null, picture: string, description: string, category: { __typename?: 'Category', id: number, name: string }, city: { __typename?: 'City', id: number, name: string } }> };
 
 export type GetProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -541,7 +568,9 @@ export const GetCitiesWithPlacesDocument = gql`
       website
       picture
       description
-      categoryId
+      category {
+        id
+      }
     }
   }
 }
@@ -639,7 +668,6 @@ export const GetOnePlacebyNameDocument = gql`
     website
     picture
     description
-    categoryId
     category {
       name
       picto
@@ -687,8 +715,10 @@ export const GetPlacesDocument = gql`
     website
     picture
     description
-    cityId
-    categoryId
+    category {
+      id
+      name
+    }
     city {
       id
       name
