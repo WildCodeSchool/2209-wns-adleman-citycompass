@@ -156,14 +156,11 @@ export class PlaceUpdate {
   @MinLength(10)
   description?: string;
 
-  @Field(() => CityId, { nullable: true })
-  city?: CityId;
+  @Field(() => CityId)
+  city: CityId;
 
-  @Field(() => CategoryId, { nullable: true })
-  category?: CategoryId;
-
-  @Field(() => InputAuthorId, { nullable: true })
-  author?: InputAuthorId;
+  @Field(() => CategoryId)
+  category: CategoryId;
 }
 
 export default Place;

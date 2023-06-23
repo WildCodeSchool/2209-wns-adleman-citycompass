@@ -109,6 +109,11 @@ async function reset(): Promise<void> {
     password: await hashPassword("contributorPassword2!"),
     picture: "https://i.pravatar.cc/300",
     role: "contributor",
+    managedCities: [
+      (await datasource
+        .getRepository(City)
+        .findOneBy({ name: "Marseille" })) as City,
+    ],
   });
 
   await datasource.getRepository(User).save([
@@ -129,7 +134,7 @@ async function reset(): Promise<void> {
       managedCities: [
         (await datasource
           .getRepository(City)
-          .findOneBy({ name: "Marseille" })) as City,
+          .findOneBy({ name: "Lyon" })) as City,
       ],
     },
     {

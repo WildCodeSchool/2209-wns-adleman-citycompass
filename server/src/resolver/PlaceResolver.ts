@@ -56,11 +56,21 @@ export class PlaceResolver {
     @Arg("id") id: number,
     @Arg("data") data: PlaceUpdate
   ): Promise<Place> {
-    const { name, description, picture, latitude, longitude, adress, website } =
-      data;
+    const {
+      name,
+      description,
+      picture,
+      latitude,
+      longitude,
+      adress,
+      website,
+      city,
+      category,
+    } = data;
+
     const placeToUpdate = await datasource
       .getRepository(Place)
-      .findOne({ where: { id } });
+      .findOne({ where: { id }, relations: { city: true, category: true } });
 
     if (placeToUpdate === null) throw new Error("Place not found");
 
@@ -72,16 +82,6 @@ export class PlaceResolver {
     if (user === null) throw new Error("User doesn't exist");
 
     // check if city name & coordinates are already in database
-    if (name !== placeToUpdate.name) {
-      await existingPlace(data, id);
-    }
-
-    if (
-      latitude !== placeToUpdate.latitude &&
-      longitude !== placeToUpdate.longitude
-    ) {
-      await existingPlaceCoordinates(data);
-    }
     if (name !== placeToUpdate.name) await existingPlace(data, id);
     if (
       latitude !== placeToUpdate.latitude &&
@@ -89,13 +89,47 @@ export class PlaceResolver {
     )
       await existingPlaceCoordinates(data, id);
 
-    placeToUpdate.adress = adress;
-    placeToUpdate.description = description;
-    placeToUpdate.latitude = latitude;
-    placeToUpdate.longitude = longitude;
-    placeToUpdate.name = name;
-    placeToUpdate.picture = picture;
-    placeToUpdate.website = website;
+    // if the user is a contributor, check if he's the author of the place
+    if (
+      user.role === "contributor" &&
+      placeToUpdate.author !== undefined &&
+      placeToUpdate.author !== null &&
+      user.id !== placeToUpdate.author.id
+    )
+      throw new Error("This place doesn't belong to you");
+
+    // If the user is a contributor, can't modify the city.
+    if (
+      user.role === "contributor" &&
+      placeToUpdate.city.id !== undefined &&
+      placeToUpdate.city.id !== null &&
+      city.id !== placeToUpdate.city.id
+    )
+      throw new Error("You can not modify this place city");
+
+    // if the user is a admin, check if he's the admin of the city linked to the place
+    if (user.role === "admin") {
+      const cityID = placeToUpdate.city.id;
+      let boolean = false;
+      if (user.managedCities?.length === 0)
+        throw new Error("You don't have any city assigned to your profile");
+      if (user.managedCities !== undefined) {
+        for (let i = 0; i < user.managedCities?.length; i++) {
+          if (user.managedCities[i].id === cityID) boolean = true;
+        }
+      }
+      if (!boolean) throw new Error("You don't manage this city");
+    }
+
+    if (adress !== undefined) placeToUpdate.adress = adress;
+    if (description !== undefined) placeToUpdate.description = description;
+    if (latitude !== undefined) placeToUpdate.latitude = latitude;
+    if (longitude !== undefined) placeToUpdate.longitude = longitude;
+    if (name !== undefined) placeToUpdate.name = name;
+    if (picture !== undefined) placeToUpdate.picture = picture;
+    if (website !== undefined) placeToUpdate.website = website;
+    if (city !== undefined) placeToUpdate.city.id = city.id;
+    if (category !== undefined) placeToUpdate.category.id = category.id;
 
     await datasource.getRepository(Place).save(placeToUpdate);
 
