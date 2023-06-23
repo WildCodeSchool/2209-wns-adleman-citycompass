@@ -47,8 +47,6 @@ export class PlaceResolver {
     await existingPlaceCoordinates(data);
 
     return await datasource.getRepository(Place).save(data);
-
-    // await la fonction qui va prendre la place qui vient d'être créé et l'associer à l'utilisateur
   }
 
   @Authorized(["superadmin", "admin", "contributor"])
@@ -83,6 +81,14 @@ export class PlaceResolver {
 
     if (user === null) throw new Error("User doesn't exist");
 
+    // check if city name & coordinates are already in database
+    if (name !== placeToUpdate.name) await existingPlace(data, id);
+    if (
+      latitude !== placeToUpdate.latitude &&
+      longitude !== placeToUpdate.longitude
+    )
+      await existingPlaceCoordinates(data, id);
+
     // if the user is a contributor, check if he's the author of the place
     if (
       user.role === "contributor" &&
@@ -105,10 +111,6 @@ export class PlaceResolver {
       }
       if (!boolean) throw new Error("You don't manage this city");
     }
-
-    // check if city name & coordinates are already in database
-    await existingPlace(data, id);
-    await existingPlaceCoordinates(data, id);
 
     if (adress !== undefined) placeToUpdate.adress = adress;
     if (categoryId !== undefined) placeToUpdate.categoryId = categoryId;
