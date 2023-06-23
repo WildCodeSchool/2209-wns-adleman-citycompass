@@ -4,11 +4,21 @@ import {
   PrimaryGeneratedColumn,
   ManyToMany,
   JoinTable,
+  OneToMany,
 } from "typeorm";
-import { IsEmail, IsNotEmpty, IsUrl, Matches, MaxLength, MinLength, Validate } from "class-validator";
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsUrl,
+  Matches,
+  MaxLength,
+  MinLength,
+  Validate,
+} from "class-validator";
 import { Field, ObjectType, InputType } from "type-graphql";
 import City from "./City";
 import { IsNotOnlySpaces } from "../helpers/customValidators";
+import Place from "./Place";
 
 export type Role = "superadmin" | "admin" | "contributor" | "visitor";
 
@@ -56,6 +66,10 @@ class User {
   @ManyToMany(() => City)
   @JoinTable()
   managedCities?: City[];
+
+  @Field(() => [Place], { nullable: true })
+  @OneToMany(() => Place, (place) => place.author)
+  managedPlaces?: Place[];
 }
 
 @InputType()

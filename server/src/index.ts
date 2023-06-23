@@ -48,10 +48,10 @@ async function start(): Promise<void> {
         // return profile's informations with relations
         user = await datasource.getRepository(User).findOne({
           where: { id },
-          relations: { managedCities: true } });
+          relations: { managedCities: true, managedPlaces: true },
+        });
       }
       if (user !== null) context.currentUser = user;
-      console.log(user);
 
       if (context.currentUser == null) return false;
       return roles.length === 0 || roles.includes(context.currentUser.role);

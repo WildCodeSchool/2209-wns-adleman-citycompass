@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from "typeorm";
+import {
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  OneToMany,
+  ManyToMany,
+  JoinTable,
+} from "typeorm";
 import { Field, InputType, ObjectType } from "type-graphql";
 import {
   IsLatitude,
@@ -11,6 +18,7 @@ import {
 } from "class-validator";
 import Place from "./Place";
 import { IsNotOnlySpaces } from "../helpers/customValidators";
+import User from "./User";
 
 @Entity()
 @ObjectType()
@@ -45,6 +53,11 @@ class City {
   @Field(() => [Place])
   @OneToMany(() => Place, (place) => place.city)
   places?: Place[];
+
+  @Field(() => [User], { nullable: true })
+  @ManyToMany(() => User)
+  @JoinTable()
+  managers?: User[];
 }
 
 @InputType()
