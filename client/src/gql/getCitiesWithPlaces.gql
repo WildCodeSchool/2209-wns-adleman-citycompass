@@ -10,7 +10,9 @@ query GetCitiesWithPlaces {
       website
       picture
       description
-      categoryId
+      category {
+        id
+      }
     }
   }
 }

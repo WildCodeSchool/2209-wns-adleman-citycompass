@@ -8,8 +8,10 @@ query GetPlaces {
     website
     picture
     description
-    cityId
-    categoryId
+    category {
+      id
+      name
+    }
     city {
       id
       name

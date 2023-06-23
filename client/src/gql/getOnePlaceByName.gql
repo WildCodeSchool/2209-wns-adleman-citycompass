@@ -8,7 +8,6 @@ query GetOnePlacebyName($name: String!) {
     website
     picture
     description
-    categoryId
     category {
       name
       picto
