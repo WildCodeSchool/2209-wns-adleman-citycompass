@@ -65,7 +65,7 @@ class User {
   @Field(() => [City], { nullable: true })
   @ManyToMany(() => City)
   @JoinTable()
-  managedCities?: City[];
+  managedCities: City[];
 
   @Field(() => [Place], { nullable: true })
   @OneToMany(() => Place, (place) => place.author)
