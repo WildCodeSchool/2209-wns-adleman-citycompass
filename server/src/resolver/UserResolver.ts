@@ -169,6 +169,8 @@ export class UserResolver {
     const currentUserId = ctx.jwtPayload.userID;
     const { managedCities } = data;
 
+    if (managedCities === undefined)
+      throw new Error("Managed cities in data are undefined");
     console.log("🐛", managedCities);
 
     // get currentUser
@@ -176,14 +178,15 @@ export class UserResolver {
       where: { id: currentUserId },
     });
     if (currentUser === null) throw new Error("current user not found");
-
+    // get userToUpdate
     const userToUpdate = await datasource.getRepository(User).findOne({
       where: { id },
+      relations: { managedCities: true },
     });
-    if (userToUpdate === null) throw new Error("User not found");
-
-    console.log("🐛", currentUser);
-    console.log("🐛", userToUpdate);
+    if (userToUpdate === null) throw new Error("User to update not found");
+    // check if user is allowed to do the mutation
+    if (userToUpdate.id === currentUser.id && currentUser.role === "admin")
+      throw new Error("You are not allowed to modify your own managed cities");
 
     return userToUpdate;
   }
