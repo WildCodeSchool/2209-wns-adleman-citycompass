@@ -1,0 +1,12 @@
+mutation updateManagedCities($userId: Int!, $data: UserManagedCityUpdate!) {
+  updateManagedCities(userId: $userId, data: $data) {
+    managedCities {
+      id
+      name
+      picture
+      description
+      latitude
+      longitude
+    }
+  }
+}
