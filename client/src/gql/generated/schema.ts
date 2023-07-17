@@ -23,10 +23,6 @@ export type Category = {
   places: Array<Place>;
 };
 
-export type CategoryId = {
-  id: Scalars['Float'];
-};
-
 export type CategoryInput = {
   name: Scalars['String'];
   picto: Scalars['String'];
@@ -49,10 +45,6 @@ export type City = {
   places: Array<Place>;
 };
 
-export type CityId = {
-  id: Scalars['Float'];
-};
-
 export type CityInput = {
   description: Scalars['String'];
   latitude: Scalars['String'];
@@ -67,10 +59,6 @@ export type CityUpdate = {
   longitude?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
   picture?: InputMaybe<Scalars['String']>;
-};
-
-export type InputAuthorId = {
-  id: Scalars['Float'];
 };
 
 export type Mutation = {
@@ -154,9 +142,8 @@ export type Place = {
 
 export type PlaceInput = {
   adress: Scalars['String'];
-  author: InputAuthorId;
-  category: CategoryId;
-  city: CityId;
+  categoryId: Scalars['Float'];
+  cityId: Scalars['Float'];
   description: Scalars['String'];
   latitude: Scalars['String'];
   longitude: Scalars['String'];
@@ -167,8 +154,8 @@ export type PlaceInput = {
 
 export type PlaceUpdate = {
   adress?: InputMaybe<Scalars['String']>;
-  category: CategoryId;
-  city: CityId;
+  categoryId: Scalars['Float'];
+  cityId: Scalars['Float'];
   description?: InputMaybe<Scalars['String']>;
   latitude?: InputMaybe<Scalars['String']>;
   longitude?: InputMaybe<Scalars['String']>;
@@ -278,6 +265,13 @@ export type CreateCityMutationVariables = Exact<{
 
 
 export type CreateCityMutation = { __typename?: 'Mutation', createCity: { __typename?: 'City', id: number, name: string, picture: string, description: string, latitude: string, longitude: string } };
+
+export type CreatePlaceMutationVariables = Exact<{
+  data: PlaceInput;
+}>;
+
+
+export type CreatePlaceMutation = { __typename?: 'Mutation', createPlace: { __typename?: 'Place', id: number, name: string, latitude: string, longitude: string, adress: string, website?: string | null, picture: string, description: string } };
 
 export type CreateUserMutationVariables = Exact<{
   data: UserInput;
@@ -447,6 +441,46 @@ export function useCreateCityMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreateCityMutationHookResult = ReturnType<typeof useCreateCityMutation>;
 export type CreateCityMutationResult = Apollo.MutationResult<CreateCityMutation>;
 export type CreateCityMutationOptions = Apollo.BaseMutationOptions<CreateCityMutation, CreateCityMutationVariables>;
+export const CreatePlaceDocument = gql`
+    mutation CreatePlace($data: PlaceInput!) {
+  createPlace(data: $data) {
+    id
+    name
+    latitude
+    longitude
+    adress
+    website
+    picture
+    description
+  }
+}
+    `;
+export type CreatePlaceMutationFn = Apollo.MutationFunction<CreatePlaceMutation, CreatePlaceMutationVariables>;
+
+/**
+ * __useCreatePlaceMutation__
+ *
+ * To run a mutation, you first call `useCreatePlaceMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreatePlaceMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createPlaceMutation, { data, loading, error }] = useCreatePlaceMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreatePlaceMutation(baseOptions?: Apollo.MutationHookOptions<CreatePlaceMutation, CreatePlaceMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreatePlaceMutation, CreatePlaceMutationVariables>(CreatePlaceDocument, options);
+      }
+export type CreatePlaceMutationHookResult = ReturnType<typeof useCreatePlaceMutation>;
+export type CreatePlaceMutationResult = Apollo.MutationResult<CreatePlaceMutation>;
+export type CreatePlaceMutationOptions = Apollo.BaseMutationOptions<CreatePlaceMutation, CreatePlaceMutationVariables>;
 export const CreateUserDocument = gql`
     mutation CreateUser($data: UserInput!) {
   createUser(data: $data) {

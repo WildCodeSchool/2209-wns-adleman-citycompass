@@ -59,24 +59,6 @@ class Place {
 }
 
 @InputType()
-export class InputAuthorId {
-  @Field()
-  id: number;
-}
-
-@InputType()
-export class CityId {
-  @Field()
-  id: number;
-}
-
-@InputType()
-export class CategoryId {
-  @Field()
-  id: number;
-}
-
-@InputType()
 export class PlaceInput {
   @Field()
   @MaxLength(50)
@@ -111,14 +93,11 @@ export class PlaceInput {
   @MinLength(10)
   description: string;
 
-  @Field(() => CityId)
-  city: CityId;
+  @Field()
+  cityId: number;
 
-  @Field(() => CategoryId)
-  category: CategoryId;
-
-  @Field(() => InputAuthorId)
-  author: InputAuthorId;
+  @Field()
+  categoryId: number;
 }
 
 @InputType()
@@ -156,11 +135,11 @@ export class PlaceUpdate {
   @MinLength(10)
   description?: string;
 
-  @Field(() => CityId)
-  city: CityId;
+  @Field()
+  cityId: number;
 
-  @Field(() => CategoryId)
-  category: CategoryId;
+  @Field()
+  categoryId: number;
 }
 
 export default Place;
