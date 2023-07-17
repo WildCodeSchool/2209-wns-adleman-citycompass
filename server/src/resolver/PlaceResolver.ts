@@ -1,8 +1,11 @@
-import { Arg, Authorized, Mutation, Query, Resolver } from "type-graphql";
+import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import datasource from "../db";
 import Place, { PlaceInput, PlaceUpdate } from "../entity/Place";
 import User from "../entity/User";
 import { existingPlace, existingPlaceCoordinates } from "../helpers/dbCheckers";
+import Category from "../entity/Category";
+import City from "../entity/City";
+import { ContextType } from "..";
 
 @Resolver(Place)
 export class PlaceResolver {
@@ -39,14 +42,41 @@ export class PlaceResolver {
 
   @Authorized(["superadmin", "admin", "contributor"])
   @Mutation(() => Place)
-  async createPlace(@Arg("data") data: PlaceInput): Promise<Place> {
+  async createPlace(
+    @Arg("data") data: PlaceInput,
+    @Ctx() ctx: ContextType
+  ): Promise<Place> {
     if (data === null) throw new Error("No data in query");
+    console.log("data", data.cityId);
+
+    const placeCity = await datasource
+      .getRepository(City)
+      .findOne({ where: { id: data.cityId } });
+    if (placeCity === null) throw new Error("City not found in database");
+    const currentUserId = ctx.jwtPayload.userID;
+    const currentUser = await datasource
+      .getRepository(User)
+      .findOne({ where: { id: currentUserId } });
+    if (currentUser === null) throw new Error("User not found in database");
+
+    const placeCategory = await datasource
+      .getRepository(Category)
+      .findOne({ where: { id: data.categoryId } });
+    if (placeCategory === null)
+      throw new Error("Category not found in database");
+
+    const newPlace = {
+      ...data,
+      category: placeCategory,
+      city: placeCity,
+      author: currentUser,
+    };
 
     // check if place name & coordinates are already in database
-    await existingPlace(data);
-    await existingPlaceCoordinates(data);
+    await existingPlace(newPlace);
+    await existingPlaceCoordinates(newPlace);
 
-    return await datasource.getRepository(Place).save(data);
+    return await datasource.getRepository(Place).save(newPlace);
   }
 
   @Authorized(["superadmin", "admin", "contributor"])
@@ -64,8 +94,8 @@ export class PlaceResolver {
       longitude,
       adress,
       website,
-      city,
-      category,
+      cityId,
+      categoryId,
     } = data;
 
     const placeToUpdate = await datasource
@@ -103,7 +133,7 @@ export class PlaceResolver {
       user.role === "contributor" &&
       placeToUpdate.city.id !== undefined &&
       placeToUpdate.city.id !== null &&
-      city.id !== placeToUpdate.city.id
+      cityId !== placeToUpdate.city.id
     )
       throw new Error("You can not modify this place city");
 
@@ -128,8 +158,8 @@ export class PlaceResolver {
     if (name !== undefined) placeToUpdate.name = name;
     if (picture !== undefined) placeToUpdate.picture = picture;
     if (website !== undefined) placeToUpdate.website = website;
-    if (city !== undefined) placeToUpdate.city.id = city.id;
-    if (category !== undefined) placeToUpdate.category.id = category.id;
+    if (cityId !== undefined) placeToUpdate.city.id = cityId;
+    if (categoryId !== undefined) placeToUpdate.category.id = categoryId;
 
     await datasource.getRepository(Place).save(placeToUpdate);
 
