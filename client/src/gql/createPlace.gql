@@ -1,0 +1,12 @@
+mutation CreatePlace($data: PlaceInput!) {
+  createPlace(data: $data) {
+    id
+    name
+    latitude
+    longitude
+    adress
+    website
+    picture
+    description
+  }
+}

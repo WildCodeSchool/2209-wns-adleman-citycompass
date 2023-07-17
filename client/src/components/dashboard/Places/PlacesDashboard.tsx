@@ -5,6 +5,7 @@ import modify_icon from "../../../assets/modify_icon.svg";
 import chevron_down from "../../../assets/chevron-arrow-down.png";
 import chevron_up from "../../../assets/up-arrow-angle.png";
 import { useGetCitiesWithPlacesQuery } from "../../../gql/generated/schema";
+import FormAddPlace from "./FormAddPlace";
 
 export interface CityArrayProps {
   cityArray: string[] | undefined;
@@ -90,14 +91,7 @@ function PlacesDashboard({ cityArray }: CityArrayProps) {
           )}
           {addPlaces && (
             <div>
-              <p>FORMULAIRE AJOUT PLACE</p>
-              <button
-                onClick={() => (
-                  setAddPlaces(false), setPlaces(true), setListPlaces(false)
-                )}
-              >
-                Enregistrer
-              </button>
+              <FormAddPlace setAddPlaces={setAddPlaces} setPlaces={setPlaces} />
             </div>
           )}
           {modifyPlaces && (
