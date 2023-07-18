@@ -27,23 +27,17 @@ export class CityResolver {
       relations: { managedCities: true },
     });
 
-    users.forEach(async (user) => {
-      console.log("🤬", user);
-      const toto = await datasource.getRepository(User).save({
-        firstname: user.firstname,
-        lastname: user.lastname,
-        email: user.email,
-        password: user.password,
-        picture: user.picture,
-        role: user.role,
-        managedCities: [
-          (await datasource
-            .getRepository(City)
-            .findOneBy({ name: createdCity.name })) as City,
-        ],
-      });
-      console.log("🤬", toto);
-    });
+    await Promise.all(
+      users.map(async (user) => {
+        await datasource.getRepository(User).update(
+          { id: user.id },
+          {
+            ...user,
+            managedCities: await datasource.getRepository(City).find(),
+          }
+        );
+      })
+    );
 
     return createdCity;
   }
