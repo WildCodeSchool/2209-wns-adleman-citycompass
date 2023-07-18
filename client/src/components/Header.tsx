@@ -34,7 +34,7 @@ function Header() {
   return (
     <>
       <div className="bg-white w-full sticky top-0 z-50">
-        <div className="header container">
+        <div className="header container py-4">
           <div className="header__compass">
             <a href="/" className="flex">
               <img

@@ -25,9 +25,9 @@ export default function Home() {
   };
 
   return (
-    <div className="flex h-full flex-col justify-between">
+    <div className="sm:flex sm:h-full flex-col justify-between">
       <Hero heroContent={heroHome} action={action} scrollToRef={scrollToRef} />
-      <div className="container" ref={scrollToRef}>
+      <div className="container py-8" ref={scrollToRef}>
         <h3 className="text-center font-bold font-karla text-l">À découvrir</h3>
         <div className="flex flex-row flex-wrap w-full mt-4 gap-12 justify-center md:justify-between">
           {cities &&
