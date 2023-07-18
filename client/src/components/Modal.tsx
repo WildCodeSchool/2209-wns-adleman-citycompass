@@ -9,10 +9,6 @@ interface modalProps {
 }
 
 function Modal({ showModal, setShowModal }: modalProps) {
-  useEffect(() => {
-    document.body.style.overflow = showModal ? "hidden" : "initial";
-  });
-
   const showClick = () => {
     setShowModal(!showModal);
   };
@@ -33,7 +29,7 @@ function Modal({ showModal, setShowModal }: modalProps) {
           <div className="flex flex-col w-full p-8">
             {isLogin ? (
               <FormSignIn isLogin={isLogin} setIsLogin={setIsLogin} />
-              ) : (
+            ) : (
               <FormSignUp isLogin={isLogin} setIsLogin={setIsLogin} />
             )}
           </div>
