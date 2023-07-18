@@ -4,7 +4,6 @@ import {
   PrimaryGeneratedColumn,
   OneToMany,
   ManyToMany,
-  JoinTable,
 } from "typeorm";
 import { Field, InputType, ObjectType } from "type-graphql";
 import {
@@ -56,7 +55,6 @@ class City {
 
   @Field(() => [User], { nullable: true })
   @ManyToMany(() => User)
-  @JoinTable()
   managers?: User[];
 }
 

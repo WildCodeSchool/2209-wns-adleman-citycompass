@@ -27,15 +27,16 @@ export class CityResolver {
       relations: { managedCities: true },
     });
 
+    if (users === null) throw new Error("No super admin found in database");
+
+    const existingCities = await datasource.getRepository(City).find();
+    if (existingCities === null)
+      throw new Error("No existing cities found in database");
+
     await Promise.all(
       users.map(async (user) => {
-        await datasource.getRepository(User).update(
-          { id: user.id },
-          {
-            ...user,
-            managedCities: await datasource.getRepository(City).find(),
-          }
-        );
+        const userToUpdate = { ...user, managedCities: existingCities };
+        await datasource.getRepository(User).save(userToUpdate);
       })
     );
 
