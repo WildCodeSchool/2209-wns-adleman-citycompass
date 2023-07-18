@@ -8,6 +8,7 @@ import {
 import { FormUpdateRole } from "./FormUpdateRole";
 import chevron_down from "../../../assets/chevron-arrow-down.png";
 import chevron_up from "../../../assets/up-arrow-angle.png";
+import { FormUpdateManagedCities } from "./FormUpdateManagedCities";
 
 export interface userToUpdateProps {
   id: number;
@@ -119,6 +120,11 @@ function UsersDashboard() {
           {modifyUsers && (
             <div>
               <FormUpdateRole
+                setListUsers={setListUsers}
+                setModifyUsers={setModifyUsers}
+                userToUpdate={userToUpdate}
+              />
+              <FormUpdateManagedCities
                 setListUsers={setListUsers}
                 setModifyUsers={setModifyUsers}
                 userToUpdate={userToUpdate}
