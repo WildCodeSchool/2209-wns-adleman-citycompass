@@ -197,6 +197,7 @@ export type Query = {
   getOnePlacebyName: Place;
   getOneUserbyMail: User;
   getPlaces: Array<Place>;
+  getUserManagedCities: User;
   getUsers: Array<User>;
   profile: User;
 };
@@ -223,6 +224,11 @@ export type QueryGetOnePlacebyNameArgs = {
 
 export type QueryGetOneUserbyMailArgs = {
   email: Scalars["String"];
+};
+
+
+export type QueryGetUserManagedCitiesArgs = {
+  userId: Scalars['Float'];
 };
 
 export type SearchResult = {
@@ -507,6 +513,7 @@ export type GetSearchResultQuery = {
 
 export type GetUsersQueryVariables = Exact<{ [key: string]: never }>;
 
+<<<<<<< HEAD
 export type GetUsersQuery = {
   __typename?: "Query";
   getUsers: Array<{
@@ -520,6 +527,19 @@ export type GetUsersQuery = {
     role: string;
   }>;
 };
+=======
+export type GetUserManagedCitiesQueryVariables = Exact<{
+  userId: Scalars['Float'];
+}>;
+
+
+export type GetUserManagedCitiesQuery = { __typename?: 'Query', getUserManagedCities: { __typename?: 'User', id: number, managedCities?: Array<{ __typename?: 'City', id: number, name: string, picture: string, description: string, latitude: string, longitude: string }> | null } };
+
+export type GetUsersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetUsersQuery = { __typename?: 'Query', getUsers: Array<{ __typename?: 'User', id: number, firstname: string, lastname: string, email: string, password: string, picture: string, role: string }> };
+>>>>>>> 88d79d3 (✨ add getUserMangedCities query in back and front)
 
 export type LoginMutationVariables = Exact<{
   data: UserLogin;
@@ -1331,17 +1351,71 @@ export const GetSearchResultDocument = gql`
  *   },
  * });
  */
-export function useGetSearchResultQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    GetSearchResultQuery,
-    GetSearchResultQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<GetSearchResultQuery, GetSearchResultQueryVariables>(
-    GetSearchResultDocument,
-    options
-  );
+export function useGetSearchResultQuery(baseOptions: Apollo.QueryHookOptions<GetSearchResultQuery, GetSearchResultQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetSearchResultQuery, GetSearchResultQueryVariables>(GetSearchResultDocument, options);
+      }
+export function useGetSearchResultLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetSearchResultQuery, GetSearchResultQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetSearchResultQuery, GetSearchResultQueryVariables>(GetSearchResultDocument, options);
+        }
+export type GetSearchResultQueryHookResult = ReturnType<typeof useGetSearchResultQuery>;
+export type GetSearchResultLazyQueryHookResult = ReturnType<typeof useGetSearchResultLazyQuery>;
+export type GetSearchResultQueryResult = Apollo.QueryResult<GetSearchResultQuery, GetSearchResultQueryVariables>;
+export const GetUserManagedCitiesDocument = gql`
+    query getUserManagedCities($userId: Float!) {
+  getUserManagedCities(userId: $userId) {
+    id
+    managedCities {
+      id
+      name
+      picture
+      description
+      latitude
+      longitude
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetUserManagedCitiesQuery__
+ *
+ * To run a query within a React component, call `useGetUserManagedCitiesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserManagedCitiesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserManagedCitiesQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useGetUserManagedCitiesQuery(baseOptions: Apollo.QueryHookOptions<GetUserManagedCitiesQuery, GetUserManagedCitiesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUserManagedCitiesQuery, GetUserManagedCitiesQueryVariables>(GetUserManagedCitiesDocument, options);
+      }
+export function useGetUserManagedCitiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserManagedCitiesQuery, GetUserManagedCitiesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUserManagedCitiesQuery, GetUserManagedCitiesQueryVariables>(GetUserManagedCitiesDocument, options);
+        }
+export type GetUserManagedCitiesQueryHookResult = ReturnType<typeof useGetUserManagedCitiesQuery>;
+export type GetUserManagedCitiesLazyQueryHookResult = ReturnType<typeof useGetUserManagedCitiesLazyQuery>;
+export type GetUserManagedCitiesQueryResult = Apollo.QueryResult<GetUserManagedCitiesQuery, GetUserManagedCitiesQueryVariables>;
+export const GetUsersDocument = gql`
+    query GetUsers {
+  getUsers {
+    id
+    firstname
+    lastname
+    email
+    password
+    picture
+    role
+  }
 }
 export function useGetSearchResultLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<

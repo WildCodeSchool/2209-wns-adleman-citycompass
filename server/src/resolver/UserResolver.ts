@@ -201,6 +201,16 @@ export class UserResolver {
   }
 
   @Query(() => User)
+  async getUserManagedCities(@Arg("userId") id: number): Promise<User> {
+    const userToFind = await datasource
+      .getRepository(User)
+      .findOne({ relations: { managedCities: true }, where: { id } });
+    if (userToFind === null) throw new Error("user not found");
+
+    return userToFind;
+  }
+
+  @Query(() => User)
   async getOneUserbyMail(@Arg("email") email: string): Promise<User> {
     const userToFind = await datasource.getRepository(User).findOne({
       where: { email },
