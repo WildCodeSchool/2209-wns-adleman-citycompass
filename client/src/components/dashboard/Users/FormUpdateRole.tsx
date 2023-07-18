@@ -11,7 +11,7 @@ import { useUpdateUserRoleMutation } from "../../../gql/generated/schema";
 import { toast } from "react-hot-toast";
 import { rolesAdmin, rolesSuperadmin } from "../../../utils/userRoles";
 
-interface FormUpdateRoleProps {
+export interface FormUpdateUserRightsProps {
   setListUsers: React.Dispatch<React.SetStateAction<boolean>>;
   setModifyUsers: React.Dispatch<React.SetStateAction<boolean>>;
   userToUpdate: userToUpdateProps;
@@ -21,7 +21,7 @@ export function FormUpdateRole({
   setListUsers,
   setModifyUsers,
   userToUpdate,
-}: FormUpdateRoleProps) {
+}: FormUpdateUserRightsProps) {
   const [updateRole] = useUpdateUserRoleMutation({ errorPolicy: "all" });
 
   const { data } = useGetProfileQuery({
