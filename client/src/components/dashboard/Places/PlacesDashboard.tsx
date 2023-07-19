@@ -6,9 +6,27 @@ import chevron_down from "../../../assets/chevron-arrow-down.png";
 import chevron_up from "../../../assets/up-arrow-angle.png";
 import { useGetCitiesWithPlacesQuery } from "../../../gql/generated/schema";
 import FormAddPlace from "./FormAddPlace";
+import FormUpdatePlace from "./FormUpdatePlace";
 
 export interface CityArrayProps {
   cityArray: string[] | undefined;
+}
+
+export interface CategoryPlace {
+  __typename: string;
+  id: number;
+}
+
+export interface PlaceProps {
+  description: string;
+  id: number;
+  latitude: string;
+  longitude: string;
+  name: string;
+  picture: string;
+  website: string;
+  adress: string;
+  category: CategoryPlace;
 }
 
 function PlacesDashboard({ cityArray }: CityArrayProps) {
@@ -17,6 +35,17 @@ function PlacesDashboard({ cityArray }: CityArrayProps) {
   const [addPlaces, setAddPlaces] = useState(false);
   const [modifyPlaces, setModifyPlaces] = useState(false);
   const [cityName, setCityName] = useState("");
+  const [currentPlace, setCurrentPlace] = useState<PlaceProps>({
+    description: "",
+    id: 0,
+    latitude: "",
+    longitude: "",
+    name: "",
+    picture: "",
+    adress: "",
+    website: "",
+    category: { __typename: "", id: 0 },
+  });
 
   const { data } = useGetCitiesWithPlacesQuery();
 
@@ -76,7 +105,8 @@ function PlacesDashboard({ cityArray }: CityArrayProps) {
                             onClick={() => (
                               setModifyPlaces(true),
                               setPlaces(false),
-                              setListPlaces(false)
+                              setListPlaces(false),
+                              setCurrentPlace(place)
                             )}
                           >
                             <img src={modify_icon} alt="" className="w-6" />
@@ -96,7 +126,7 @@ function PlacesDashboard({ cityArray }: CityArrayProps) {
           )}
           {modifyPlaces && (
             <div>
-              <p>FORMULAIRE MODIFICATION PLACE</p>
+              <FormUpdatePlace currentPlace={currentPlace} />
               <button
                 onClick={() => (
                   setModifyPlaces(false), setPlaces(true), setListPlaces(false)

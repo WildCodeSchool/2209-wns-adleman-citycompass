@@ -82,7 +82,7 @@ export class PlaceResolver {
   @Authorized(["superadmin", "admin", "contributor"])
   @Mutation(() => Place)
   async updatePlace(
-    @Arg("userID") userID: number,
+    @Ctx() ctx: ContextType,
     @Arg("id") id: number,
     @Arg("data") data: PlaceUpdate
   ): Promise<Place> {
@@ -103,6 +103,8 @@ export class PlaceResolver {
       .findOne({ where: { id }, relations: { city: true, category: true } });
 
     if (placeToUpdate === null) throw new Error("Place not found");
+
+    const userID = ctx.jwtPayload.userID;
 
     const user = await datasource.getRepository(User).findOne({
       where: { id: userID },
