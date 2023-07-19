@@ -42,6 +42,7 @@ export function FormUpdateRole({
           toast.error(message);
         });
       }
+      toast.success("changement bien effectué");
       setListUsers(true);
       setModifyUsers(false);
     });
