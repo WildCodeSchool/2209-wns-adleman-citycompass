@@ -2,11 +2,15 @@ import MapCity from "../components/MapCity";
 import Hero, { heroContent } from "../components/Hero";
 import { useGetOneCitybyNameQuery } from "../gql/generated/schema";
 import { useParams } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 import MiniCardPoi from "../components/MiniCardPoi";
+import { useEffect } from "react";
 
 export default function City() {
-  const navigate = useNavigate();
+  useEffect(() => {
+    // 👇️ scroll to top on page load
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+  }, []);
+
   const { cityName = "" } = useParams();
   const { data } = useGetOneCitybyNameQuery({
     variables: { name: cityName },
@@ -44,15 +48,7 @@ export default function City() {
           >
             <h3 className="text-center sm:text-left">À découvrir</h3>
             {city.places?.map((place) => (
-              <div
-                onClick={() =>
-                  navigate(`/cities/${city.name}/${place.name}`, {
-                    state: { place },
-                  })
-                }
-              >
-                <MiniCardPoi place={place} />
-              </div>
+              <MiniCardPoi place={place} city={city} />
             ))}
           </div>
         )}

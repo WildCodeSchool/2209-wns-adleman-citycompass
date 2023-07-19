@@ -6,7 +6,7 @@ import city_icon from "../assets/city_icon.svg";
 import poi_icon from "../assets/poi_icon.svg";
 import user_icon from "../assets/user_icon.svg";
 import logout_icon from "../assets/logout.png";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useGetProfileQuery, useLogoutMutation } from "../gql/generated/schema";
 import { toast } from "react-hot-toast";
 
@@ -23,6 +23,11 @@ interface userManagedCitiesArray {
 }
 
 export default function Dashboard() {
+  useEffect(() => {
+    // 👇️ scroll to top on page load
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+  }, []);
+
   const [accueilClicked, setAccueilClicked] = useState(true);
   const [categoryClicked, setCategoryClicked] = useState(false);
   const [cityClicked, setCityClicked] = useState(false);
