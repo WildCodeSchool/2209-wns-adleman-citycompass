@@ -220,7 +220,7 @@ export default function FormAddPlace({
               )}
 
               <label htmlFor="name" className="modal__input--label">
-                Adress
+                Address
               </label>
               <Field
                 name="adress"

@@ -13,7 +13,6 @@ export interface CityArrayProps {
 }
 
 export interface CategoryPlace {
-  __typename: string;
   id: number;
 }
 
@@ -24,9 +23,10 @@ export interface PlaceProps {
   longitude: string;
   name: string;
   picture: string;
-  website: string;
+  website?: string | null | undefined;
   adress: string;
-  category: CategoryPlace;
+  categoryId: number;
+  cityId: number;
 }
 
 function PlacesDashboard({ cityArray }: CityArrayProps) {
@@ -35,6 +35,7 @@ function PlacesDashboard({ cityArray }: CityArrayProps) {
   const [addPlaces, setAddPlaces] = useState(false);
   const [modifyPlaces, setModifyPlaces] = useState(false);
   const [cityName, setCityName] = useState("");
+  const [currentCity, setCurrentCity] = useState<number>(0);
   const [currentPlace, setCurrentPlace] = useState<PlaceProps>({
     description: "",
     id: 0,
@@ -44,7 +45,8 @@ function PlacesDashboard({ cityArray }: CityArrayProps) {
     picture: "",
     adress: "",
     website: "",
-    category: { __typename: "", id: 0 },
+    categoryId: 0,
+    cityId: 0,
   });
 
   const { data } = useGetCitiesWithPlacesQuery();
@@ -79,6 +81,7 @@ function PlacesDashboard({ cityArray }: CityArrayProps) {
                         onClick={() => {
                           setCityName(city.name);
                           setListPlaces(!listPlaces);
+                          setCurrentCity(city.id);
                         }}
                       >
                         <img
@@ -106,7 +109,11 @@ function PlacesDashboard({ cityArray }: CityArrayProps) {
                               setModifyPlaces(true),
                               setPlaces(false),
                               setListPlaces(false),
-                              setCurrentPlace(place)
+                              setCurrentPlace({
+                                ...place,
+                                categoryId: place.category.id,
+                                cityId: currentCity,
+                              })
                             )}
                           >
                             <img src={modify_icon} alt="" className="w-6" />
@@ -126,14 +133,11 @@ function PlacesDashboard({ cityArray }: CityArrayProps) {
           )}
           {modifyPlaces && (
             <div>
-              <FormUpdatePlace currentPlace={currentPlace} />
-              <button
-                onClick={() => (
-                  setModifyPlaces(false), setPlaces(true), setListPlaces(false)
-                )}
-              >
-                Enregistrer
-              </button>
+              <FormUpdatePlace
+                currentPlace={currentPlace}
+                setModifyPlaces={setModifyPlaces}
+                setPlaces={setPlaces}
+              />
             </div>
           )}
         </div>

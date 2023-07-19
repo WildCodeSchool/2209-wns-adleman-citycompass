@@ -1,6 +1,7 @@
 query GetCitiesWithPlaces {
   getCities {
     name
+    id
     places {
       id
       name

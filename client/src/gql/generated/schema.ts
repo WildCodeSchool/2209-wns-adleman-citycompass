@@ -121,7 +121,6 @@ export type MutationUpdateManagedCitiesArgs = {
 export type MutationUpdatePlaceArgs = {
   data: PlaceUpdate;
   id: Scalars["Float"];
-  userID: Scalars["Float"];
 };
 
 export type MutationUpdateUserArgs = {
@@ -361,6 +360,7 @@ export type GetCitiesWithPlacesQuery = {
   getCities: Array<{
     __typename?: "City";
     name: string;
+    id: number;
     places: Array<{
       __typename?: "Place";
       id: number;
@@ -459,7 +459,7 @@ export type GetProfileQueryVariables = Exact<{ [key: string]: never }>;
 export type GetProfileQuery = {
   __typename?: "Query";
   profile: {
-    __typename: "User";
+    __typename?: "User";
     id: number;
     firstname: string;
     lastname: string;
@@ -565,6 +565,26 @@ export type UpdateCityMutation = {
     description: string;
     latitude: string;
     longitude: string;
+  };
+};
+
+export type UpdatePlaceMutationVariables = Exact<{
+  data: PlaceUpdate;
+  updatePlaceId: Scalars["Float"];
+}>;
+
+export type UpdatePlaceMutation = {
+  __typename?: "Mutation";
+  updatePlace: {
+    __typename?: "Place";
+    id: number;
+    name: string;
+    adress: string;
+    latitude: string;
+    longitude: string;
+    picture: string;
+    website?: string | null;
+    category: { __typename?: "Category"; id: number };
   };
 };
 
@@ -951,6 +971,7 @@ export const GetCitiesWithPlacesDocument = gql`
   query GetCitiesWithPlaces {
     getCities {
       name
+      id
       places {
         id
         name
@@ -1684,6 +1705,66 @@ export type UpdateCityMutationResult =
 export type UpdateCityMutationOptions = Apollo.BaseMutationOptions<
   UpdateCityMutation,
   UpdateCityMutationVariables
+>;
+export const UpdatePlaceDocument = gql`
+  mutation UpdatePlace($data: PlaceUpdate!, $updatePlaceId: Float!) {
+    updatePlace(data: $data, id: $updatePlaceId) {
+      id
+      name
+      adress
+      latitude
+      longitude
+      picture
+      website
+      category {
+        id
+      }
+    }
+  }
+`;
+export type UpdatePlaceMutationFn = Apollo.MutationFunction<
+  UpdatePlaceMutation,
+  UpdatePlaceMutationVariables
+>;
+
+/**
+ * __useUpdatePlaceMutation__
+ *
+ * To run a mutation, you first call `useUpdatePlaceMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdatePlaceMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updatePlaceMutation, { data, loading, error }] = useUpdatePlaceMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *      updatePlaceId: // value for 'updatePlaceId'
+ *   },
+ * });
+ */
+export function useUpdatePlaceMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdatePlaceMutation,
+    UpdatePlaceMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<UpdatePlaceMutation, UpdatePlaceMutationVariables>(
+    UpdatePlaceDocument,
+    options
+  );
+}
+export type UpdatePlaceMutationHookResult = ReturnType<
+  typeof useUpdatePlaceMutation
+>;
+export type UpdatePlaceMutationResult =
+  Apollo.MutationResult<UpdatePlaceMutation>;
+export type UpdatePlaceMutationOptions = Apollo.BaseMutationOptions<
+  UpdatePlaceMutation,
+  UpdatePlaceMutationVariables
 >;
 export const UpdateUserDocument = gql`
   mutation UpdateUser($data: UserUpdate!, $updateUserId: Int!) {
