@@ -10,6 +10,7 @@ import {
 import { toast } from "react-hot-toast";
 import {
   isAccessAuthorized,
+  isManagedCitiesNotEmpty,
   isUserNotAVisitor,
 } from "../../../utils/isAccessAuthorized";
 
@@ -73,7 +74,8 @@ export function FormUpdateManagedCities({
     <>
       <div className="container mx-auto p-6 bg-cream flex flex-col">
         {isAccessAuthorized(currentUser, userToUpdate) &&
-        isUserNotAVisitor(userToUpdate) ? (
+        isUserNotAVisitor(userToUpdate) &&
+        isManagedCitiesNotEmpty(authorizedCities?.managedCities) ? (
           <>
             <h3 className="type-h4 text-center py-6">
               Changer les villes autorisées

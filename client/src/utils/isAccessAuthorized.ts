@@ -17,3 +17,9 @@ export const isUserNotAVisitor = (userToUpdate: User): boolean => {
   if (userToUpdate.role !== "visitor") return true;
   return false;
 };
+
+export const isManagedCitiesNotEmpty = (authorizedCities: any): boolean => {
+  if (authorizedCities !== undefined && authorizedCities.length === 0)
+    return false;
+  return true;
+};
