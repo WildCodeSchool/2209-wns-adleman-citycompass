@@ -12,3 +12,8 @@ export const isAccessAuthorized = (
     return true;
   return false;
 };
+
+export const isUserNotAVisitor = (userToUpdate: User): boolean => {
+  if (userToUpdate.role !== "visitor") return true;
+  return false;
+};

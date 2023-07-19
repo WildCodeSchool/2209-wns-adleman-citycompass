@@ -8,7 +8,10 @@ import {
   useUserManagedCityUpdateMutation,
 } from "../../../gql/generated/schema";
 import { toast } from "react-hot-toast";
-import { isAccessAuthorized } from "../../../utils/isAccessAuthorized";
+import {
+  isAccessAuthorized,
+  isUserNotAVisitor,
+} from "../../../utils/isAccessAuthorized";
 
 export function FormUpdateManagedCities({
   setListUsers,
@@ -69,7 +72,8 @@ export function FormUpdateManagedCities({
   return (
     <>
       <div className="container mx-auto p-6 bg-cream flex flex-col">
-        {isAccessAuthorized(currentUser, userToUpdate) ? (
+        {isAccessAuthorized(currentUser, userToUpdate) &&
+        isUserNotAVisitor(userToUpdate) ? (
           <>
             <h3 className="type-h4 text-center py-6">
               Changer les villes autorisées
@@ -125,20 +129,7 @@ export function FormUpdateManagedCities({
             </Formik>
           </>
         ) : (
-          <div>
-            <p className="text-center font-semibold text-red ">
-              Seuls les superadmin peuvent gérer les droits de cet utilisateur
-            </p>
-            <div
-              className="button--primary w-1/4 text-center mx-auto my-6"
-              onClick={() => {
-                setListUsers(true);
-                setModifyUsers(false);
-              }}
-            >
-              Retour à la liste
-            </div>
-          </div>
+          <></>
         )}
       </div>
     </>
