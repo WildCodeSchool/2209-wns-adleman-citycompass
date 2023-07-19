@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { FormUpdateUserRightsProps } from "./FormUpdateRole";
 import { Field, Form, Formik } from "formik";
 import {
   GetUserManagedCitiesDocument,
-  useGetCitiesQuery,
+  useGetProfileQuery,
   useGetUserManagedCitiesQuery,
   useUserManagedCityUpdateMutation,
 } from "../../../gql/generated/schema";
@@ -18,8 +18,22 @@ export function FormUpdateManagedCities({
     errorPolicy: "all",
   });
 
-  const { data: citiesData } = useGetCitiesQuery();
-  const existingCities = citiesData?.getCities;
+  const { data } = useGetProfileQuery({
+    errorPolicy: "ignore",
+  });
+
+  const currentUser = data?.profile;
+  let currentUserId = 0;
+  if (currentUser !== undefined) {
+    currentUserId = currentUser.id;
+  }
+
+  const { data: authorizedCitiesData } = useGetUserManagedCitiesQuery({
+    variables: { userId: currentUserId },
+    fetchPolicy: "network-only",
+  });
+
+  const authorizedCities = authorizedCitiesData?.getUserManagedCities;
 
   const { data: managedcitiesDatas } = useGetUserManagedCitiesQuery({
     variables: { userId: userToUpdate.id },
@@ -72,9 +86,9 @@ export function FormUpdateManagedCities({
               aria-labelledby="checkbox-group"
               className="flex flex-row gap-4 justify-center align-center"
             >
-              {existingCities?.map((city) => (
+              {authorizedCities?.managedCities?.map((city) => (
                 <label
-                  key={`${city.id}`}
+                  key={`${city.name}`}
                   className="flex gap-3 py-4 px-6 border-2 border-gray rounded
                 bg-white cursor-pointer hover:bg-orange"
                 >
