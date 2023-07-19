@@ -2,40 +2,56 @@ import React from "react";
 import { FormUpdateUserRightsProps } from "./FormUpdateRole";
 import { Field, Form, Formik } from "formik";
 import {
-  ManagedCity,
   useGetCitiesQuery,
-  useGetUserManagedCitiesQuery,
-  useUpdateManagedCitiesMutation,
+  useUserManagedCityUpdateMutation,
 } from "../../../gql/generated/schema";
+import { toast } from "react-hot-toast";
+
+interface CityIdValues {
+  cities: string[] | number[];
+}
 
 export function FormUpdateManagedCities({
   setListUsers,
   setModifyUsers,
   userToUpdate,
 }: FormUpdateUserRightsProps) {
-  const [updateManagedCities] = useUpdateManagedCitiesMutation({
+  const [updateManagedCities] = useUserManagedCityUpdateMutation({
     errorPolicy: "all",
   });
 
   const { data: citiesData } = useGetCitiesQuery();
-  let cities: ManagedCity[] = [];
-  if (citiesData !== undefined) {
-    cities = citiesData.getCities;
-  }
 
-  const { data: managedcitiesDatas } = useGetUserManagedCitiesQuery({
-    variables: { userId: userToUpdate.id },
-  });
-  const currentManagedCities = managedcitiesDatas?.getUserManagedCities;
+  const existingCities = citiesData?.getCities;
 
-  console.log("currentManagedcities", currentManagedCities);
+  // const { data: managedcitiesDatas } = useGetUserManagedCitiesQuery({
+  //   variables: { userId: userToUpdate.id },
+  // });
+  // const currentManagedCities = managedcitiesDatas?.getUserManagedCities;
 
-  const handleSubmit = async (values: any) => {
-    console.log("sent values", values);
-    const correctValues = values.cities.map((value: string) =>
-      parseInt(value, 10)
-    );
-    console.log(correctValues);
+  // console.log("currentManagedcities", currentManagedCities);
+
+  const handleSubmit = async (values: CityIdValues) => {
+    const correctValues = values.cities.map((value) => {
+      if (typeof value !== "string") return value;
+      return parseInt(value, 10);
+    });
+
+    updateManagedCities({
+      variables: {
+        userId: userToUpdate.id,
+        data: { managedCitiesId: correctValues },
+      },
+    }).then((res) => {
+      if (res.errors) {
+        res.errors.forEach(({ message }) => {
+          toast.error(message);
+        });
+      }
+      toast.success("changement bien effectué");
+      setListUsers(true);
+      setModifyUsers(false);
+    });
   };
 
   return (
@@ -58,7 +74,7 @@ export function FormUpdateManagedCities({
               aria-labelledby="checkbox-group"
               className="flex flex-row gap-4 justify-center align-center"
             >
-              {cities.map((city) => (
+              {existingCities?.map((city) => (
                 <label
                   key={`${city.id}`}
                   className="flex gap-3 py-4 px-6 border-2 border-gray rounded

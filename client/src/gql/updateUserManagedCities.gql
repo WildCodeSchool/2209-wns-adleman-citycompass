@@ -1,10 +1,10 @@
-mutation updateManagedCities($userId: Int!, $data: UserManagedCityUpdate!) {
+mutation UserManagedCityUpdate($userId: Int!, $data: UserManagedCityUpdate!) {
   updateManagedCities(userId: $userId, data: $data) {
+    id
     managedCities {
       id
       name
       picture
-      description
       latitude
       longitude
     }
