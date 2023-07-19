@@ -1,15 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { FormUpdateUserRightsProps } from "./FormUpdateRole";
 import { Field, Form, Formik } from "formik";
 import {
+  GetUserManagedCitiesDocument,
   useGetCitiesQuery,
+  useGetUserManagedCitiesQuery,
   useUserManagedCityUpdateMutation,
 } from "../../../gql/generated/schema";
 import { toast } from "react-hot-toast";
-
-interface CityIdValues {
-  cities: string[] | number[];
-}
 
 export function FormUpdateManagedCities({
   setListUsers,
@@ -21,27 +19,26 @@ export function FormUpdateManagedCities({
   });
 
   const { data: citiesData } = useGetCitiesQuery();
-
   const existingCities = citiesData?.getCities;
 
-  // const { data: managedcitiesDatas } = useGetUserManagedCitiesQuery({
-  //   variables: { userId: userToUpdate.id },
-  // });
-  // const currentManagedCities = managedcitiesDatas?.getUserManagedCities;
+  const { data: managedcitiesDatas } = useGetUserManagedCitiesQuery({
+    variables: { userId: userToUpdate.id },
+    fetchPolicy: "network-only",
+  });
 
-  // console.log("currentManagedcities", currentManagedCities);
+  const currentManagedCities = managedcitiesDatas?.getUserManagedCities;
+  const currentManagedCitiesNames: string[] = [];
+  currentManagedCities?.managedCities?.map((city) =>
+    currentManagedCitiesNames.push(city.name)
+  );
 
-  const handleSubmit = async (values: CityIdValues) => {
-    const correctValues = values.cities.map((value) => {
-      if (typeof value !== "string") return value;
-      return parseInt(value, 10);
-    });
-
+  const handleSubmit = async (values: string[]) => {
     updateManagedCities({
       variables: {
         userId: userToUpdate.id,
-        data: { managedCitiesId: correctValues },
+        data: { managedCitiesNames: values },
       },
+      refetchQueries: [{ query: GetUserManagedCitiesDocument }],
     }).then((res) => {
       if (res.errors) {
         res.errors.forEach(({ message }) => {
@@ -61,13 +58,14 @@ export function FormUpdateManagedCities({
       </h3>
       <Formik
         initialValues={{
-          cities: [0],
+          cities: currentManagedCitiesNames,
         }}
         onSubmit={(values) => {
-          handleSubmit(values);
+          handleSubmit(values.cities);
         }}
+        enableReinitialize
       >
-        {({ values, setFieldValue }) => (
+        {({ values }) => (
           <Form className="flex flex-col gap-4 my-8">
             <div
               role="group"
@@ -80,11 +78,7 @@ export function FormUpdateManagedCities({
                   className="flex gap-3 py-4 px-6 border-2 border-gray rounded
                 bg-white cursor-pointer hover:bg-orange"
                 >
-                  <Field
-                    type="checkbox"
-                    name="cities"
-                    value={city.id.toString()}
-                  />
+                  <Field type="checkbox" name="cities" value={city.name} />
                   {city.name}
                 </label>
               ))}

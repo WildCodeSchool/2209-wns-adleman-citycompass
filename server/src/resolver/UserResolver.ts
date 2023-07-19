@@ -168,12 +168,12 @@ export class UserResolver {
     @Ctx() ctx: ContextType
   ): Promise<User> {
     const currentUserId = ctx.jwtPayload.userID;
-    const { managedCitiesId } = data;
+    const { managedCitiesNames } = data;
 
-    if (managedCitiesId === undefined)
+    if (managedCitiesNames === undefined)
       throw new Error("Managed cities in data are undefined");
 
-    const uniqueManagedCityId = [...new Set(managedCitiesId)];
+    const uniqueManagedCityId = [...new Set(managedCitiesNames)];
 
     const currentUser = await datasource.getRepository(User).findOne({
       where: { id: currentUserId },
@@ -191,10 +191,10 @@ export class UserResolver {
 
     const managedCities: City[] = [];
 
-    uniqueManagedCityId.map(async (id) => {
+    uniqueManagedCityId.map(async (name) => {
       const cityFound = await datasource
         .getRepository(City)
-        .findOne({ where: { id } });
+        .findOne({ where: { name } });
       if (cityFound !== null) managedCities.push(cityFound);
     });
 

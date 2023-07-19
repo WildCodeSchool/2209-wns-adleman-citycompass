@@ -264,7 +264,7 @@ export type UserLogin = {
 };
 
 export type UserManagedCityUpdate = {
-  managedCitiesId: Array<Scalars['Float']>;
+  managedCitiesNames: Array<Scalars['String']>;
 };
 
 export type UserRoleUpdate = {
@@ -359,7 +359,7 @@ export type GetUserManagedCitiesQueryVariables = Exact<{
 }>;
 
 
-export type GetUserManagedCitiesQuery = { __typename?: 'Query', getUserManagedCities: { __typename?: 'User', id: number, managedCities?: Array<{ __typename?: 'City', id: number, name: string, picture: string, description: string, latitude: string, longitude: string }> | null } };
+export type GetUserManagedCitiesQuery = { __typename?: 'Query', getUserManagedCities: { __typename?: 'User', managedCities?: Array<{ __typename?: 'City', name: string }> | null } };
 
 export type GetUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -934,14 +934,8 @@ export type GetSearchResultQueryResult = Apollo.QueryResult<GetSearchResultQuery
 export const GetUserManagedCitiesDocument = gql`
     query getUserManagedCities($userId: Float!) {
   getUserManagedCities(userId: $userId) {
-    id
     managedCities {
-      id
       name
-      picture
-      description
-      latitude
-      longitude
     }
   }
 }

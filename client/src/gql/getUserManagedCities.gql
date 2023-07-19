@@ -1,13 +1,7 @@
 query getUserManagedCities($userId: Float!) {
   getUserManagedCities(userId: $userId) {
-    id
     managedCities {
-      id
       name
-      picture
-      description
-      latitude
-      longitude
     }
   }
 }

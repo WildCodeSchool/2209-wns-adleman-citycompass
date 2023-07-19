@@ -183,8 +183,8 @@ export class UserRoleUpdate {
 
 @InputType()
 export class UserManagedCityUpdate {
-  @Field(() => [Number])
-  managedCitiesId: number[];
+  @Field(() => [String])
+  managedCitiesNames: string[];
 }
 
 export default User;
