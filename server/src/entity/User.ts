@@ -65,7 +65,7 @@ class User {
   @Field(() => [City], { nullable: true })
   @ManyToMany(() => City)
   @JoinTable()
-  managedCities?: City[];
+  managedCities: City[];
 
   @Field(() => [Place], { nullable: true })
   @OneToMany(() => Place, (place) => place.author)
@@ -172,6 +172,19 @@ export class UserLogin {
   @Field()
   @Column({ length: 255, type: "varchar" })
   password: string;
+}
+
+@InputType()
+export class UserRoleUpdate {
+  @Field()
+  @MaxLength(20)
+  role?: string;
+}
+
+@InputType()
+export class UserManagedCityUpdate {
+  @Field(() => [String])
+  managedCitiesNames: string[];
 }
 
 export default User;

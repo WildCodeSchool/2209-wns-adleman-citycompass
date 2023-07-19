@@ -6,7 +6,7 @@ import City from "./pages/City";
 import Place from "./pages/Place";
 import Account from "./pages/Account";
 import Dashboard from "./pages/Dashboard";
-import Error from "./pages/Error"
+import Error from "./pages/Error";
 
 import "./index.css";
 import Footer from "./components/Footer";

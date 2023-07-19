@@ -28,6 +28,15 @@ export const login = gql`
   }
 `;
 
+export const updateUserRole = gql`
+  mutation UpdateUserRole($updateUserRoleId: Int!, $data: UserRoleUpdate!) {
+    updateUserRole(id: $updateUserRoleId, data: $data) {
+      id
+      role
+    }
+  }
+`;
+
 /**
  * Tests
  */
@@ -263,6 +272,24 @@ describe("User Resolver", () => {
           },
         })
       ).rejects.toThrow();
+    });
+  });
+
+  describe("update user", () => {
+    it("should throw an error if user is not logged in", async () => {
+      await expect(() =>
+        client.mutate({
+          mutation: updateUserRole,
+          variables: {
+            updateUserRoleId: 76,
+            data: {
+              role: "visitor",
+            },
+          },
+        })
+      ).rejects.toThrowErrorMatchingInlineSnapshot(
+        `"Access denied! You don't have permission for this action!"`
+      );
     });
   });
 });

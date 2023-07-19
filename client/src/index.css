@@ -34,7 +34,8 @@ h3 {
   font-size: theme("fontSize.m");
 }
 
-h4 {
+h4,
+.type-h4 {
   font-family: "Lato Regular";
   color: theme("colors.darkBlue");
   font-size: theme("fontSize.base");
