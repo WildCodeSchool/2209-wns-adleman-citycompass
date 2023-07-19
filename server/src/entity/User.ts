@@ -182,30 +182,9 @@ export class UserRoleUpdate {
 }
 
 @InputType()
-export class ManagedCity {
-  @Field()
-  id: number;
-
-  @Field()
-  name: string;
-
-  @Field()
-  picture: string;
-
-  @Field()
-  description: string;
-
-  @Field()
-  latitude: string;
-
-  @Field()
-  longitude: string;
-}
-
-@InputType()
 export class UserManagedCityUpdate {
-  @Field(() => [ManagedCity], { nullable: true })
-  managedCities?: ManagedCity[];
+  @Field(() => [Number])
+  managedCitiesId: number[];
 }
 
 export default User;

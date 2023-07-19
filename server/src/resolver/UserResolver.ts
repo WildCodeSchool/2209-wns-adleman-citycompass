@@ -24,6 +24,7 @@ import {
 import jwt from "jsonwebtoken";
 import { env } from "../env";
 import { ContextType } from "../index";
+import City from "../entity/City";
 
 @Resolver(User)
 export class UserResolver {
@@ -167,10 +168,12 @@ export class UserResolver {
     @Ctx() ctx: ContextType
   ): Promise<User> {
     const currentUserId = ctx.jwtPayload.userID;
-    const { managedCities } = data;
+    const { managedCitiesId } = data;
 
-    if (managedCities === undefined)
+    if (managedCitiesId === undefined)
       throw new Error("Managed cities in data are undefined");
+
+    const uniqueManagedCityId = [...new Set(managedCitiesId)];
 
     const currentUser = await datasource.getRepository(User).findOne({
       where: { id: currentUserId },
@@ -185,6 +188,15 @@ export class UserResolver {
 
     if (userToUpdate.id === currentUser.id && currentUser.role === "admin")
       throw new Error("You are not allowed to modify your own managed cities");
+
+    const managedCities: City[] = [];
+
+    uniqueManagedCityId.map(async (id) => {
+      const cityFound = await datasource
+        .getRepository(City)
+        .findOne({ where: { id } });
+      if (cityFound !== null) managedCities.push(cityFound);
+    });
 
     if (managedCities !== undefined) userToUpdate.managedCities = managedCities;
 
