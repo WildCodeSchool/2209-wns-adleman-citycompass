@@ -109,9 +109,8 @@ function PlacesDashboard({ cityArray }: CityArrayProps) {
                   )}
                   {listPlaces && cityName === city.name && (
                     <div className="flex flex-col justify-between self-center">
-                      {city.places
-                        .filter((place) => place.author.id === currentUser?.id)
-                        .map((place) => (
+                      {currentUser?.role !== "contributor" &&
+                        city.places.map((place) => (
                           <div
                             className="h-12 w-96 px-6 flex justify-between items-center"
                             key={place.id}
@@ -133,6 +132,33 @@ function PlacesDashboard({ cityArray }: CityArrayProps) {
                             </button>
                           </div>
                         ))}
+                      {currentUser?.role === "contributor" &&
+                        city.places
+                          .filter(
+                            (place) => place.author.id === currentUser?.id
+                          )
+                          .map((place) => (
+                            <div
+                              className="h-12 w-96 px-6 flex justify-between items-center"
+                              key={place.id}
+                            >
+                              <p className="w-4/5">{place.name}</p>
+                              <button
+                                onClick={() => (
+                                  setModifyPlaces(true),
+                                  setPlaces(false),
+                                  setListPlaces(false),
+                                  setCurrentPlace({
+                                    ...place,
+                                    categoryId: place.category.id,
+                                    cityId: currentCity,
+                                  })
+                                )}
+                              >
+                                <img src={modify_icon} alt="" className="w-6" />
+                              </button>
+                            </div>
+                          ))}
                     </div>
                   )}
                 </>
