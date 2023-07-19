@@ -1,15 +1,14 @@
 import React from "react";
 import { Formik, Field, Form } from "formik";
 import { userToUpdateProps } from "./UsersDashboard";
-import { UserInformations } from "../Accueil/UserInformations";
 import {
-  User,
   UserRoleUpdate,
   useGetProfileQuery,
 } from "../../../gql/generated/schema";
 import { useUpdateUserRoleMutation } from "../../../gql/generated/schema";
 import { toast } from "react-hot-toast";
 import { rolesAdmin, rolesSuperadmin } from "../../../utils/userRoles";
+import { isAccessAuthorized } from "../../../utils/isAccessAuthorized";
 
 export interface FormUpdateUserRightsProps {
   setListUsers: React.Dispatch<React.SetStateAction<boolean>>;
@@ -48,23 +47,9 @@ export function FormUpdateRole({
     });
   };
 
-  const isAccessAuthorized = (
-    currentUser: any,
-    userToUpdate: User
-  ): boolean => {
-    if (currentUser.role === "superadmin") return true;
-    if (
-      currentUser.role === "admin" &&
-      (userToUpdate.role === "contributor" || userToUpdate.role === "visitor")
-    )
-      return true;
-    return false;
-  };
-
   return (
     <>
       <div className="container mx-auto p-6 bg-cream flex flex-col">
-        <UserInformations user={userToUpdate} />
         {isAccessAuthorized(currentUser, userToUpdate) ? (
           <>
             <h3 className="type-h4 text-center py-6">
