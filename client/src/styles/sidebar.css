@@ -9,19 +9,20 @@
 
 .sidebar__menu {
   display: flex;
-  @apply
-    w-full
+  @apply w-full
     py-4
-    justify-center;
+    justify-center
+    hover:text-cream
+    transition;
 }
 
 .sidebar__menu-active {
-    display: flex;
-    @apply bg-cream
+  display: flex;
+  @apply bg-cream
       w-full
       py-4
       justify-center;
-  }
+}
 
 .sidebar__button {
   display: flex;

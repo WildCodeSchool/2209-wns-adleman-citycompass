@@ -46,7 +46,6 @@ h4,
 
 p {
   font-family: "Karla Medium";
-  color: theme("colors.darkBlue");
   font-size: theme("fontSize.base");
 }
 
