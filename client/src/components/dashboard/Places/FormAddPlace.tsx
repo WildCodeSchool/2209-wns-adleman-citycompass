@@ -7,6 +7,7 @@ import {
   useGetProfileQuery,
   useGetCitiesQuery,
   useGetCategoriesQuery,
+  GetCitiesWithPlacesDocument,
 } from "../../../gql/generated/schema";
 import { toast } from "react-hot-toast";
 import {
@@ -60,7 +61,7 @@ export default function FormAddPlace({
           categoryId: values.categoryId,
         },
       },
-      refetchQueries: [{ query: GetPlacesDocument }],
+      refetchQueries: [{ query: GetCitiesWithPlacesDocument }],
     }).then((res) => {
       // error handling in .then is due to Formik, errors can't be catch in .catch, because of on submit formik method
       if (res.errors) {
@@ -109,6 +110,9 @@ export default function FormAddPlace({
                 as="select"
                 name="cityId"
                 type="number"
+                className={`modal__input ${
+                  errors.name && touched.name ? "border-red" : "border-current"
+                }`}
                 onChange={(e: any) => {
                   setFieldValue("cityId", parseInt(e.target.value));
                 }}
@@ -209,7 +213,7 @@ export default function FormAddPlace({
               </label>
               <Field
                 name="website"
-                placeholder="13.12.13.12"
+                placeholder="https://mon-site.net"
                 className={`modal__input ${
                   errors.name && touched.name ? "border-red" : "border-current"
                 }`}
@@ -224,7 +228,7 @@ export default function FormAddPlace({
               </label>
               <Field
                 name="adress"
-                placeholder=""
+                placeholder="52 Champs Élysées, 75008 Paris"
                 label="adress"
                 className={`modal__input ${
                   errors.name && touched.name ? "border-red" : "border-current"
@@ -237,6 +241,9 @@ export default function FormAddPlace({
               <Field
                 as="select"
                 name="categoryId"
+                className={`modal__input ${
+                  errors.name && touched.name ? "border-red" : "border-current"
+                }`}
                 onChange={(e: any) => {
                   setFieldValue("categoryId", parseInt(e.target.value));
                 }}

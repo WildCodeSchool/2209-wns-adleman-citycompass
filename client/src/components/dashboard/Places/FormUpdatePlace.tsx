@@ -3,7 +3,7 @@ import {
   PlaceUpdate,
   useGetCategoriesQuery,
   useGetCitiesQuery,
-  GetPlacesDocument,
+  GetCitiesWithPlacesDocument,
 } from "../../../gql/generated/schema";
 import { Formik, Field, Form } from "formik";
 import { PlaceProps } from "./PlacesDashboard";
@@ -16,6 +16,7 @@ import {
   validatePicture,
 } from "../../../utils/formValidator";
 import { CitiesHome } from "../../../services/interfaces";
+import { useEffect } from "react";
 
 interface updatePlaceProps {
   currentPlace: PlaceProps;
@@ -56,8 +57,8 @@ function FormUpdatePlace({
           cityId: values.cityId,
         },
       },
-      refetchQueries: [{ query: GetPlacesDocument }],
-    }).then((res: any) => {
+      refetchQueries: [{ query: GetCitiesWithPlacesDocument }],
+    }).then((res) => {
       // error handling in .then is due to Formik, errors can't be catch in .catch, because of on submit formik method
       if (res.errors) {
         res.errors.forEach(({ message }: any) => {
@@ -69,8 +70,9 @@ function FormUpdatePlace({
         setPlaces(true);
       }
     });
-    console.log(values);
   };
+
+  useEffect(() => {}, []);
   return (
     <div className="container mx-auto p-6 bg-cream flex flex-col">
       <h1 className="type-h2 text-center">Modifier {currentPlace.name}</h1>
@@ -176,7 +178,7 @@ function FormUpdatePlace({
             </label>
             <Field
               name="adress"
-              placeholder="address"
+              placeholder="52 Champs Élysées, 75008 Paris"
               className={`modal__input ${
                 errors.name && touched.name ? "border-red" : "border-current"
               }`}
@@ -190,7 +192,7 @@ function FormUpdatePlace({
             </label>
             <Field
               name="website"
-              placeholder="website"
+              placeholder="https://mon-site.net"
               className={`modal__input ${
                 errors.name && touched.name ? "border-red" : "border-current"
               }`}
@@ -205,6 +207,9 @@ function FormUpdatePlace({
             <Field
               as="select"
               name="categoryId"
+              className={`modal__input ${
+                errors.name && touched.name ? "border-red" : "border-current"
+              }`}
               onChange={(e: any) => {
                 setFieldValue("categoryId", parseInt(e.target.value));
               }}
@@ -220,6 +225,9 @@ function FormUpdatePlace({
             <Field
               as="select"
               name="cityId"
+              className={`modal__input ${
+                errors.name && touched.name ? "border-red" : "border-current"
+              }`}
               onChange={(e: any) => {
                 setFieldValue("cityId", parseInt(e.target.value));
               }}
