@@ -252,6 +252,15 @@ function FormUpdatePlace({
             <button type="submit" className="button--primary mt-6">
               Enregistrer
             </button>
+            <div
+              className="modal__input--label hover:text-green text-s mt-3 text-center cursor-pointer"
+              onClick={() => {
+                setPlaces(true);
+                setModifyPlaces(false);
+              }}
+            >
+              Annuler
+            </div>
           </Form>
         )}
       </Formik>
