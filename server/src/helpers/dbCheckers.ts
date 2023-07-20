@@ -1,6 +1,7 @@
 import datasource from "../db";
+import Category, { CategoryInput, CategoryUpdate } from "../entity/Category";
 import City, { CityInput, CityUpdate } from "../entity/City";
-import Place, { PlaceInput } from "../entity/Place";
+import Place, { PlaceInput, PlaceUpdate } from "../entity/Place";
 import User, { UserInput, UserUpdate } from "../entity/User";
 
 /**
@@ -56,8 +57,8 @@ export const existingCoordinates = async (
 };
 
 export const existingPlace = async (
-  data: PlaceInput,
-  id?: string | undefined
+  data: PlaceInput | PlaceUpdate,
+  id?: number | undefined
 ): Promise<void> => {
   const nameExists = await datasource
     .getRepository(Place)
@@ -65,7 +66,7 @@ export const existingPlace = async (
 
   if (id !== undefined) {
     // test for modification
-    if (nameExists !== null && nameExists.id !== parseInt(id, 10))
+    if (nameExists !== null && nameExists.id !== id)
       throw new Error("Place name already found in database (modification)");
   } else {
     // test for creation
@@ -74,12 +75,42 @@ export const existingPlace = async (
   }
 };
 
+export const existingCategory = async (
+  data: CategoryInput | CategoryUpdate,
+  id?: number | undefined
+): Promise<void> => {
+  const nameExists = await datasource
+    .getRepository(Category)
+    .findOne({ where: { name: data.name } });
+
+  if (id !== undefined) {
+    // test for modification
+    if (nameExists !== null && nameExists.id !== id)
+      throw new Error("Category name already found in database (modification)");
+  } else {
+    // test for creation
+    if (nameExists !== null)
+      throw new Error("Category name already found in database (creation)");
+  }
+};
+
 export const existingPlaceCoordinates = async (
-  data: PlaceInput
+  data: PlaceInput | PlaceUpdate,
+  id?: number
 ): Promise<void> => {
   const coordo = await datasource.getRepository(Place).findOne({
     where: { latitude: data.latitude, longitude: data.longitude },
   });
 
-  if (coordo !== null) throw new Error("Place coordinates found in database");
+  if (id !== undefined) {
+    // test for modification
+    if (coordo !== null && coordo.id !== id)
+      throw new Error(
+        "Place coordinates already found in database (modification)"
+      );
+  } else {
+    // test for creation
+    if (coordo !== null)
+      throw new Error("Place coordinates already found in database (creation)");
+  }
 };

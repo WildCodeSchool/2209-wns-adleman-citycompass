@@ -7,7 +7,13 @@ import {
   Ctx,
   Int,
 } from "type-graphql";
-import User, { UserInput, UserUpdate, UserLogin } from "../entity/User";
+import User, {
+  UserInput,
+  UserUpdate,
+  UserLogin,
+  UserRoleUpdate,
+  UserManagedCityUpdate,
+} from "../entity/User";
 import datasource from "../db";
 import { existingUser } from "../helpers/dbCheckers";
 import {
@@ -18,6 +24,7 @@ import {
 import jwt from "jsonwebtoken";
 import { env } from "../env";
 import { ContextType } from "../index";
+import City from "../entity/City";
 
 @Resolver(User)
 export class UserResolver {
@@ -47,7 +54,6 @@ export class UserResolver {
 
     ctx.res.cookie("token", token, {
       secure: env.NODE_ENV === "production",
-      domain: env.SERVER_HOST,
       httpOnly: true,
     });
 
@@ -68,7 +74,7 @@ export class UserResolver {
     @Arg("data") data: UserUpdate,
     @Ctx() ctx: ContextType
   ): Promise<User> {
-    const { firstname, lastname, picture, password } = data;
+    const { firstname, lastname, picture, password, email } = data;
     // get id of connected user from context, using JWT token
     const currentUserId = ctx.jwtPayload.userID;
 
@@ -87,6 +93,15 @@ export class UserResolver {
     if (firstname !== undefined) {
       userToUpdate.firstname = firstname;
     }
+
+    if (email !== userToUpdate.email) {
+      await existingUser(data);
+    }
+
+    if (email !== undefined) {
+      userToUpdate.email = email;
+    }
+
     if (password !== undefined) {
       userToUpdate.password = password;
     }
@@ -99,11 +114,111 @@ export class UserResolver {
     return userToUpdate;
   }
 
+  @Authorized(["superadmin", "admin"])
+  @Mutation(() => User)
+  async updateUserRole(
+    @Arg("data") data: UserRoleUpdate,
+    @Arg("id", () => Int) id: number,
+    @Ctx() ctx: ContextType
+  ): Promise<User> {
+    const { role } = data;
+    const roles = ["visitor", "contributor", "admin", "superadmin"];
+    const currentUserId = ctx.jwtPayload.userID;
+
+    // check datas sent
+    if (role !== undefined && !roles.includes(role))
+      throw new Error("this is not an existing role");
+    if (currentUserId === undefined) throw new Error("unauthorized operation");
+
+    // get currentUser
+    const currentUser = await datasource.getRepository(User).findOne({
+      where: { id: currentUserId },
+    });
+    if (currentUser === null) throw new Error("current user not found");
+
+    // check if currentUser is authorized to update role
+    // only superadmins can give superadmin & admin role to an user
+    if (
+      currentUser.role !== "superadmin" &&
+      (role === "superadmin" || role === "admin")
+    )
+      throw new Error("Only superadmin can give this role");
+
+    // get and check user to update
+    const userToUpdate = await datasource.getRepository(User).findOne({
+      where: { id },
+    });
+    if (userToUpdate === null) throw new Error("User not found");
+    if (currentUserId === userToUpdate.id)
+      throw new Error("User cannot change his own role");
+
+    // update user role
+    if (role !== undefined) userToUpdate.role = role;
+    await datasource.getRepository(User).save(userToUpdate);
+
+    return userToUpdate;
+  }
+
+  @Authorized(["superadmin", "admin"])
+  @Mutation(() => User)
+  async updateManagedCities(
+    @Arg("data") data: UserManagedCityUpdate,
+    @Arg("userId", () => Int) id: number,
+    @Ctx() ctx: ContextType
+  ): Promise<User> {
+    const currentUserId = ctx.jwtPayload.userID;
+    const { managedCitiesNames } = data;
+
+    if (managedCitiesNames === undefined)
+      throw new Error("Managed cities in data are undefined");
+
+    const uniqueManagedCityId = [...new Set(managedCitiesNames)];
+
+    const currentUser = await datasource.getRepository(User).findOne({
+      where: { id: currentUserId },
+    });
+    if (currentUser === null) throw new Error("current user not found");
+
+    const userToUpdate = await datasource.getRepository(User).findOne({
+      where: { id },
+      relations: { managedCities: true },
+    });
+    if (userToUpdate === null) throw new Error("User to update not found");
+
+    if (userToUpdate.id === currentUser.id && currentUser.role === "admin")
+      throw new Error("You are not allowed to modify your own managed cities");
+
+    const managedCities: City[] = [];
+
+    uniqueManagedCityId.map(async (name) => {
+      const cityFound = await datasource
+        .getRepository(City)
+        .findOne({ where: { name } });
+      if (cityFound !== null) managedCities.push(cityFound);
+    });
+
+    if (managedCities !== undefined) userToUpdate.managedCities = managedCities;
+
+    await datasource.getRepository(User).save(userToUpdate);
+
+    return userToUpdate;
+  }
+
   @Query(() => [User])
   async getUsers(): Promise<User[]> {
     return await datasource
       .getRepository(User)
-      .find({ relations: { managedCities: true } });
+      .find({ relations: { managedCities: true, managedPlaces: true } });
+  }
+
+  @Query(() => User)
+  async getUserManagedCities(@Arg("userId") id: number): Promise<User> {
+    const userToFind = await datasource
+      .getRepository(User)
+      .findOne({ relations: { managedCities: true }, where: { id } });
+    if (userToFind === null) throw new Error("user not found");
+
+    return userToFind;
   }
 
   @Query(() => User)

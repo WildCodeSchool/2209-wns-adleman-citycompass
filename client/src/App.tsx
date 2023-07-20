@@ -6,6 +6,8 @@ import City from "./pages/City";
 import Place from "./pages/Place";
 import Account from "./pages/Account";
 import Dashboard from "./pages/Dashboard";
+import Error from "./pages/Error";
+import Cities from "./pages/Cities";
 
 import "./index.css";
 import Footer from "./components/Footer";
@@ -18,7 +20,7 @@ function App() {
     <>
       <Toaster position="bottom-center" />
       <main>
-        {currentLocation.pathname.includes("dashboard") ? (
+        {currentLocation.pathname.includes("dashboard/") ? (
           <Routes>
             <Route path="/dashboard/:userId" element={<Dashboard />} />
           </Routes>
@@ -27,9 +29,11 @@ function App() {
             <Header />
             <Routes>
               <Route path="/" element={<Home />} />
+              <Route path="/cities" element={<Cities />} />
               <Route path="/cities/:cityName" element={<City />} />
               <Route path="/cities/:cityName/:placeName" element={<Place />} />
               <Route path="/account/:userId" element={<Account />} />
+              <Route path="*" element={<Error />} />
             </Routes>
             <Footer />
           </>

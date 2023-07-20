@@ -20,11 +20,17 @@ export type Category = {
   id: Scalars['Float'];
   name: Scalars['String'];
   picto: Scalars['String'];
+  places: Array<Place>;
 };
 
 export type CategoryInput = {
   name: Scalars['String'];
   picto: Scalars['String'];
+};
+
+export type CategoryUpdate = {
+  name?: InputMaybe<Scalars['String']>;
+  picto?: InputMaybe<Scalars['String']>;
 };
 
 export type City = {
@@ -35,6 +41,7 @@ export type City = {
   longitude: Scalars['String'];
   name: Scalars['String'];
   picture: Scalars['String'];
+  places: Array<Place>;
 };
 
 export type CityInput = {
@@ -45,14 +52,26 @@ export type CityInput = {
   picture: Scalars['String'];
 };
 
+export type CityUpdate = {
+  description?: InputMaybe<Scalars['String']>;
+  latitude?: InputMaybe<Scalars['String']>;
+  longitude?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
+  picture?: InputMaybe<Scalars['String']>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createCategory: Category;
   createCity: City;
   createPlace: Place;
+  createUser: User;
+  login: Scalars['String'];
+  logout: Scalars['String'];
   updateCategory: Category;
   updateCity: City;
   updatePlace: Place;
+  updateUser: User;
 };
 
 
@@ -71,15 +90,25 @@ export type MutationCreatePlaceArgs = {
 };
 
 
+export type MutationCreateUserArgs = {
+  data: UserInput;
+};
+
+
+export type MutationLoginArgs = {
+  data: UserLogin;
+};
+
+
 export type MutationUpdateCategoryArgs = {
-  data: CategoryInput;
+  data: CategoryUpdate;
   id: Scalars['Int'];
 };
 
 
 export type MutationUpdateCityArgs = {
-  data: CityInput;
-  id: Scalars['String'];
+  data: CityUpdate;
+  id: Scalars['Float'];
 };
 
 
@@ -88,11 +117,17 @@ export type MutationUpdatePlaceArgs = {
   id: Scalars['String'];
 };
 
+
+export type MutationUpdateUserArgs = {
+  data: UserUpdate;
+  id: Scalars['Int'];
+};
+
 export type Place = {
   __typename?: 'Place';
   adress: Scalars['String'];
-  categoryId: Scalars['Float'];
-  cityId: Scalars['Float'];
+  category: Category;
+  city: City;
   description: Scalars['String'];
   id: Scalars['Float'];
   latitude: Scalars['String'];
@@ -104,8 +139,6 @@ export type Place = {
 
 export type PlaceInput = {
   adress: Scalars['String'];
-  categoryId: Scalars['Float'];
-  cityId: Scalars['Float'];
   description: Scalars['String'];
   latitude: Scalars['String'];
   longitude: Scalars['String'];
@@ -116,11 +149,22 @@ export type PlaceInput = {
 
 export type Query = {
   __typename?: 'Query';
+  Search: SearchResult;
   getCategories: Array<Category>;
   getCities: Array<City>;
   getOneCitybyId: City;
+  getOneCitybyName: City;
   getOnePlacebyId: Place;
+  getOnePlacebyName: Place;
+  getOneUserbyMail: User;
   getPlaces: Array<Place>;
+  getUsers: Array<User>;
+  profile: User;
+};
+
+
+export type QuerySearchArgs = {
+  searchInput: Scalars['String'];
 };
 
 
@@ -129,9 +173,78 @@ export type QueryGetOneCitybyIdArgs = {
 };
 
 
+export type QueryGetOneCitybyNameArgs = {
+  name: Scalars['String'];
+};
+
+
 export type QueryGetOnePlacebyIdArgs = {
   id: Scalars['String'];
 };
+
+
+export type QueryGetOnePlacebyNameArgs = {
+  name: Scalars['String'];
+};
+
+
+export type QueryGetOneUserbyMailArgs = {
+  email: Scalars['String'];
+};
+
+export type SearchResult = {
+  __typename?: 'SearchResult';
+  cities: Array<City>;
+  placesByAddress: Array<Place>;
+  placesByName: Array<Place>;
+};
+
+export type User = {
+  __typename?: 'User';
+  email: Scalars['String'];
+  firstname: Scalars['String'];
+  id: Scalars['Float'];
+  lastname: Scalars['String'];
+  managedCities?: Maybe<Array<City>>;
+  password: Scalars['String'];
+  picture: Scalars['String'];
+  role: Scalars['String'];
+};
+
+export type UserInput = {
+  email: Scalars['String'];
+  firstname: Scalars['String'];
+  lastname: Scalars['String'];
+  password: Scalars['String'];
+  picture: Scalars['String'];
+  role?: Scalars['String'];
+};
+
+export type UserLogin = {
+  email: Scalars['String'];
+  password: Scalars['String'];
+};
+
+export type UserUpdate = {
+  email?: InputMaybe<Scalars['String']>;
+  firstname?: InputMaybe<Scalars['String']>;
+  lastname?: InputMaybe<Scalars['String']>;
+  password?: InputMaybe<Scalars['String']>;
+  picture?: InputMaybe<Scalars['String']>;
+  role?: InputMaybe<Scalars['String']>;
+};
+
+export type GetCitiesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetCitiesQuery = { __typename?: 'Query', getCities: Array<{ __typename?: 'City', picture: string, name: string, id: number, description: string, longitude: string, latitude: string }> };
+
+export type GetOneCitybyNameQueryVariables = Exact<{
+  name: Scalars['String'];
+}>;
+
+
+export type GetOneCitybyNameQuery = { __typename?: 'Query', getOneCitybyName: { __typename?: 'City', id: number, name: string, picture: string, description: string, latitude: string, longitude: string, places: Array<{ __typename?: 'Place', id: number, name: string, latitude: string, longitude: string, adress: string, website?: string | null, picture: string, description: string, category: { __typename?: 'Category', name: string, id: number, picto: string } }> } };
 
 export type GetOnePlacebyIdQueryVariables = Exact<{
   getOnePlacebyIdId: Scalars['String'];
@@ -143,9 +256,103 @@ export type GetOnePlacebyIdQuery = { __typename?: 'Query', getOnePlacebyId: { __
 export type GetPlacesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetPlacesQuery = { __typename?: 'Query', getPlaces: Array<{ __typename?: 'Place', name: string, id: number, cityId: number, picture: string }> };
+export type GetPlacesQuery = { __typename?: 'Query', getPlaces: Array<{ __typename?: 'Place', name: string, id: number, picture: string, city: { __typename?: 'City', id: number } }> };
 
 
+export const GetCitiesDocument = gql`
+    query GetCities {
+  getCities {
+    picture
+    name
+    id
+    description
+    longitude
+    latitude
+  }
+}
+    `;
+
+/**
+ * __useGetCitiesQuery__
+ *
+ * To run a query within a React component, call `useGetCitiesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCitiesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCitiesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetCitiesQuery(baseOptions?: Apollo.QueryHookOptions<GetCitiesQuery, GetCitiesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCitiesQuery, GetCitiesQueryVariables>(GetCitiesDocument, options);
+      }
+export function useGetCitiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCitiesQuery, GetCitiesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCitiesQuery, GetCitiesQueryVariables>(GetCitiesDocument, options);
+        }
+export type GetCitiesQueryHookResult = ReturnType<typeof useGetCitiesQuery>;
+export type GetCitiesLazyQueryHookResult = ReturnType<typeof useGetCitiesLazyQuery>;
+export type GetCitiesQueryResult = Apollo.QueryResult<GetCitiesQuery, GetCitiesQueryVariables>;
+export const GetOneCitybyNameDocument = gql`
+    query GetOneCitybyName($name: String!) {
+  getOneCitybyName(name: $name) {
+    id
+    name
+    picture
+    description
+    latitude
+    longitude
+    places {
+      id
+      name
+      latitude
+      longitude
+      adress
+      website
+      picture
+      description
+      category {
+        name
+        id
+        picto
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetOneCitybyNameQuery__
+ *
+ * To run a query within a React component, call `useGetOneCitybyNameQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetOneCitybyNameQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetOneCitybyNameQuery({
+ *   variables: {
+ *      name: // value for 'name'
+ *   },
+ * });
+ */
+export function useGetOneCitybyNameQuery(baseOptions: Apollo.QueryHookOptions<GetOneCitybyNameQuery, GetOneCitybyNameQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetOneCitybyNameQuery, GetOneCitybyNameQueryVariables>(GetOneCitybyNameDocument, options);
+      }
+export function useGetOneCitybyNameLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetOneCitybyNameQuery, GetOneCitybyNameQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetOneCitybyNameQuery, GetOneCitybyNameQueryVariables>(GetOneCitybyNameDocument, options);
+        }
+export type GetOneCitybyNameQueryHookResult = ReturnType<typeof useGetOneCitybyNameQuery>;
+export type GetOneCitybyNameLazyQueryHookResult = ReturnType<typeof useGetOneCitybyNameLazyQuery>;
+export type GetOneCitybyNameQueryResult = Apollo.QueryResult<GetOneCitybyNameQuery, GetOneCitybyNameQueryVariables>;
 export const GetOnePlacebyIdDocument = gql`
     query GetOnePlacebyId($getOnePlacebyIdId: String!) {
   getOnePlacebyId(id: $getOnePlacebyIdId) {
@@ -191,7 +398,9 @@ export const GetPlacesDocument = gql`
   getPlaces {
     name
     id
-    cityId
+    city {
+      id
+    }
     picture
   }
 }

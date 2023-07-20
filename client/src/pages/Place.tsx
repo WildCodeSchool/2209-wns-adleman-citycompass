@@ -1,8 +1,14 @@
 import Hero from "../components/Hero";
 import { useParams } from "react-router-dom";
+import { useEffect } from "react";
 import { useGetOnePlacebyNameQuery } from "../gql/generated/schema";
 
 export default function Place() {
+  useEffect(() => {
+    // 👇️ scroll to top on page load
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+  }, []);
+
   let { placeName = "" } = useParams();
 
   const { data } = useGetOnePlacebyNameQuery({

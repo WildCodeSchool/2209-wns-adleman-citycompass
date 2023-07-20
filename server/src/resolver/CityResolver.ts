@@ -1,5 +1,6 @@
 import { Arg, Mutation, Resolver, Query, Authorized } from "type-graphql";
 import City, { CityInput, CityUpdate } from "../entity/City";
+import User from "../entity/User";
 import datasource from "../db";
 import { existingCity, existingCoordinates } from "../helpers/dbCheckers";
 
@@ -19,7 +20,27 @@ export class CityResolver {
     await existingCity(data);
     await existingCoordinates(data);
 
-    return await datasource.getRepository(City).save(data);
+    const createdCity = await datasource.getRepository(City).save(data);
+
+    const users = await datasource.getRepository(User).find({
+      where: { role: "superadmin" },
+      relations: { managedCities: true },
+    });
+
+    if (users === null) throw new Error("No super admin found in database");
+
+    const existingCities = await datasource.getRepository(City).find();
+    if (existingCities === null)
+      throw new Error("No existing cities found in database");
+
+    await Promise.all(
+      users.map(async (user) => {
+        const userToUpdate = { ...user, managedCities: existingCities };
+        await datasource.getRepository(User).save(userToUpdate);
+      })
+    );
+
+    return createdCity;
   }
 
   @Query(() => [City])
