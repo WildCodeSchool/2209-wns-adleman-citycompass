@@ -94,7 +94,7 @@ export function FormUpdateManagedCities({
                   <div
                     role="group"
                     aria-labelledby="checkbox-group"
-                    className="flex flex-row gap-4 justify-center align-center"
+                    className="flex flex-wrap gap-4 justify-center align-center"
                   >
                     {authorizedCities?.managedCities?.map((city) => (
                       <label
