@@ -2,7 +2,6 @@ import React, { MutableRefObject } from "react";
 import Breadcrumbs from "./Breadcrumbs";
 import { useLocation } from "react-router-dom";
 import { PlaceProps } from "./MapCity";
-import { useNavigate } from "react-router-dom";
 
 export interface HeroProps {
   heroContent: heroContent;
@@ -24,7 +23,6 @@ export interface heroContent {
 }
 
 function Hero({ heroContent, action, scrollToRef }: HeroProps) {
-  const navigate = useNavigate();
   const isHome = useLocation().pathname === "/" ? true : false;
   const handleClick = () => scrollToRef?.current.scrollIntoView();
 
