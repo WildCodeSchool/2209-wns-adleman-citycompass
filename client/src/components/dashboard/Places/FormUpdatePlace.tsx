@@ -3,6 +3,7 @@ import {
   PlaceUpdate,
   useGetCategoriesQuery,
   useGetCitiesQuery,
+  useGetProfileQuery,
   GetCitiesWithPlacesDocument,
 } from "../../../gql/generated/schema";
 import { Formik, Field, Form } from "formik";
@@ -37,6 +38,13 @@ function FormUpdatePlace({
   if (data !== undefined) {
     cities = data.getCities;
   }
+
+  const { data: currentUser } = useGetProfileQuery({
+    errorPolicy: "ignore",
+  });
+  const userManagedCities = currentUser?.profile.managedCities?.map(
+    (city) => city.name
+  );
 
   const [updatePlace] = useUpdatePlaceMutation({
     errorPolicy: "all",
@@ -233,7 +241,13 @@ function FormUpdatePlace({
               }}
             >
               {cities?.map((city) => (
-                <option value={city.id}>{city.name}</option>
+                <>
+                  {userManagedCities?.includes(city.name) && (
+                    <option key={city.id} value={city.id}>
+                      {city.name}
+                    </option>
+                  )}
+                </>
               ))}
             </Field>
 

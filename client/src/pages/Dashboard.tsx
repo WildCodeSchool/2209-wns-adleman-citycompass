@@ -17,6 +17,11 @@ import PlacesDashboard from "../components/dashboard/Places/PlacesDashboard";
 import UsersDashboard from "../components/dashboard/Users/UsersDashboard";
 import { useNavigate } from "react-router-dom";
 
+interface userManagedCitiesArray {
+  id: number;
+  name: string;
+}
+
 export default function Dashboard() {
   const [accueilClicked, setAccueilClicked] = useState(true);
   const [categoryClicked, setCategoryClicked] = useState(false);
@@ -27,6 +32,8 @@ export default function Dashboard() {
   const { data: currentUser, client } = useGetProfileQuery({
     errorPolicy: "ignore",
   });
+
+  console.log(currentUser);
 
   const [logout] = useLogoutMutation();
 
@@ -39,6 +46,13 @@ export default function Dashboard() {
   const userManagedCities = currentUser?.profile.managedCities?.map(
     (city) => city.name
   );
+
+  let userManagedCitiesArray: userManagedCitiesArray[] = [];
+  if (
+    currentUser?.profile.managedCities !== null &&
+    currentUser?.profile.managedCities !== undefined
+  )
+    userManagedCitiesArray = currentUser.profile.managedCities;
 
   return (
     <>
@@ -118,28 +132,29 @@ export default function Dashboard() {
                   </button>
                 </div>
               )}
-              {(isSuperAdmin || isAdmin || isContributor) && (
-                <div
-                  className={
-                    poiClicked ? "sidebar__menu-active" : "sidebar__menu"
-                  }
-                >
-                  <button
-                    className="sidebar__button"
-                    disabled={poiClicked === true}
-                    onClick={() => (
-                      setPoiClicked(!poiClicked),
-                      setAccueilClicked(false),
-                      setCategoryClicked(false),
-                      setCityClicked(false),
-                      setUserClicked(false)
-                    )}
+              {(isSuperAdmin || isAdmin || isContributor) &&
+                userManagedCitiesArray.length > 0 && (
+                  <div
+                    className={
+                      poiClicked ? "sidebar__menu-active" : "sidebar__menu"
+                    }
                   >
-                    <img className="w-6 h-6" src={poi_icon} alt="" />
-                    <p>Points d'intérêts</p>
-                  </button>
-                </div>
-              )}
+                    <button
+                      className="sidebar__button"
+                      disabled={poiClicked === true}
+                      onClick={() => (
+                        setPoiClicked(!poiClicked),
+                        setAccueilClicked(false),
+                        setCategoryClicked(false),
+                        setCityClicked(false),
+                        setUserClicked(false)
+                      )}
+                    >
+                      <img className="w-6 h-6" src={poi_icon} alt="" />
+                      <p>Points d'intérêts</p>
+                    </button>
+                  </div>
+                )}
               {(isSuperAdmin || isAdmin) && (
                 <div
                   className={

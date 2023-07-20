@@ -3,7 +3,6 @@ import { Formik, Field, Form } from "formik";
 import {
   PlaceInput,
   useCreatePlaceMutation,
-  GetPlacesDocument,
   useGetProfileQuery,
   useGetCitiesQuery,
   useGetCategoriesQuery,
