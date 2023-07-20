@@ -48,7 +48,7 @@ export function FormUpdateUser({ user, setModifyUser }: FormUpdateUserProps) {
           }
         });
       } else if (res.errors === undefined) {
-        toast.success("Données enregistrée");
+        toast.success("Données enregistrées");
         setModifyUser(false);
       }
     });
@@ -134,7 +134,7 @@ export function FormUpdateUser({ user, setModifyUser }: FormUpdateUserProps) {
               Enregistrer
             </button>
             <div
-              className="modal__input--label text-s mt-3 text-center cursor-pointer"
+              className="modal__input--label hover:text-green text-s mt-3 text-center cursor-pointer"
               onClick={() => {
                 setModifyUser(false);
               }}

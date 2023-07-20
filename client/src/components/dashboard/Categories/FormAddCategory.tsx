@@ -89,6 +89,15 @@ export default function FormAddCategory({
             <button type="submit" className="button--primary mt-6">
               Enregistrer
             </button>
+            <div
+              className="modal__input--label hover:text-green text-s mt-3 text-center cursor-pointer"
+              onClick={() => {
+                setListCategories(true);
+                setAddCategories(false);
+              }}
+            >
+              Annuler
+            </div>
           </Form>
         )}
       </Formik>

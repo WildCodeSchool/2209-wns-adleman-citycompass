@@ -2,7 +2,7 @@ name: Compile and push client and server to staging
 
 on:
   push:
-    branches: ["main"]
+    branches: ["dev"]
   workflow_dispatch:
 
 jobs:

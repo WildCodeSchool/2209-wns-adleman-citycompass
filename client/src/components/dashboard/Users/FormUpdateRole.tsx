@@ -108,7 +108,7 @@ export function FormUpdateRole({
                     Enregistrer
                   </button>
                   <div
-                    className="modal__input--label text-s mt-3 text-center cursor-pointer"
+                    className="modal__input--label hover:text-green text-s mt-3 text-center cursor-pointer"
                     onClick={() => {
                       setListUsers(true);
                       setModifyUsers(false);

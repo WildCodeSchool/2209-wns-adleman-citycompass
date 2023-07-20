@@ -79,20 +79,11 @@ function CitiesDashboard() {
             </div>
           )}
           {modifyCities && (
-            <div>
-              <button
-                onClick={() => (
-                  setModifyCities(!modifyCities), setListCities(!listCities)
-                )}
-              >
-                Retour
-              </button>
-              <FormUpdateCity
-                setModifyCities={setModifyCities}
-                setListCities={setListCities}
-                currentCity={currentCity}
-              />
-            </div>
+            <FormUpdateCity
+              setModifyCities={setModifyCities}
+              setListCities={setListCities}
+              currentCity={currentCity}
+            />
           )}
         </div>
       </div>

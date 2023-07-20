@@ -17,8 +17,8 @@ h1,
 .type-h1 {
   font-family: "Lato Black";
   color: theme("colors.darkBlue");
-  font-size: theme("fontSize.xl");
   text-transform: uppercase;
+  font-size: theme("fontSize.m");
 }
 
 h2,
@@ -46,7 +46,6 @@ h4,
 
 p {
   font-family: "Karla Medium";
-  color: theme("colors.darkBlue");
   font-size: theme("fontSize.base");
 }
 
