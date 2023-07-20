@@ -43,7 +43,7 @@ function Hero({ heroContent, action, scrollToRef }: HeroProps) {
 
   return (
     heroContent && (
-      <div className="hero sm:h-screen flex flex-col sm:flex-row justify-start bg-cream">
+      <div className="hero sm:min-h-screen flex flex-col sm:flex-row justify-start bg-cream">
         <div className="w-full sm:w-1/2 overflow-hidden">
           <img
             className="w-full sm:w-auto sm:max-w-none h-full"

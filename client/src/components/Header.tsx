@@ -80,14 +80,14 @@ function Header() {
                       toast.success("Vous avez été correctement déconnecté");
                     }}
                   >
-                    <p className="type-h4 ml-2">Me déconnecter</p>
+                    <p className="ml-2">Me déconnecter</p>
                   </div>
                   <div
                     onClick={() =>
                       navigate(`/dashboard/${currentUser.profile.id}`)
                     }
                   >
-                    <p className="type-h4 ml-2">Back-office</p>
+                    <p className="ml-2">Back-office</p>
                   </div>
                 </>
               ) : (
