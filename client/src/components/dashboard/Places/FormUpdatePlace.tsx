@@ -17,7 +17,6 @@ import {
   validatePicture,
 } from "../../../utils/formValidator";
 import { CitiesHome } from "../../../services/interfaces";
-import { useEffect } from "react";
 
 interface updatePlaceProps {
   currentPlace: PlaceProps;
@@ -80,7 +79,6 @@ function FormUpdatePlace({
     });
   };
 
-  useEffect(() => {}, []);
   return (
     <div className="container mx-auto p-6 bg-cream flex flex-col">
       <h1 className="type-h2 text-center">Modifier {currentPlace.name}</h1>
