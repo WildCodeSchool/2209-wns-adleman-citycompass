@@ -54,7 +54,6 @@ export class UserResolver {
 
     ctx.res.cookie("token", token, {
       secure: env.NODE_ENV === "production",
-      domain: env.SERVER_HOST,
       httpOnly: true,
     });
 
