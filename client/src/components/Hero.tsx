@@ -72,7 +72,12 @@ function Hero({ heroContent, action, scrollToRef }: HeroProps) {
 
           {heroContent.website && (
             <p>
-              <button className="button--primary">Site internet</button>
+              <a
+                className="button--primary"
+                href={`${heroContent.website}`}
+              >
+                Site internet
+              </a>
             </p>
           )}
           {action && (

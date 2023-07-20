@@ -64,7 +64,7 @@ export function FormUpdateRole({
                   <div
                     role="group"
                     aria-labelledby="my-radio-group"
-                    className="flex flex-row gap-4 justify-center align-center"
+                    className="flex flex-wrap gap-4 justify-center align-center"
                   >
                     {currentUser?.role === "superadmin" &&
                       rolesSuperadmin?.map((e) => (
