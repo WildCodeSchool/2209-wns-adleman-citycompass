@@ -33,8 +33,6 @@ export default function Dashboard() {
     errorPolicy: "ignore",
   });
 
-  console.log(currentUser);
-
   const [logout] = useLogoutMutation();
 
   const navigate = useNavigate();

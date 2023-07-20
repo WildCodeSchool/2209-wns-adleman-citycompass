@@ -57,12 +57,10 @@ function PlacesDashboard({ cityArray }: CityArrayProps) {
   });
 
   const currentUser = currentUserData?.profile;
-  console.log(currentUser);
 
   const { data } = useGetCitiesWithPlacesQuery();
 
   const cities = data?.getCities;
-  console.log(cities);
 
   return (
     <>

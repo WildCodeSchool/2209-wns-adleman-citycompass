@@ -36,13 +36,18 @@ export default function FormAddPlace({
   const userManagedCities = currentUser?.profile.managedCities?.map(
     (city) => city.name
   );
+  let initialUserCity = 0;
+  if (
+    currentUser?.profile.managedCities !== undefined &&
+    currentUser?.profile.managedCities !== null
+  )
+    initialUserCity = currentUser.profile.managedCities[0].id;
 
   const { data: allCategories } = useGetCategoriesQuery();
   const categories = allCategories?.getCategories;
 
   const { data: allCities } = useGetCitiesQuery();
   const cities = allCities?.getCities;
-  const initialCity = cities?.slice(0, 1).shift();
   const initialCategory = categories?.slice(0, 1).shift();
 
   const handleSubmit = (values: PlaceInput) => {
@@ -82,10 +87,10 @@ export default function FormAddPlace({
   return (
     <div className="container mx-auto p-6 bg-cream flex flex-col">
       <h1 className="type-h2 text-center">Ajouter une place</h1>
-      {initialCity && initialCategory && (
+      {initialUserCity && initialCategory && (
         <Formik
           initialValues={{
-            cityId: initialCity.id,
+            cityId: initialUserCity,
             name: "",
             picture: "",
             description: "",
@@ -96,7 +101,6 @@ export default function FormAddPlace({
             categoryId: initialCategory.id,
           }}
           onSubmit={(values: PlaceInput) => {
-            console.log(values);
             handleSubmit(values);
           }}
         >

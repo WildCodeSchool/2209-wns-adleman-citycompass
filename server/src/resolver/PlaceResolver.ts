@@ -47,7 +47,6 @@ export class PlaceResolver {
     @Ctx() ctx: ContextType
   ): Promise<Place> {
     if (data === null) throw new Error("No data in query");
-    console.log("data", data.cityId);
 
     const placeCity = await datasource
       .getRepository(City)
