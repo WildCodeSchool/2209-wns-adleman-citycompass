@@ -1,0 +1,14 @@
+mutation UpdatePlace($data: PlaceUpdate!, $updatePlaceId: Float!) {
+  updatePlace(data: $data, id: $updatePlaceId) {
+    id
+    name
+    adress
+    latitude
+    longitude
+    picture
+    website
+    category {
+      id
+    }
+  }
+}

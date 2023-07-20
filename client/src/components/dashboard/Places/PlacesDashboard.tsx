@@ -4,11 +4,32 @@ import add_icon from "../../../assets/add_icon.svg";
 import modify_icon from "../../../assets/modify_icon.svg";
 import chevron_down from "../../../assets/chevron-arrow-down.png";
 import chevron_up from "../../../assets/up-arrow-angle.png";
-import { useGetCitiesWithPlacesQuery } from "../../../gql/generated/schema";
+import {
+  useGetCitiesWithPlacesQuery,
+  useGetProfileQuery,
+} from "../../../gql/generated/schema";
 import FormAddPlace from "./FormAddPlace";
+import FormUpdatePlace from "./FormUpdatePlace";
 
 export interface CityArrayProps {
   cityArray: string[] | undefined;
+}
+
+export interface CategoryPlace {
+  id: number;
+}
+
+export interface PlaceProps {
+  description: string;
+  id: number;
+  latitude: string;
+  longitude: string;
+  name: string;
+  picture: string;
+  website?: string | null | undefined;
+  adress: string;
+  categoryId: number;
+  cityId: number;
 }
 
 function PlacesDashboard({ cityArray }: CityArrayProps) {
@@ -17,6 +38,25 @@ function PlacesDashboard({ cityArray }: CityArrayProps) {
   const [addPlaces, setAddPlaces] = useState(false);
   const [modifyPlaces, setModifyPlaces] = useState(false);
   const [cityName, setCityName] = useState("");
+  const [currentCity, setCurrentCity] = useState<number>(0);
+  const [currentPlace, setCurrentPlace] = useState<PlaceProps>({
+    description: "",
+    id: 0,
+    latitude: "",
+    longitude: "",
+    name: "",
+    picture: "",
+    adress: "",
+    website: "",
+    categoryId: 0,
+    cityId: 0,
+  });
+
+  const { data: currentUserData } = useGetProfileQuery({
+    errorPolicy: "ignore",
+  });
+
+  const currentUser = currentUserData?.profile;
 
   const { data } = useGetCitiesWithPlacesQuery();
 
@@ -50,6 +90,7 @@ function PlacesDashboard({ cityArray }: CityArrayProps) {
                         onClick={() => {
                           setCityName(city.name);
                           setListPlaces(!listPlaces);
+                          setCurrentCity(city.id);
                         }}
                       >
                         <img
@@ -66,23 +107,56 @@ function PlacesDashboard({ cityArray }: CityArrayProps) {
                   )}
                   {listPlaces && cityName === city.name && (
                     <div className="flex flex-col justify-between self-center">
-                      {city.places.map((place) => (
-                        <div
-                          className="h-12 w-96 px-6 flex justify-between items-center"
-                          key={place.id}
-                        >
-                          <p className="w-4/5">{place.name}</p>
-                          <button
-                            onClick={() => (
-                              setModifyPlaces(true),
-                              setPlaces(false),
-                              setListPlaces(false)
-                            )}
+                      {currentUser?.role !== "contributor" &&
+                        city.places.map((place) => (
+                          <div
+                            className="h-12 w-96 px-6 flex justify-between items-center"
+                            key={place.id}
                           >
-                            <img src={modify_icon} alt="" className="w-6" />
-                          </button>
-                        </div>
-                      ))}
+                            <p className="w-4/5">{place.name}</p>
+                            <button
+                              onClick={() => (
+                                setModifyPlaces(true),
+                                setPlaces(false),
+                                setListPlaces(false),
+                                setCurrentPlace({
+                                  ...place,
+                                  categoryId: place.category.id,
+                                  cityId: currentCity,
+                                })
+                              )}
+                            >
+                              <img src={modify_icon} alt="" className="w-6" />
+                            </button>
+                          </div>
+                        ))}
+                      {currentUser?.role === "contributor" &&
+                        city.places
+                          .filter(
+                            (place) => place.author.id === currentUser?.id
+                          )
+                          .map((place) => (
+                            <div
+                              className="h-12 w-96 px-6 flex justify-between items-center"
+                              key={place.id}
+                            >
+                              <p className="w-4/5">{place.name}</p>
+                              <button
+                                onClick={() => (
+                                  setModifyPlaces(true),
+                                  setPlaces(false),
+                                  setListPlaces(false),
+                                  setCurrentPlace({
+                                    ...place,
+                                    categoryId: place.category.id,
+                                    cityId: currentCity,
+                                  })
+                                )}
+                              >
+                                <img src={modify_icon} alt="" className="w-6" />
+                              </button>
+                            </div>
+                          ))}
                     </div>
                   )}
                 </>
@@ -96,14 +170,11 @@ function PlacesDashboard({ cityArray }: CityArrayProps) {
           )}
           {modifyPlaces && (
             <div>
-              <p>FORMULAIRE MODIFICATION PLACE</p>
-              <button
-                onClick={() => (
-                  setModifyPlaces(false), setPlaces(true), setListPlaces(false)
-                )}
-              >
-                Enregistrer
-              </button>
+              <FormUpdatePlace
+                currentPlace={currentPlace}
+                setModifyPlaces={setModifyPlaces}
+                setPlaces={setPlaces}
+              />
             </div>
           )}
         </div>
