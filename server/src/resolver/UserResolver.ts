@@ -123,18 +123,12 @@ export class UserResolver {
   ): Promise<User> {
     const { role } = data;
     const roles = ["visitor", "contributor", "admin", "superadmin"];
-    const currentUserId = ctx.jwtPayload.userID;
+    const currentUser = ctx.currentUser;
 
     // check datas sent
     if (role !== undefined && !roles.includes(role))
       throw new Error("this is not an existing role");
-    if (currentUserId === undefined) throw new Error("unauthorized operation");
-
-    // get currentUser
-    const currentUser = await datasource.getRepository(User).findOne({
-      where: { id: currentUserId },
-    });
-    if (currentUser === null) throw new Error("current user not found");
+    if (currentUser === undefined) throw new Error("unauthorized operation");
 
     // check if currentUser is authorized to update role
     // only superadmins can give superadmin & admin role to an user
@@ -149,7 +143,7 @@ export class UserResolver {
       where: { id },
     });
     if (userToUpdate === null) throw new Error("User not found");
-    if (currentUserId === userToUpdate.id)
+    if (currentUser.id === userToUpdate.id)
       throw new Error("User cannot change his own role");
 
     // update user role
