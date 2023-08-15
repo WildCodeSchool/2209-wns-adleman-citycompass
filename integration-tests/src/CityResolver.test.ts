@@ -100,15 +100,8 @@ describe("City resolver", () => {
         role: "superadmin",
         managedCities: await db.getRepository(City).find(),
       });
-      console.log(superadmin);
-      const token = await getJWTFor({
-        firstname: "John",
-        lastname: "Test",
-        email: "superadmin@example.com",
-        password: "monMotsdepasse1!",
-        picture: "https://i.pravatar.cc/300",
-        role: "superadmin",
-      });
+
+      const token = await getJWTFor(superadmin);
 
       const res = await client.mutate({
         mutation: createCityMutation,
@@ -117,7 +110,8 @@ describe("City resolver", () => {
           data: {
             name: "Ville",
             picture: "https://picsum.photos/",
-            description: "la description un peu longue",
+            description:
+              "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
             latitude: "52.12",
             longitude: "12.52",
           },
