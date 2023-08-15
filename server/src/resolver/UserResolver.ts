@@ -13,6 +13,7 @@ import User, {
   UserLogin,
   UserRoleUpdate,
   UserManagedCityUpdate,
+  UserRoles,
 } from "../entity/User";
 import datasource from "../db";
 import { existingUser } from "../helpers/dbCheckers";
@@ -122,11 +123,10 @@ export class UserResolver {
     @Ctx() ctx: ContextType
   ): Promise<User> {
     const { role } = data;
-    const roles = ["visitor", "contributor", "admin", "superadmin"];
     const currentUser = ctx.currentUser;
 
     // check datas sent
-    if (role !== undefined && !roles.includes(role))
+    if (role !== undefined && !UserRoles.includes(role))
       throw new Error("this is not an existing role");
     if (currentUser === undefined) throw new Error("unauthorized operation");
 

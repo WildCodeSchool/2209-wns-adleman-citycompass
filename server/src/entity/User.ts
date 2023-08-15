@@ -22,6 +22,8 @@ import Place from "./Place";
 
 export type Role = "superadmin" | "admin" | "contributor" | "visitor";
 
+export const UserRoles = ["superadmin", "admin", "contributor", "visitor"];
+
 @ObjectType()
 @Entity()
 class User {
@@ -56,7 +58,7 @@ class User {
   @Column({
     length: 20,
     type: "varchar",
-    enum: ["superadmin", "admin", "contributor", "visitor"],
+    enum: UserRoles,
     default: "visitor",
   })
   role: string;
