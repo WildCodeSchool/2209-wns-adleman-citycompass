@@ -13,6 +13,7 @@ import User, {
   UserLogin,
   UserRoleUpdate,
   UserManagedCityUpdate,
+  UserRoles,
 } from "../entity/User";
 import datasource from "../db";
 import { existingUser } from "../helpers/dbCheckers";
@@ -122,35 +123,29 @@ export class UserResolver {
     @Ctx() ctx: ContextType
   ): Promise<User> {
     const { role } = data;
-    const roles = ["visitor", "contributor", "admin", "superadmin"];
-    const currentUserId = ctx.jwtPayload.userID;
+    const currentUser = ctx.currentUser;
 
     // check datas sent
-    if (role !== undefined && !roles.includes(role))
+    if (role !== undefined && !UserRoles.includes(role))
       throw new Error("this is not an existing role");
-    if (currentUserId === undefined) throw new Error("unauthorized operation");
-
-    // get currentUser
-    const currentUser = await datasource.getRepository(User).findOne({
-      where: { id: currentUserId },
-    });
-    if (currentUser === null) throw new Error("current user not found");
+    if (currentUser === undefined) throw new Error("unauthorized operation");
 
     // check if currentUser is authorized to update role
-    // only superadmins can give superadmin & admin role to an user
     if (
       currentUser.role !== "superadmin" &&
       (role === "superadmin" || role === "admin")
     )
       throw new Error("Only superadmin can give this role");
 
-    // get and check user to update
+    // check if user to update is different from current user
+    if (currentUser.id === id)
+      throw new Error("User cannot change his own role");
+
+    // get user to update
     const userToUpdate = await datasource.getRepository(User).findOne({
       where: { id },
     });
     if (userToUpdate === null) throw new Error("User not found");
-    if (currentUserId === userToUpdate.id)
-      throw new Error("User cannot change his own role");
 
     // update user role
     if (role !== undefined) userToUpdate.role = role;
