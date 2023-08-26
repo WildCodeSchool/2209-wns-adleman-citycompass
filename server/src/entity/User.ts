@@ -150,7 +150,7 @@ export class UserUpdate {
 
   @Field({ nullable: true })
   @MaxLength(255)
-  @Matches(/(?=.*\d)(?=.*\W+)(?![.\n])(?=.*[A-Z])(?=.*[a-z]).{8,}$/, {
+  @Matches(/(?=.*\d)(?=.*\W+)(?![.\n])(?=.*[A-Z])(?=.*[a-z]).{13,}$/, {
     message: "password too weak",
   })
   password?: string;

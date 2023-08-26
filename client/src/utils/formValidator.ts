@@ -75,8 +75,8 @@ export function validatePassword(password: string) {
   let error;
   if (!password) {
     error = "Le mot de passe est obligatoire";
-  } else if (password.length < 8) {
-    error = "Le mot de passe doit avoir au moins 8 caractères";
+  } else if (password.length < 13) {
+    error = "Le mot de passe doit avoir au moins 13 caractères";
   } else if (password.length > 255) {
     error = "Le mot de passe doit avoir moins de 255 caractères";
   } else if (!/^(?=.*[0-9])/i.test(password)) {
@@ -145,5 +145,3 @@ export function validateLongitude(longitude: string) {
   }
   return error;
 }
-
-
