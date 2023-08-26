@@ -1,5 +1,7 @@
 // Categories validations
 
+import { allRoles } from "./userRoles";
+
 export function validateName(name: string) {
   let error;
   if (!name) {
@@ -143,5 +145,11 @@ export function validateLongitude(longitude: string) {
   ) {
     error = "La donnée doit être une longitude";
   }
+  return error;
+}
+
+export function validateRole(role: string) {
+  let error;
+  if (!allRoles.includes(role)) error = "Cette donnée n'est pas autorisée";
   return error;
 }

@@ -9,6 +9,7 @@ import { useUpdateUserRoleMutation } from "../../../gql/generated/schema";
 import { toast } from "react-hot-toast";
 import { rolesAdmin, allRoles } from "../../../utils/userRoles";
 import { isAccessAuthorized } from "../../../utils/isAccessAuthorized";
+import { validateRole } from "../../../utils/formValidator";
 
 export interface FormUpdateUserRightsProps {
   setListUsers: React.Dispatch<React.SetStateAction<boolean>>;
@@ -77,6 +78,7 @@ export function FormUpdateRole({
                           <Field
                             type="radio"
                             name="role"
+                            validate={validateRole}
                             value={`${e}`}
                             id={`${e}`}
                           ></Field>
