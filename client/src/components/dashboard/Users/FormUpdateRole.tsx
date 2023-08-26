@@ -7,7 +7,7 @@ import {
 } from "../../../gql/generated/schema";
 import { useUpdateUserRoleMutation } from "../../../gql/generated/schema";
 import { toast } from "react-hot-toast";
-import { rolesAdmin, rolesSuperadmin } from "../../../utils/userRoles";
+import { rolesAdmin, allRoles } from "../../../utils/userRoles";
 import { isAccessAuthorized } from "../../../utils/isAccessAuthorized";
 
 export interface FormUpdateUserRightsProps {
@@ -67,7 +67,7 @@ export function FormUpdateRole({
                     className="flex flex-wrap gap-4 justify-center align-center"
                   >
                     {currentUser?.role === "superadmin" &&
-                      rolesSuperadmin?.map((e) => (
+                      allRoles?.map((e) => (
                         <label
                           htmlFor={`${e}`}
                           key={`${e}`}
