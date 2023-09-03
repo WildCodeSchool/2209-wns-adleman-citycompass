@@ -96,6 +96,7 @@ export function FormUpdateRole({
                           <Field
                             type="radio"
                             name="role"
+                            validate={validateRole}
                             value={`${e}`}
                             id={`${e}`}
                           ></Field>
